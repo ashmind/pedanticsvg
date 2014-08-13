@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Pedantic SVG</title>
+
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=0.7">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/4.2.0/codemirror.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/4.2.0/addon/hint/show-hint.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.0/normalize.min.css" />
+    <link rel="stylesheet" href="app.css" />
+  </head>
+  <body>
+    <main>
+      <section class="code">
+        <header>
+          <h1>Code</h1>
+        </header>
+        <div class="content">
+          <textarea id="code"></textarea>
+        </div>
+      </section>
+
+      <section class="preview">
+        <header>
+          <h1>Preview</h1>
+        </header>
+        <div class="content">
+          <app-svgpreview code="code"></app-svgpreview>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      Built by Andrey Shchekin (<a href="http://twitter.com/ashmind">@ashmind</a>).
+    </footer>
+
+    <script data-main="js/main" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.11/require.js"></script>
+  </body>
+</html>
