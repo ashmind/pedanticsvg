@@ -166,6 +166,17 @@ section .content {
     border-left: 1px solid #aaa;
   }
 
+  @media (orientation: portrait) {
+    header {
+      border-left: none;
+      border-top: 1px solid #aaa;
+    }
+
+    .content {
+      border-left: none;
+    }
+  }
+
   iframe {
     position: absolute;
     top: 0;

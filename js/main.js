@@ -33,4 +33,7 @@ require(['jquery', 'app/editorService', 'app/previewService'], function($, edito
     var previewService = previewServiceFactory($('.preview .content'));
 
     previewService.render(editorService.code);
+    editorService.codechange(function() {
+        previewService.render(editorService.code);
+    });
 });

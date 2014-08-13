@@ -137,6 +137,15 @@ section .content {
 .preview .content {
   border-left: 1px solid #aaa;
 }
+@media (orientation: portrait) {
+  .preview header {
+    border-left: none;
+    border-top: 1px solid #aaa;
+  }
+  .preview .content {
+    border-left: none;
+  }
+}
 .preview iframe {
   position: absolute;
   top: 0;
