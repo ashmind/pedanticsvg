@@ -28,4 +28,10 @@ define([
             cm.replaceSelection(new Array(cm.getOption('indentUnit') + 1).join(' '), 'end', '+input');
         }
     }
+
+    var service = {
+        code: $editor.val()
+    };
+
+    return service;
 };});

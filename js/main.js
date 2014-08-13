@@ -26,7 +26,11 @@
     require.config(config);
 })();
 
-require(['jquery', 'app/editorService'], function($, editorService) {
+require(['jquery', 'app/editorService', 'app/previewService'], function($, editorServiceFactory, previewServiceFactory) {
     'use strict';
-    editorService($('#code'));
+
+    var editorService = editorServiceFactory($('#code'));
+    var previewService = previewServiceFactory($('.preview .content'));
+
+    previewService.render(editorService.code);
 });

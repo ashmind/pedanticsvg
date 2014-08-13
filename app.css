@@ -73,8 +73,8 @@ section header {
   display: flex;
   padding: 5px;
   padding-left: 7px;
-  color: #fff;
-  background-color: #4684ee;
+  color: #888;
+  background-color: #eee;
 }
 section header h1 {
   font-family: 'Roboto Condensed', sans-serif;
@@ -137,11 +137,19 @@ section .content {
 .preview .content {
   border-left: 1px solid #aaa;
 }
+.preview iframe {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
 textarea,
 .CodeMirror {
   position: absolute;
   left: 0;
-  right: 5px;
+  right: 0;
   height: 100%;
   font-family: Consolas, Menlo, Monaco, monospace;
   line-height: 1.2;
