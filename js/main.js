@@ -4,9 +4,13 @@
     var config = {
         paths: {
             app:                          '../js',
+            sax:                          '../external/sax',
             jquery:                       'https://code.jquery.com/jquery-2.0.3.min',
             codemirror:                   codeMirrorBase + 'codemirror',
             'codemirror/addon':           codeMirrorBase + 'addon'
+        },
+        shim: {
+            sax: { exports: 'sax' }
         },
         map: {
             '*': {
@@ -26,14 +30,14 @@
     require.config(config);
 })();
 
-require(['jquery', 'app/editorService', 'app/previewService'], function($, editorServiceFactory, previewServiceFactory) {
+require(['jquery', 'app/services/editor', 'app/services/preview'], function($, editorFactory, previewFactory) {
     'use strict';
 
-    var editorService = editorServiceFactory($('#code'));
-    var previewService = previewServiceFactory($('.preview .content'));
+    var editor = editorFactory($('#code'));
+    var preview = previewFactory($('.preview .content'));
 
-    previewService.render(editorService.code);
-    editorService.codechange(function() {
-        previewService.render(editorService.code);
+    preview.render(editor.code);
+    editor.codechange(function() {
+        preview.render(editor.code);
     });
 });
