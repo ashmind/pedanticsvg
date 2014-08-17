@@ -2,20 +2,30 @@ define([
     'jquery',
     'app/utils/eventLib',
     'app/services/codemirror-setup',
-    'app/services/ast'
-], function($, event, setupCodeMirror, astFactory) { 'use strict'; return function($editor) {
-    var ast = astFactory();
+    'app/services/svg-parser'
+], function($, event, setupCodeMirror, parse) { 'use strict'; return function($editor) {
     var cursorMarker;
+    var selectedNode;
+    var ast;
+
     var service = {
-        codechange: event()
+        astchange: event(),
+        codechange: event(),
+        selectionchange: event(),
+        
+        changeAst: function(change) {
+            change(ast);
+            service.astchange(ast);
+            updateCodeFromAst();
+        }
     };
 
     var cm = setupCodeMirror($editor[0], function processChange(cm, updateLinting) {
         var code = cm.getValue();
-        service.code = code;
-        ast.parse(code);
+        ast = parse(code);
+        service.astchange(ast);        
         updateCursorMarker(cm);
-        service.codechange();
+        updateCodeFromAst();
     });
 
     cm.on('cursorActivity', function() {
@@ -27,6 +37,11 @@ define([
 
     return service;
 
+    function updateCodeFromAst() {
+        service.code = ast.stringify();
+        service.codechange();
+    }
+    
     function updateCursorMarker(cm) {
         if (cursorMarker) {
             cursorMarker.clear();
@@ -35,6 +50,11 @@ define([
 
         var cursor = cm.getCursor();
         var node = ast.getNodeAt(fromCMPosition(cursor));
+        if (selectedNode !== node) {
+            service.selectionchange({ astNodes: [node] });
+            selectedNode = node;
+        }
+
         if (!node)
             return;
 

@@ -30,11 +30,12 @@
     require.config(config);
 })();
 
-require(['jquery', 'app/services/editor', 'app/services/preview'], function($, editorFactory, previewFactory) {
+require(['jquery', 'app/services/editor', 'app/services/preview', 'app/services/tracer'], function($, editorFactory, previewFactory, tracerFactory) {
     'use strict';
 
     var editor = editorFactory($('#code'));
     var preview = previewFactory($('.preview .content'));
+    tracerFactory(editor, preview);
 
     preview.render(editor.code);
     editor.codechange(function() {
