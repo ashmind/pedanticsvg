@@ -7,41 +7,55 @@ define([
     var cursorMarker;
     var selectedNode;
     var ast;
+    var code;
 
     var service = {
         astchange: event(),
         codechange: event(),
-        selectionchange: event(),
-        
-        changeAst: function(change) {
-            change(ast);
-            service.astchange(ast);
-            updateCodeFromAst();
+        selectionchange: event()
+    };
+
+    Object.defineProperty(service, 'code', {
+        get: function() { return code; },
+        set: function(value) {
+            if (value === code)
+                return;
+
+            code = value;
+            updateAstFromCode();
+            cm.setValue(code);
+            service.codechange(code);
         }
+    });
+
+    service.astchange.onsubscribe = function() {
+        // since service does not currently provide editable ast
+        // as a property, this is the only way to get it to any new
+        // subscribers
+        service.astchange(ast);
     };
 
     var cm = setupCodeMirror($editor[0], function processChange(cm, updateLinting) {
-        var code = cm.getValue();
-        ast = parse(code);
-        service.astchange(ast);        
+        code = cm.getValue();
+        updateAstFromCode();
         updateCursorMarker(cm);
-        updateCodeFromAst();
+        service.codechange(code);
     });
 
     cm.on('cursorActivity', function() {
         updateCursorMarker(cm);
     });
 
-    if (!service.code)
-        service.code = cm.getValue();
+    if (!code)
+        code = cm.getValue();
 
     return service;
 
-    function updateCodeFromAst() {
-        service.code = ast.stringify();
-        service.codechange();
+    function updateAstFromCode() {
+        ast = parse(code);
+        service.astchange(ast);
     }
-    
+
     function updateCursorMarker(cm) {
         if (cursorMarker) {
             cursorMarker.clear();

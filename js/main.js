@@ -30,15 +30,21 @@
     require.config(config);
 })();
 
-require(['jquery', 'app/services/editor', 'app/services/preview', 'app/services/tracer'], function($, editorFactory, previewFactory, tracerFactory) {
+require([
+    'jquery',
+    'app/services/editor',
+    'app/services/preview',
+    'app/services/tracer',
+    'app/services/autosave',
+], function($, editorFactory, previewFactory, trace, autosave) {
     'use strict';
 
     var editor = editorFactory($('#code'));
     var preview = previewFactory($('.preview .content'));
-    tracerFactory(editor, preview);
+    autosave(editor);
+    trace(editor, preview);
 
-    preview.render(editor.code);
-    editor.codechange(function() {
-        preview.render(editor.code);
+    editor.astchange(function(ast) {
+        preview.render(ast.stringify());
     });
 });

@@ -2,10 +2,6 @@ define(['app/services/linker'], function(linker) { 'use strict'; return function
     var selectedClassName = 'psvg-selected';
 
     editor.astchange(processAst);
-    editor.changeAst(function() {
-        /* just trigger initial astchange */
-    });
-
     function processAst(ast) {
         var root = ast.root;
         root.children[0].children.unshift({

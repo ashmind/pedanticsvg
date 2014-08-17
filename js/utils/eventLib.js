@@ -3,9 +3,12 @@ define(function() {
 
     return function() {
         var subscribers = [];
-        var event = (function(arg) {
+        var event = (function eventFunc(arg) {
             if (typeof arg === 'function') {
                 subscribers.push(arg);
+                if (eventFunc.onsubscribe)
+                    eventFunc.onsubscribe(arg);
+
                 return;
             }
 
