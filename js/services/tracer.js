@@ -10,7 +10,7 @@ define(['app/services/linker'], function(linker) { 'use strict'; return function
             attributes: {},
             children: [
                 // TODO: move to CSS
-                '.psvg-selected { fill: #FF0000; }'
+                '.psvg-selected { fill: #daa520 !important; }'
             ]
         });
         linker.annotate(root);
