@@ -40,7 +40,12 @@ define(['sax'], function(sax) {
             stack.pop();
         };
 
-        parser.write(code).close();
+        try {
+            parser.write(code);
+        }
+        finally {
+            parser.resume().close();
+        }
 
         return {
             root: root,
