@@ -167,5 +167,5 @@ textarea,
   z-index: 1000 !important;
 }
 .CodeMirror .cursor-scope {
-  background-color: #ffffee;
+  background-color: rgba(218, 165, 32, 0.1);
 }
