@@ -15,6 +15,29 @@ define([
         selectionchange: event()
     };
 
+    service.astchange.onsubscribe = function() {
+        // since service does not currently provide editable ast
+        // as a property, this is the only way to get it to any new
+        // subscribers
+        service.astchange(ast);
+    };
+
+    var cm = setupCodeMirror($editor[0]);
+    cm.setOption('lint', {
+        async: true,
+        getAnnotations: (function processChange(_, updateLinting) {
+            code = cm.getValue();
+            updateAstFromCode(updateLinting);
+            updateCursorMarker();
+            service.codechange(code);
+        })
+    });
+
+    cm.on('cursorActivity', function() {
+        updateCursorMarker(cm);
+    });
+
+
     Object.defineProperty(service, 'code', {
         get: function() { return code; },
         set: function(value) {
@@ -28,35 +51,38 @@ define([
         }
     });
 
-    service.astchange.onsubscribe = function() {
-        // since service does not currently provide editable ast
-        // as a property, this is the only way to get it to any new
-        // subscribers
-        service.astchange(ast);
-    };
-
-    var cm = setupCodeMirror($editor[0], function processChange(cm, updateLinting) {
-        code = cm.getValue();
-        updateAstFromCode();
-        updateCursorMarker(cm);
-        service.codechange(code);
-    });
-
-    cm.on('cursorActivity', function() {
-        updateCursorMarker(cm);
-    });
 
     if (!code)
         code = cm.getValue();
 
     return service;
 
-    function updateAstFromCode() {
-        ast = parse(code);
+    function updateAstFromCode(updateLinting) {
+        var parsed = parse(code);
+        reportParseErrors(parsed.errors, updateLinting);
+        if (parsed.errors.length > 0)
+            return;
+
+        ast = parsed;
         service.astchange(ast);
     }
 
-    function updateCursorMarker(cm) {
+    function reportParseErrors(errors, updateLinting) {
+        if (!updateLinting)
+            return;
+
+        var cmErrors = errors.map(function(e) {
+            return {
+                message: e.message,
+                from: toCMPosition(e),
+                to: toCMPosition(e)
+            };
+        });
+
+        updateLinting(cm, cmErrors);
+    }
+
+    function updateCursorMarker() {
         if (cursorMarker) {
             cursorMarker.clear();
             cursorMarker = null;

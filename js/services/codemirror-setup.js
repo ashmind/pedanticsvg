@@ -12,7 +12,7 @@ define([
 ], function(CodeMirror, svgSchema, xmlHintKeys) {
     'use strict';
 
-    return function(textarea, getAnnotations) {
+    return function(textarea) {
         return CodeMirror.fromTextArea(textarea, {
             mode:        'image/svg+xml',
             lineNumbers: true,
@@ -31,11 +31,7 @@ define([
             autoCloseTags: true,
             autoCloseBrackets: true,
             hintOptions: { schemaInfo: svgSchema },
-            gutters:     ['CodeMirror-linenumbers', 'CodeMirror-lint-markers'],
-            lint:        {
-                async: true,
-                getAnnotations: getAnnotations
-            }
+            gutters:     ['CodeMirror-linenumbers', 'CodeMirror-lint-markers']
         });
     };
 });

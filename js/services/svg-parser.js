@@ -1,7 +1,7 @@
 define(['sax'], function(sax) {
     'use strict';
 
-    var parser = sax.parser({
+    var parser = sax.parser(true, {
         lowercase: true,
         position: true
     });
@@ -40,6 +40,15 @@ define(['sax'], function(sax) {
             stack.pop();
         };
 
+        var errors = [];
+        parser.onerror = function(e) {
+            errors.push({
+                message: e.message.match(/^.+/)[0],
+                line:    parser.line,
+                column:  parser.column
+            });
+        };
+
         try {
             parser.write(code);
         }
@@ -49,6 +58,7 @@ define(['sax'], function(sax) {
 
         return {
             root: root,
+            errors: errors,
             getNodeAt: function(position) { return getNodeAt(flat, position); },
             stringify: function() { return stringify(root); }
         };
