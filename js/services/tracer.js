@@ -3,8 +3,12 @@ define(['app/services/linker'], function(linker) { 'use strict'; return function
 
     editor.astchange(processAst);
     function processAst(ast) {
-        var root = ast.root;
-        root.children[0].children.unshift({
+        linker.annotate(ast.root);
+        var parentTag = findFirstTag(ast.root);
+        if (!parentTag)
+            return;
+
+        parentTag.children.unshift({
             type: 'tag',
             name: 'style',
             attributes: {},
@@ -13,7 +17,6 @@ define(['app/services/linker'], function(linker) { 'use strict'; return function
                 '.psvg-selected { fill: #daa520 !important; }'
             ]
         });
-        linker.annotate(root);
     }
 
     editor.selectionchange(function(selection) {
@@ -21,6 +24,22 @@ define(['app/services/linker'], function(linker) { 'use strict'; return function
             highlightPreview($previewRoot, selection.astNodes);
         });
     });
+
+    function findFirstTag(astNode) {
+        if (astNode.type === 'tag')
+            return astNode;
+
+        var children = astNode.children;
+        if (!children)
+            return;
+
+        for (var i = 0; i < children.length; i++) {
+            var tag = findFirstTag(children[i]);
+            if (tag)
+                return tag;
+        }
+
+    }
 
     function highlightPreview($previewRoot, astNodes) {
         $previewRoot.find('.' + selectedClassName)

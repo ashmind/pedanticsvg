@@ -11,6 +11,27 @@ define(['sax'], function(sax) {
         var flat = [];
         var stack = [root];
 
+        parser.onprocessinginstruction = function(node) {
+            topOf(stack).children.push({
+                type: 'instruction',
+                raw: '<?' + node.name + ' ' + node.body + '?>'
+            });
+        };
+
+        parser.ondoctype = function(content) {
+            topOf(stack).children.push({
+                type: 'doctype',
+                raw: '<!DOCTYPE ' + content + '>'
+            });
+        };
+
+        parser.oncomment = function(text) {
+            topOf(stack).children.push({
+                type: 'comment',
+                text: text
+            });
+        };
+
         parser.onopentag = function(node) {
             var parent = topOf(stack);
             var tag = {
@@ -110,6 +131,9 @@ define(['sax'], function(sax) {
         if (typeof node === 'string')
             return node;
 
+        if (node.raw)
+            return node.raw;
+
         if (node.type === 'root')
             return stringifyChildren(node);
 
@@ -129,6 +153,9 @@ define(['sax'], function(sax) {
             }
             return result;
         }
+
+        if (node.type === 'comment')
+            return '<!-- ' + node.text + ' -->';
 
         throw new Error('Unknown node: ' + JSON.stringify(node) + '.');
     }
