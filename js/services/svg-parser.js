@@ -9,7 +9,6 @@ define(['sax'], function(sax) {
     function parse(code) {
         var root = { type: 'root', children: [] };
         var flat = [];
-        var lastEnd = { line: 0, column: 0 };
         var stack = [root];
 
         parser.onopentag = function(node) {
@@ -20,13 +19,11 @@ define(['sax'], function(sax) {
                 parent: parent,
                 attributes: node.attributes,
                 children: [],
-                start: lastEnd
+                start: getStartTagPosition(parser)
             };
             parent.children.push(tag);
             flat.push(tag);
             stack.push(tag);
-
-            lastEnd = { line: parser.line, column: parser.column };
         };
 
         parser.ontext = function(text) {
@@ -34,9 +31,7 @@ define(['sax'], function(sax) {
         };
 
         parser.onclosetag = function() {
-            var position = { line: parser.line, column: parser.column };
-            lastEnd = position;
-            topOf(stack).end = position;
+            topOf(stack).end = getPosition(parser);
             stack.pop();
         };
 
@@ -66,6 +61,15 @@ define(['sax'], function(sax) {
 
     function topOf(stack) {
         return stack[stack.length - 1];
+    }
+
+    function getPosition(parser) {
+        return { line: parser.line, column: parser.column };
+    }
+
+    function getStartTagPosition(parser) {
+        // require modified sax (not currently submitted to sax-js)
+        return { line: parser.startTagLine, column: parser.startTagColumn };
     }
 
     function getNodeAt(flat, position) {

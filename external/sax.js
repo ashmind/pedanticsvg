@@ -928,7 +928,11 @@ function write (chunk) {
       case S.BEGIN:
         if (c === "<") {
           parser.state = S.OPEN_WAKA
-          parser.startTagPosition = parser.position
+          // modification by Andrey Shchekin
+          parser.startTagPosition = parser.position-1
+          parser.startTagLine = parser.line;
+          parser.startTagColumn = parser.column-1;
+          // end modification
         } else if (not(whitespace,c)) {
           // have to process this as a text node.
           // weird, but happens.
@@ -955,7 +959,11 @@ function write (chunk) {
         }
         if (c === "<") {
           parser.state = S.OPEN_WAKA
-          parser.startTagPosition = parser.position
+          // modification by Andrey Shchekin
+          parser.startTagPosition = parser.position-1
+          parser.startTagLine = parser.line;
+          parser.startTagColumn = parser.column-1;
+          // end mod
         } else {
           if (not(whitespace, c) && (!parser.sawRoot || parser.closedRoot))
             strictFail(parser, "Text data outside of root node.")
@@ -999,10 +1007,12 @@ function write (chunk) {
         } else {
           strictFail(parser, "Unencoded <")
           // if there was some whitespace, then add that in.
-          if (parser.startTagPosition + 1 < parser.position) {
-            var pad = parser.position - parser.startTagPosition
+          // modification by Andrey Shchekin
+          if (parser.startTagPosition + 2 < parser.position) {
+            var pad = parser.position - (parser.startTagPosition+1)
             c = new Array(pad).join(" ") + c
           }
+          // end modification
           parser.textNode += "<" + c
           parser.state = S.TEXT
         }
