@@ -32,19 +32,32 @@ define(['sax'], function(sax) {
             });
         };
 
+        var attributes = {};
+        parser.onattribute = function(a) {
+            attributes[a.name] = {
+                type: 'attribute',
+                name: a.name,
+                value: a.value,
+                valueStart: getPosition(parser, 'attribValueStart'),
+                valueEnd: getPosition(parser)
+            };
+        };
+
         parser.onopentag = function(node) {
             var parent = topOf(stack);
             var tag = {
                 type: 'tag',
                 name: node.name,
                 parent: parent,
-                attributes: node.attributes,
+                attributes: attributes,
                 children: [],
-                start: getStartTagPosition(parser)
+                start: getPosition(parser, 'startTag')
             };
             parent.children.push(tag);
             flat.push(tag);
             stack.push(tag);
+
+            attributes = {};
         };
 
         parser.ontext = function(text) {
@@ -84,13 +97,10 @@ define(['sax'], function(sax) {
         return stack[stack.length - 1];
     }
 
-    function getPosition(parser) {
-        return { line: parser.line, column: parser.column };
-    }
-
-    function getStartTagPosition(parser) {
-        // require modified sax (not currently submitted to sax-js)
-        return { line: parser.startTagLine, column: parser.startTagColumn };
+    function getPosition(parser, prefix) {
+        return prefix
+             ? { line: parser[prefix + 'Line'], column: parser[prefix + 'Column'] }
+             : { line: parser.line, column: parser.column };
     }
 
     function getNodeAt(flat, position) {
@@ -135,17 +145,17 @@ define(['sax'], function(sax) {
             return node.raw;
 
         if (node.type === 'root')
-            return stringifyChildren(node);
+            return stringifyList(node.children);
 
         if (node.type === 'tag') {
             var result = '<' + node.name;
-            var attributes = node.attributes;
-            for (var key in attributes) {
-                result += ' ' + key + '="' + attributes[key] + '"';
-            }
+            if (Object.getOwnPropertyNames(node.attributes),length > 0)
+                result += ' ';
+
+            result += stringifyList(node.attributes, ' ');
             if (node.children.length > 0) {
                 result += '>';
-                result += stringifyChildren(node);
+                result += stringifyList(node.children);
                 result += '</' + node.name + '>';
             }
             else {
@@ -154,19 +164,28 @@ define(['sax'], function(sax) {
             return result;
         }
 
+        if (node.type === 'attribute')
+            return node.name + '="' + node.value + '"';
+
         if (node.type === 'comment')
             return '<!-- ' + node.text + ' -->';
 
         throw new Error('Unknown node: ' + JSON.stringify(node) + '.');
     }
 
-    function stringifyChildren(node) {
-        var result = '';
-        var children = node.children;
-        for (var i = 0; i < children.length; i++) {
-            result += stringify(children[i]);
+    function stringifyList(nodes, separator) {
+        var results = [];
+        if (nodes instanceof Array) {
+            for (var i = 0; i < nodes.length; i++) {
+                results.push(stringify(nodes[i]));
+            }
         }
-        return result;
+        else {
+            for (var key in nodes) {
+                results.push(stringify(nodes[key]));
+            }
+        }
+        return results.join(separator || '');
     }
 
     return parse;

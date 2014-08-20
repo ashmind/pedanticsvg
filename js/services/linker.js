@@ -7,8 +7,13 @@ define(function() {
         if (astNode.type !== 'tag' && astNode.type !== 'root')
             return;
 
-        if (astNode.type === 'tag')
-            astNode.attributes[idName] = uniqueId++;
+        if (astNode.type === 'tag') {
+            astNode.attributes[idName] = {
+                type: 'attribute',
+                name: idName,
+                value: uniqueId++
+            };
+        }
 
         var children = astNode.children;
         for (var i = 0; i < children.length; i++) {
@@ -18,7 +23,7 @@ define(function() {
 
     function findByAstNode($root, astNode) {
         var id = astNode.attributes[idName];
-        var $element = $root.find('[' + idName + '=' + id + ']');
+        var $element = $root.find('[' + idName + '=' + id.value + ']');
         return $element;
     }
 

@@ -1244,13 +1244,19 @@ function write (chunk) {
 
       case S.ATTRIB_VALUE:
         if (is(whitespace, c)) continue
-        else if (is(quote, c)) {
-          parser.q = c
-          parser.state = S.ATTRIB_VALUE_QUOTED
-        } else {
-          strictFail(parser, "Unquoted attribute value")
-          parser.state = S.ATTRIB_VALUE_UNQUOTED
-          parser.attribValue = c
+        else {
+          if (is(quote, c)) {
+            parser.q = c
+            parser.state = S.ATTRIB_VALUE_QUOTED
+          } else {
+            strictFail(parser, "Unquoted attribute value")
+            parser.state = S.ATTRIB_VALUE_UNQUOTED
+            parser.attribValue = c
+          }
+          // modification by Andrey Shchekin
+          parser.attribValueStartLine = parser.line;
+          parser.attribValueStartColumn = parser.column;
+          // end of modification
         }
       continue
 

@@ -45,6 +45,7 @@ require([
     trace(editor, preview);
 
     editor.astchange(function(ast) {
+        console.log(ast.stringify());
         preview.render(ast.stringify());
     });
 });
