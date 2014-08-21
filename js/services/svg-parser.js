@@ -1,4 +1,4 @@
-define(['sax'], function(sax) {
+define(['sax', 'app/services/parsing/parse-path'], function(sax, parsePath) {
     'use strict';
 
     var parser = sax.parser(true, {
@@ -10,6 +10,7 @@ define(['sax'], function(sax) {
         var root = { type: 'root', children: [] };
         var flat = [];
         var stack = [root];
+        var errors = [];
 
         parser.onprocessinginstruction = function(node) {
             topOf(stack).children.push({
@@ -34,13 +35,20 @@ define(['sax'], function(sax) {
 
         var attributes = {};
         parser.onattribute = function(a) {
-            attributes[a.name] = {
+            var valueStart = getPosition(parser, 'attribValueStart');
+            var attribute = {
                 type: 'attribute',
                 name: a.name,
                 value: a.value,
-                valueStart: getPosition(parser, 'attribValueStart'),
+                valueStart: valueStart,
                 valueEnd: getPosition(parser)
             };
+            if (a.name === 'd') {
+                var parsed = parsePath(a.value, valueStart);
+                errors.push.apply(errors, parsed.errors);
+                attribute.valueParts = parsed.segments;
+            }
+            attributes[a.name] = attribute;
         };
 
         parser.onopentag = function(node) {
@@ -57,6 +65,11 @@ define(['sax'], function(sax) {
             flat.push(tag);
             stack.push(tag);
 
+            for (var key in attributes) {
+                var parts = attributes[key].valueParts;
+                if (parts)
+                    flat.push.apply(flat, parts);
+            }
             attributes = {};
         };
 
@@ -69,7 +82,6 @@ define(['sax'], function(sax) {
             stack.pop();
         };
 
-        var errors = [];
         parser.onerror = function(e) {
             errors.push({
                 message: e.message.match(/^.+/)[0],
@@ -149,7 +161,7 @@ define(['sax'], function(sax) {
 
         if (node.type === 'tag') {
             var result = '<' + node.name;
-            if (Object.getOwnPropertyNames(node.attributes),length > 0)
+            if (Object.getOwnPropertyNames(node.attributes).length > 0)
                 result += ' ';
 
             result += stringifyList(node.attributes, ' ');

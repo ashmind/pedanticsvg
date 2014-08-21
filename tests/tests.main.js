@@ -24,8 +24,22 @@
     };
     require.config(config);
 
-    var tests = ['svg-parser.tests.js'];
+    var tests = [
+        'svg-parser.tests.js',
+        'parse-path.tests.js',
+    ];
+
+
     require(['jasmine/boot'], function () {
+        var jasmineDescribe = window.describe;
+        window.describe = function(name, tests) {
+            define([name], function(instance) {
+                jasmineDescribe(name, function() {
+                    tests(instance);
+                });
+            });
+        };
+
         require(tests, function () {
             window.onload();
         });

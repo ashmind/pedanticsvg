@@ -19,12 +19,6 @@ define(['app/services/linker'], function(linker) { 'use strict'; return function
         });
     }
 
-    editor.selectionchange(function(selection) {
-        preview.getRootElement().then(function ($previewRoot) {
-            highlightPreview($previewRoot, selection.astNodes);
-        });
-    });
-
     function findFirstTag(astNode) {
         if (astNode.type === 'tag')
             return astNode;
@@ -38,8 +32,13 @@ define(['app/services/linker'], function(linker) { 'use strict'; return function
             if (tag)
                 return tag;
         }
-
     }
+
+    editor.selectionchange(function(selection) {
+        preview.getRootElement().then(function ($previewRoot) {
+            highlightPreview($previewRoot, selection.astNodes);
+        });
+    });
 
     function highlightPreview($previewRoot, astNodes) {
         $previewRoot.find('.' + selectedClassName)
@@ -48,7 +47,13 @@ define(['app/services/linker'], function(linker) { 'use strict'; return function
                     });
 
         for (var i = 0; i < astNodes.length; i++) {
+            if (astNodes[i].type !== 'tag')
+                continue;
+
             var $element = linker.findByAstNode($previewRoot, astNodes[i]);
+            if ($element.length === 0)
+                continue;
+
             $element[0].classList.add(selectedClassName);
         }
     }
