@@ -1,5 +1,9 @@
-define(['app/services/linker'], function(linker) { 'use strict'; return function(editor, preview) {
+define(['app/services/linker', 'app/utils/jquery.svg'], function(linker) { 'use strict'; return function(editor, preview) {
     var selectedClassName = 'psvg-selected';
+    var currentTrace = {
+        styled: [],
+        created: []
+    };
 
     editor.astchange(processAst);
     function processAst(ast) {
@@ -14,7 +18,7 @@ define(['app/services/linker'], function(linker) { 'use strict'; return function
             attributes: {},
             children: [
                 // TODO: move to CSS
-                '.psvg-selected { fill: #daa520 !important; }'
+                '.psvg-selected { fill: #daa520 !important; stroke: #daa520 !important; }'
             ]
         });
     }
@@ -36,25 +40,59 @@ define(['app/services/linker'], function(linker) { 'use strict'; return function
 
     editor.selectionchange(function(selection) {
         preview.getRootElement().then(function ($previewRoot) {
-            highlightPreview($previewRoot, selection.astNodes);
+            tracePreview($previewRoot, selection.astNodes);
         });
     });
 
-    function highlightPreview($previewRoot, astNodes) {
-        $previewRoot.find('.' + selectedClassName)
-                    .each(function() {
-                        this.classList.remove(selectedClassName);
-                    });
+    function tracePreview($previewRoot, astNodes) {
+        var tracers = {
+            tag: traceElement,
+            'path-segment': tracePathSegment
+        };
 
-        for (var i = 0; i < astNodes.length; i++) {
-            if (astNodes[i].type !== 'tag')
-                continue;
+        //for (var i = 0; i < astNodes.length; i++) {
+        var astNode = astNodes[0];
+        if (currentTrace.astNode === astNode)
+            return;
 
-            var $element = linker.findByAstNode($previewRoot, astNodes[i]);
-            if ($element.length === 0)
-                continue;
+        clearCurrentTrace();
+        var tracer = tracers[astNode.type];
+        if (!tracer)
+            return;
 
-            $element[0].classList.add(selectedClassName);
-        }
+        tracer($previewRoot, astNode);
+        //}
+    }
+
+    function clearCurrentTrace() {
+        var trace = currentTrace;
+        $(trace.styled).svgRemoveClass(selectedClassName);
+        $(trace.created).remove();
+        trace.styled = [];
+        trace.created = [];
+    }
+
+    function traceElement($previewRoot, tag) {
+        var $element = linker.findByAstNode($previewRoot, tag);
+        if ($element.length === 0)
+            return;
+
+        $element.svgAddClass(selectedClassName);
+        currentTrace.styled.push($element[0]);
+    }
+
+    function tracePathSegment($previewRoot, segment) {
+        var $path = linker.findByAstNode($previewRoot, segment.parent);
+        if ($path.length === 0)
+            return;
+
+        var start = segment.startPoint();
+        var d = 'M ' + start.x + ' ' + start.y + ' ' + segment.toAbsolute().stringify();
+        var $tracePath = $path.clone()
+             .svgAddClass(selectedClassName)
+             .attr('d', d)
+             .appendTo($path.parent());
+
+        currentTrace.created.push($tracePath[0]);
     }
 };});

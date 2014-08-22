@@ -1,6 +1,6 @@
 define(function() {
     'use strict';
-    var idName = 'data-psvg-d39c9e8b-448e-45fc-a972-710c179c3650-id'; // just a random guid to guarantee uniqueness
+    var idName = 'data-psvg-link-uid';
     var uniqueId = 0;
 
     function annotate(astNode) {

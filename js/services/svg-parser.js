@@ -67,8 +67,12 @@ define(['sax', 'app/services/parsing/parse-path'], function(sax, parsePath) {
 
             for (var key in attributes) {
                 var parts = attributes[key].valueParts;
-                if (parts)
+                if (parts) {
+                    for (var i = 0; i < parts.length; i++) {
+                        parts[i].parent = tag;
+                    }
                     flat.push.apply(flat, parts);
+                }
             }
             attributes = {};
         };
