@@ -37,13 +37,17 @@ define(function() {
                 match = regexp.exec(string.substring(index));
             }
 
-            return {
-                string: string.substring(errorStart, index),
-                _next: {
+            var result = {
+                string: string.substring(errorStart, index)
+            };
+            if (match) {
+                result._next = {
                     string: match[0],
                     match: match
-                }
-            };
+                };
+            }
+
+            return result;
         }
 
         return {

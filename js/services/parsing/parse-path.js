@@ -1,8 +1,8 @@
 define(['app/utils/regexp-iterator', 'app/utils/position'], function(RegExpIterator, Position) {
     'use strict';
 
-    var segmentRegexp = /([mlhvcsqtaz])((?:\s*[\d\.\-]+)*)|(\s+)/i;
-    var coordRegexp = /\-?(?:\d*\.)?\d+|(\s+)/i;
+    var segmentRegexp = /([mlhvcsqtaz])((?:[\s,]*[\d\.\-]+)*)|(\s+)/i;
+    var coordRegexp = /\-?(?:\d*\.)?\d+|([\s,]+)/i;
     var coordRules = {
         m: { count: 2, keys: ['x', 'y'] },
         l: { count: 2, keys: ['x', 'y'] },
@@ -56,6 +56,11 @@ define(['app/utils/regexp-iterator', 'app/utils/position'], function(RegExpItera
         var coords = { _count: 0 };
         var rule = coordRules[command.toLowerCase()];
         var start = position.toObject();
+        if (rule === '?') {
+            reportError(result, 'Segment \'' + command + '\' is not yet supported.', start);
+            return;
+        }
+
         position.advanceByString(command);
 
         var iterator = RegExpIterator(allCoordsString, coordRegexp);

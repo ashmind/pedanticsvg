@@ -12,6 +12,9 @@ describe('app/services/parsing/parse-path', function(parse) {
     }, {
         path:     'M570 664 c-19-49 27-87 69-57 23 16 28 52 9 71-7 7-25 12-40 12-21 0-31 -6 -38 -26z',
         segments: [ 'M 570 664', 'c -19 -49 27 -87 69 -57', 'c 23 16 28 52 9 71', 'c -7 7 -25 12 -40 12', 'c -21 0 -31 -6 -38 -26', 'z' ]
+    },{
+        path:     'M10,10 L30,40z',
+        segments: [ 'M 10 10', 'L 30 40', 'z' ]
     }].forEach(function(pair, index) {
         it('can parse path ' + (index + 1), function() {
             var result = parse(pair.path);
