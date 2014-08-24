@@ -45,7 +45,7 @@ define(['app/utils/regexp-iterator', 'app/utils/position'], function(RegExpItera
 
                 var match = item.value.match;
                 if (!match) {
-                    reportError(result, 'Unexpected: \'' + item.value.string + '\'.', start);
+                    reportError('Unexpected: \'' + item.value.string + '\'.', start);
                     continue;
                 }
 
@@ -65,7 +65,7 @@ define(['app/utils/regexp-iterator', 'app/utils/position'], function(RegExpItera
             var rule = coordRules[command.toLowerCase()];
             var start = position.toObject();
             if (rule === '?') {
-                reportError(result, 'Segment \'' + command + '\' is not yet supported.', start);
+                reportError('Segment \'' + command + '\' is not yet supported.', start);
                 return;
             }
 
@@ -76,7 +76,7 @@ define(['app/utils/regexp-iterator', 'app/utils/position'], function(RegExpItera
                 var string = item.value.string;
                 position.advanceByString(string);
                 if (!item.value.match) {
-                    reportError(result, 'Unexpected: \'' + string + '\'.', start);
+                    reportError('Unexpected: \'' + string + '\'.', start);
                     start = position.toObject();
                     coords = { _count: 0 };
                     continue;
@@ -108,7 +108,7 @@ define(['app/utils/regexp-iterator', 'app/utils/position'], function(RegExpItera
                 addSegment(command, {}, start, position.toObject());
 
             if (coords._count > 0)
-                reportError(result, 'Segment \'' + command + '\' must have exactly ' + rule.count + ' values.', start);
+                reportError('Segment \'' + command + '\' must have exactly ' + rule.count + ' values.', start);
         }
 
         function addSegment(command, coords, start, end) {

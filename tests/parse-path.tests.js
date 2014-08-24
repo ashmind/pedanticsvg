@@ -51,7 +51,6 @@ describe('app/services/parsing/parse-path', function(parse) {
         });
     });
 
-
     it('produces path that can be converted to absolute', function() {
         var result = parse('M100 100 c10 10 20 20 40-40 h5 v5 l10 10');
         var absolute = result.segments[4].toAbsolute();
@@ -60,6 +59,15 @@ describe('app/services/parsing/parse-path', function(parse) {
         expect(absolute.coords).toEqual({ x: 155, y: 75 });
     });
 
+    it('reports parsing errors', function() {
+        var result = parse('M100 100 e! H10');
+
+        expect(result.errors).toEqual([{
+            message: 'Unexpected: \'e!\'.',
+            line: 0,
+            column: 9
+        }]);
+    });
 
     function at(line, column) {
         return { line: line, column: column };
