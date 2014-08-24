@@ -15,7 +15,7 @@ define(['app/utils/regexp-iterator', 'app/utils/position'], function(RegExpItera
         s: { count: 4, keys: ['x2', 'y2', 'x', 'y'] },
         q: { count: 4, keys: ['x1', 'y1', 'x', 'y'] },
         t: { count: 2, keys: ['x', 'y'] },
-        a: '?', // needs beter grammar
+        a: '?', // needs better grammar
         z: { count: 0 }
     };
 
