@@ -26,9 +26,6 @@ describe('app/services/parsing/parse-path', function(parse) {
         });
     });
 
-    var at = function(line, column) {
-        return { line: line, column: column };
-    };
     [{
         path:     'M 1 1 L 2 2',
         positions: [
@@ -62,4 +59,9 @@ describe('app/services/parsing/parse-path', function(parse) {
         expect(absolute.command).toEqual('L');
         expect(absolute.coords).toEqual({ x: 155, y: 75 });
     });
+
+
+    function at(line, column) {
+        return { line: line, column: column };
+    }
 });

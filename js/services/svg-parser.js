@@ -2,11 +2,11 @@ define(['sax', 'app/services/parsing/parse-path'], function(sax, parsePath) {
     'use strict';
 
     var parser = sax.parser(true, {
-        lowercase: true,
         position: true
     });
 
     function parse(code) {
+        var id = 1;
         var root = { type: 'root', children: [] };
         var flat = [];
         var stack = [root];
@@ -14,6 +14,7 @@ define(['sax', 'app/services/parsing/parse-path'], function(sax, parsePath) {
 
         parser.onprocessinginstruction = function(node) {
             topOf(stack).children.push({
+                id: id++,
                 type: 'instruction',
                 raw: '<?' + node.name + ' ' + node.body + '?>'
             });
@@ -21,6 +22,7 @@ define(['sax', 'app/services/parsing/parse-path'], function(sax, parsePath) {
 
         parser.ondoctype = function(content) {
             topOf(stack).children.push({
+                id: id++,
                 type: 'doctype',
                 raw: '<!DOCTYPE ' + content + '>'
             });
@@ -28,6 +30,7 @@ define(['sax', 'app/services/parsing/parse-path'], function(sax, parsePath) {
 
         parser.oncomment = function(text) {
             topOf(stack).children.push({
+                id: id++,
                 type: 'comment',
                 text: text
             });
@@ -37,6 +40,7 @@ define(['sax', 'app/services/parsing/parse-path'], function(sax, parsePath) {
         parser.onattribute = function(a) {
             var valueStart = getPosition(parser, 'attribValueStart');
             var attribute = {
+                id: id++,
                 type: 'attribute',
                 name: a.name,
                 value: a.value,
@@ -44,7 +48,7 @@ define(['sax', 'app/services/parsing/parse-path'], function(sax, parsePath) {
                 valueEnd: getPosition(parser)
             };
             if (a.name === 'd') {
-                var parsed = parsePath(a.value, valueStart);
+                var parsed = parsePath(a.value, { position: valueStart, id: id });
                 errors.push.apply(errors, parsed.errors);
                 attribute.valueParts = parsed.segments;
             }
@@ -54,6 +58,7 @@ define(['sax', 'app/services/parsing/parse-path'], function(sax, parsePath) {
         parser.onopentag = function(node) {
             var parent = topOf(stack);
             var tag = {
+                id: id++,
                 type: 'tag',
                 name: node.name,
                 parent: parent,
@@ -104,7 +109,7 @@ define(['sax', 'app/services/parsing/parse-path'], function(sax, parsePath) {
         return {
             root: root,
             errors: errors,
-            getNodeAt: function(position) { return getNodeAt(flat, position); },
+            getNodesInRanges: function(ranges) { return getNodesInRanges(flat, ranges); },
             stringify: function() { return stringify(root); }
         };
     }
@@ -119,38 +124,70 @@ define(['sax', 'app/services/parsing/parse-path'], function(sax, parsePath) {
              : { line: parser.line, column: parser.column };
     }
 
-    function getNodeAt(flat, position) {
-        var line = position.line;
-        var column = position.column;
+    function getNodesInRanges(flat, ranges) {
+        if (ranges.length === 0)
+            return [];
 
-        var match;
+        var rangeIndex = 0;
+        var range = ranges[rangeIndex];
+        var inRange = false;
+
+        var nodes = [];
+        var firstInRangeCandidate;
         for (var i = 0; i < flat.length; i++) {
-            var start = flat[i].start;
-            var end = flat[i].end;
-            if (start.line < line) {
-                if (end.line < line)
-                    continue;
+            var node = flat[i];
 
-                if (end.line === line && end.column < column)
-                    continue;
+            if (!inRange) {
+                var startToStart = compare(node.start, range.start);
+                if (startToStart === 'before') {
+                    var endToStart = compare(node.end, range.start);
+                    if (endToStart === 'before')
+                        continue;
 
-                match = flat[i];
-                continue;
+                    firstInRangeCandidate = node;
+                    continue;
+                }
+
+                // node.start >= range.start
+                if (startToStart !== 'equal' && firstInRangeCandidate)
+                    nodes.push(firstInRangeCandidate);
+
+                firstInRangeCandidate = null;
             }
 
-            if (start.line === line && start.column <= column) {
-                if (end.line === line && end.column < column)
-                    continue;
-
-                match = flat[i];
-                continue;
+            var startToEnd = compare(node.start, range.end);
+            if (startToEnd !== 'after') {
+                // node.start <= range.end
+                nodes.push(node);
+                inRange = true;
             }
+            else {
+                inRange = false;
+                rangeIndex += 1;
+                if (rangeIndex === ranges.length)
+                    break;
 
-            // start > position
-            break;
+                range = ranges[rangeIndex];
+                i -= 1; // retry with the new range
+            }
         }
 
-        return match;
+        return nodes;
+    }
+
+    function compare(position1, position2) {
+        if (position1.line < position2.line)
+            return 'before';
+
+        if (position1.line === position2.line) {
+            if (position1.column < position2.column)
+                return 'before';
+
+            if (position1.column === position2.column)
+                return 'equal';
+        }
+
+        return 'after';
     }
 
     function stringify(node) {
@@ -159,6 +196,9 @@ define(['sax', 'app/services/parsing/parse-path'], function(sax, parsePath) {
 
         if (node.raw)
             return node.raw;
+
+        if (node.stringify)
+            return node.stringify();
 
         if (node.type === 'root')
             return stringifyList(node.children);

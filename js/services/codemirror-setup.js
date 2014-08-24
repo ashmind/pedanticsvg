@@ -4,6 +4,7 @@ define([
     'app/codemirror/xml-hint-keys',
     'codemirror/mode/xml',
     'app/codemirror/svg',
+    'app/codemirror/track-nodes',
     'codemirror/addon/hint/show-hint',
     'codemirror/addon/hint/xml-hint',
     'codemirror/addon/edit/closetag',

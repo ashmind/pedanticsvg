@@ -166,6 +166,6 @@ textarea,
 .CodeMirror-cursors {
   z-index: 1000 !important;
 }
-.CodeMirror .cursor-scope {
+.cm-node-in-selection {
   background-color: rgba(218, 165, 32, 0.1);
 }

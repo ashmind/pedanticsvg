@@ -1,8 +1,16 @@
 define(['app/services/linker', 'app/utils/jquery.svg'], function(linker) { 'use strict'; return function(editor, preview) {
     var selectedClassName = 'psvg-selected';
-    var currentTrace = {
-        styled: [],
-        created: []
+    var traces = {};
+
+    var tracers = {
+        tag: {
+            trace: traceElement,
+            untrace: untraceElement
+        },
+        'path-segment': {
+            trace: tracePathSegment,
+            untrace: untracePathSegment
+        }
     };
 
     editor.astchange(processAst);
@@ -38,38 +46,39 @@ define(['app/services/linker', 'app/utils/jquery.svg'], function(linker) { 'use 
         }
     }
 
-    editor.selectionchange(function(selection) {
+    editor.codeMirror.on('nodesInSelectionChanged', function(cm, nodeChange) {
         preview.getRootElement().then(function ($previewRoot) {
-            tracePreview($previewRoot, selection.astNodes);
+            updateTrace($previewRoot, nodeChange);
+        }).catch(function(e) {
+            if (window.console && window.console.error)
+                console.error(e);
         });
     });
 
-    function tracePreview($previewRoot, astNodes) {
-        var tracers = {
-            tag: traceElement,
-            'path-segment': tracePathSegment
-        };
+    function updateTrace($previewRoot, change) {
+        /* jshint shadow:true */
 
-        //for (var i = 0; i < astNodes.length; i++) {
-        var astNode = astNodes[0];
-        if (currentTrace.astNode === astNode)
-            return;
+        var removed = change.removed;
+        for (var i = 0; i < removed.length; i++) {
+            var id = removed[i].id;
+            var tracer = tracers[removed[i].astNode.type];
+            var trace = traces[id];
+            if (!tracer || !trace)
+                continue;
 
-        clearCurrentTrace();
-        var tracer = tracers[astNode.type];
-        if (!tracer)
-            return;
+            tracer.untrace(trace);
+            delete traces[id];
+        }
 
-        tracer($previewRoot, astNode);
-        //}
-    }
+        var added = change.added;
+        for (var i = 0; i < added.length; i++) {
+            var astNode = added[i].astNode;
+            var tracer = tracers[astNode.type];
+            if (!tracer)
+                continue;
 
-    function clearCurrentTrace() {
-        var trace = currentTrace;
-        $(trace.styled).svgRemoveClass(selectedClassName);
-        $(trace.created).remove();
-        trace.styled = [];
-        trace.created = [];
+            traces[added[i].id] = tracer.trace($previewRoot, astNode);
+        }
     }
 
     function traceElement($previewRoot, tag) {
@@ -78,21 +87,88 @@ define(['app/services/linker', 'app/utils/jquery.svg'], function(linker) { 'use 
             return;
 
         $element.svgAddClass(selectedClassName);
-        currentTrace.styled.push($element[0]);
+        return $element;
+    }
+
+    function untraceElement($element) {
+        $element.svgRemoveClass(selectedClassName);
     }
 
     function tracePathSegment($previewRoot, segment) {
-        var $path = linker.findByAstNode($previewRoot, segment.parent);
+        //console.log('trace ', segment.stringify());
+
+        var parent = segment.parent;
+
+        var $path = linker.findByAstNode($previewRoot, parent);
         if ($path.length === 0)
             return;
 
-        var start = segment.startPoint();
-        var d = 'M ' + start.x + ' ' + start.y + ' ' + segment.toAbsolute().stringify();
-        var $tracePath = $path.clone()
-             .svgAddClass(selectedClassName)
-             .attr('d', d)
-             .appendTo($path.parent());
+        var segmentIndexInTrace;
+        var commonParentTraceKey = parent.id + '_segments';
+        var trace = traces[commonParentTraceKey];
+        if (!trace) {
+            trace = {
+                extraKey: commonParentTraceKey,
+                segments: [segment]
+            };
+            segmentIndexInTrace = 0;
+            traces[commonParentTraceKey] = trace;
+            trace.$path = $path.clone()
+                               .svgAddClass(selectedClassName)
+                               .appendTo($path.parent());
+        }
+        else {
+            // insert segment in in a location based on its order
+            var segments = trace.segments;
+            if (segments[0].index > segment.index) {
+                segments.unshift(segment);
+            }
+            else if (segments[segments.length - 1].index < segment.index) {
+                segments.push(segment);
+            }
+            else {
+                for (var i = 0; i < segments.length; i++) {
+                    if (segments[i].index > segment.index) {
+                        segments.splice(i, 0, segment);
+                        break;
+                    }
+                }
+            }
+        }
 
-        currentTrace.created.push($tracePath[0]);
+        retracePathSegment(trace);
+        return { trace: trace, segment: segment };
+    }
+
+    function untracePathSegment(traceAndSegment) {
+        var trace = traceAndSegment.trace;
+        var segment = traceAndSegment.segment;
+        var segments = trace.segments;
+
+        //console.log('untrace ', segment.stringify());
+        for (var i = 0; i < segments.length; i++) {
+            if (segments[i] === segment) {
+                segments.splice(i, 1);
+                break;
+            }
+        }
+
+        if (segments.length === 0) {
+            trace.$path.remove();
+            delete traces[trace.extraKey];
+            return;
+        }
+
+        retracePathSegment(trace);
+    }
+
+    function retracePathSegment(trace) {
+        var start = trace.segments[0].startPoint();
+        var d = 'M ' + start.x + ' ' + start.y;
+        for (var i = 0; i < trace.segments.length; i++) {
+            d += ' ' + trace.segments[i].toAbsolute().stringify();
+        }
+
+        trace.$path.attr('d', d);
     }
 };});

@@ -1,14 +1,21 @@
-// CodeMirror, copyright (c) by Marijn Haverbeke and others
-// Distributed under an MIT license: http://codemirror.net/LICENSE
+/* globals module:true */
 
-(function(mod) {
-  if (typeof exports == "object" && typeof module == "object") // CommonJS
-    mod(require("../../lib/codemirror"));
-  else if (typeof define == "function" && define.amd) // AMD
-    define(["../../lib/codemirror"], mod);
-  else // Plain browser env
-    mod(CodeMirror);
-})(function(CodeMirror) {
-"use strict";
-CodeMirror.defineMIME("image/svg+xml", "xml");
+(function (root, factory) {
+    "use strict";
+
+    if (typeof define === "function" && define.amd) {
+        // AMD. Register as an anonymous module.
+        define(["codemirror"], factory);
+    } else if (typeof exports === "object") {
+        // Node. Does not work with strict CommonJS, but
+        // only CommonJS-like environments that support module.exports,
+        // like Node.
+        module.exports = factory(require("codemirror"));
+    } else {
+        // Browser globals (root is window)
+        factory(window.CodeMirror);
+    }
+})(this, function(CodeMirror) {
+    "use strict";
+    CodeMirror.defineMIME("image/svg+xml", "xml");
 });

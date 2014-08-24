@@ -4,15 +4,12 @@ define([
     'app/services/codemirror-setup',
     'app/services/svg-parser'
 ], function($, event, setupCodeMirror, parse) { 'use strict'; return function($editor) {
-    var cursorMarker;
-    var selectedNode;
     var ast;
     var code;
 
     var service = {
         astchange: event(),
-        codechange: event(),
-        selectionchange: event()
+        codechange: event()
     };
 
     service.astchange.onsubscribe = function() {
@@ -23,20 +20,18 @@ define([
     };
 
     var cm = setupCodeMirror($editor[0]);
+    cm.setOption('trackNodesInSelection', {
+        getNodes: getNodesInSelection
+    });
     cm.setOption('lint', {
         async: true,
         getAnnotations: (function processChange(_, updateLinting) {
             code = cm.getValue();
             updateAstFromCode(updateLinting);
-            updateCursorMarker();
+            cm.refreshNodesInSelection();
             service.codechange(code);
         })
     });
-
-    cm.on('cursorActivity', function() {
-        updateCursorMarker(cm);
-    });
-
 
     Object.defineProperty(service, 'code', {
         get: function() { return code; },
@@ -51,10 +46,13 @@ define([
         }
     });
 
-
     if (!code)
         code = cm.getValue();
 
+    Object.defineProperty(service, 'codeMirror', {
+        value: cm,
+        writable: false
+    });
     return service;
 
     function updateAstFromCode(updateLinting) {
@@ -82,25 +80,31 @@ define([
         updateLinting(cm, cmErrors);
     }
 
-    function updateCursorMarker() {
-        if (cursorMarker) {
-            cursorMarker.clear();
-            cursorMarker = null;
+    function getNodesInSelection(cm, selections) {
+        /* jshint shadow:true */
+
+        if (!ast)
+            return [];
+
+        var ranges = [];
+        for (var i = 0; i < selections.length; i++) {
+            ranges.push({
+                start: fromCMPosition(selections[i].from()),
+                end: fromCMPosition(selections[i].to())
+            });
         }
-
-        var cursor = cm.getCursor();
-        var node = ast.getNodeAt(fromCMPosition(cursor));
-        if (selectedNode !== node) {
-            service.selectionchange({ astNodes: [node] });
-            selectedNode = node;
+        var astNodes = ast.getNodesInRanges(ranges);
+        var mappedNodes = [];
+        for (var i = 0; i < astNodes.length; i++) {
+            var astNode = astNodes[i];
+            mappedNodes.push({
+                id: astNode.id,
+                start: toCMPosition(astNode.start),
+                end: toCMPosition(astNode.end),
+                astNode: astNode
+            });
         }
-
-        if (!node)
-            return;
-
-        cursorMarker = cm.markText(toCMPosition(node.start), toCMPosition(node.end), {
-            className: 'cursor-scope'
-        });
+        return mappedNodes;
     }
 
     function fromCMPosition(position) {
