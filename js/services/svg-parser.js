@@ -37,22 +37,22 @@ define(['sax', 'app/services/parsing/parse-path'], function(sax, parsePath) {
         };
 
         var attributes = {};
-        parser.onattribute = function(a) {
+        var tagExtra = [];
+        var onpath = function(a) {
             var valueStart = getPosition(parser, 'attribValueStart');
-            var attribute = {
-                id: id++,
-                type: 'attribute',
-                name: a.name,
-                value: a.value,
-                valueStart: valueStart,
-                valueEnd: getPosition(parser)
-            };
-            if (a.name === 'd') {
-                var parsed = parsePath(a.value, { position: valueStart, id: id });
+            tagExtra.push(function(tag) {
+                var parsed = parsePath(a.value, { position: valueStart, id: id, parent: tag });
                 errors.push.apply(errors, parsed.errors);
-                attribute.valueParts = parsed.segments;
-            }
-            attributes[a.name] = attribute;
+                var segments = parsed.segments;
+                tag.segments = segments;
+                flat.push.apply(flat, segments);
+            });
+        };
+        parser.onattribute = function(a) {
+            if (a.name === 'd')
+                onpath(a);
+
+            attributes[a.name] = a.value;
         };
 
         parser.onopentag = function(node) {
@@ -70,15 +70,10 @@ define(['sax', 'app/services/parsing/parse-path'], function(sax, parsePath) {
             flat.push(tag);
             stack.push(tag);
 
-            for (var key in attributes) {
-                var parts = attributes[key].valueParts;
-                if (parts) {
-                    for (var i = 0; i < parts.length; i++) {
-                        parts[i].parent = tag;
-                    }
-                    flat.push.apply(flat, parts);
-                }
+            for (var i = 0; i < tagExtra.length; i++) {
+                tagExtra[i](tag);
             }
+            tagExtra = [];
             attributes = {};
         };
 
@@ -205,10 +200,12 @@ define(['sax', 'app/services/parsing/parse-path'], function(sax, parsePath) {
 
         if (node.type === 'tag') {
             var result = '<' + node.name;
-            if (Object.getOwnPropertyNames(node.attributes).length > 0)
-                result += ' ';
 
-            result += stringifyList(node.attributes, ' ');
+            var attributes = node.attributes;
+            for (var name in attributes) {
+                result += ' ' + name + '="' + attributes[name] + '"';
+            }
+
             if (node.children.length > 0) {
                 result += '>';
                 result += stringifyList(node.children);
@@ -219,9 +216,6 @@ define(['sax', 'app/services/parsing/parse-path'], function(sax, parsePath) {
             }
             return result;
         }
-
-        if (node.type === 'attribute')
-            return node.name + '="' + node.value + '"';
 
         if (node.type === 'comment')
             return '<!-- ' + node.text + ' -->';

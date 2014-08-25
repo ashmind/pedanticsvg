@@ -29,6 +29,8 @@ define(['app/utils/regexp-iterator', 'app/utils/position'], function(RegExpItera
             errors: []
         };
 
+        var parent = outer.parent || { segments: result.segments };
+
         parse();
         return result;
 
@@ -116,8 +118,8 @@ define(['app/utils/regexp-iterator', 'app/utils/position'], function(RegExpItera
 
             var index = result.segments.length;
             var segment = Segment(idPrefix + '-segment-' + id++, command, coords, start, end);
+            segment.parent = parent;
             segment.index = index;
-            segment.parentList = result.segments;
             result.segments.push(segment);
         }
 
@@ -162,10 +164,10 @@ define(['app/utils/regexp-iterator', 'app/utils/position'], function(RegExpItera
                 return startPoint;
             }
 
-            var segments = this.parentList;
+            var siblings = this.parent.segments;
             var firstUncachedIndex = 0;
             for (var i = this.index-1; i >= 0; i--) {
-                if (segments[i]._cache.absolute) {
+                if (siblings[i]._cache.absolute) {
                     firstUncachedIndex = i+1;
                     break;
                 }
@@ -174,7 +176,7 @@ define(['app/utils/regexp-iterator', 'app/utils/position'], function(RegExpItera
             // this prevents stack explosion that might have happened
             // if I just called toAbsolute() on previous
             for (var i = firstUncachedIndex; i < this.index; i++) {
-                segments[i].toAbsolute();
+                siblings[i].toAbsolute();
             }
 
             // and one more time backwards,
@@ -182,7 +184,7 @@ define(['app/utils/regexp-iterator', 'app/utils/position'], function(RegExpItera
             var x;
             var y;
             for (var i = this.index-1; i >= 0; i--) {
-                var precedingCoords = segments[i].toAbsolute().coords;
+                var precedingCoords = siblings[i].toAbsolute().coords;
                 if (precedingCoords.x !== undefined)
                     x = precedingCoords.x;
 
