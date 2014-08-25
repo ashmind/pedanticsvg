@@ -136,6 +136,7 @@ section .content {
 }
 .preview .content {
   border-left: 1px solid #aaa;
+  overflow: hidden;
 }
 @media (orientation: portrait) {
   .preview header {
@@ -145,6 +146,32 @@ section .content {
   .preview .content {
     border-left: none;
   }
+}
+.preview .size {
+  position: relative;
+}
+.preview .size:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-right: 5px dashed #eee;
+  border-bottom: 5px dashed #eee;
+}
+.preview .size-label {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  margin-top: 10px;
+  text-align: center;
+  color: #ddd;
+  font-size: 120%;
+}
+.preview .size-label.inside {
+  margin-top: -30px;
 }
 .preview iframe {
   position: absolute;

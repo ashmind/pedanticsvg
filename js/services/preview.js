@@ -1,5 +1,8 @@
 define(['jquery'], function($) { 'use strict'; return function($preview) {
     var $iframe = $('<iframe>').appendTo($preview);
+    var $size = $('<div>').addClass('size').appendTo($preview);
+    var $sizeLabel = $('<div>').addClass('size-label').appendTo($size);
+
     var lastUnreleasedUrl;
 
     var loaded;
@@ -8,7 +11,13 @@ define(['jquery'], function($) { 'use strict'; return function($preview) {
     $iframe[0].onload = function() {
         if (resolveLoaded)
             resolveLoaded();
+
+        updateSize();
     };
+
+    $(window).resize(function() {
+        updateSize();
+    });
 
     function render(svg) {
         setLoadPromise();
@@ -27,14 +36,34 @@ define(['jquery'], function($) { 'use strict'; return function($preview) {
             setLoadPromise();
 
         return loaded.then(function() {
-            return $($iframe[0].contentWindow.document.documentElement);
+            return getRootElementImmediate();
         });
+    }
+
+    function getRootElementImmediate() {
+        return $($iframe[0].contentWindow.document.documentElement);
     }
 
     function setLoadPromise() {
         loaded = new Promise(function(resolve) {
             resolveLoaded = resolve;
         });
+    }
+
+    function updateSize() {
+        var $svg = getRootElementImmediate();
+        var svgWidth = $svg.width();
+        var svgHeight = $svg.height();
+
+        var previewWidth = $preview.width();
+        var previewHeight = $preview.height();
+
+        $size.width(Math.min(svgWidth, previewWidth));
+        $size.height(Math.min(svgHeight, previewHeight));
+
+        $sizeLabel
+            .toggleClass('inside', svgWidth >= previewWidth)
+            .text(svgWidth + ' × ' + svgHeight);
     }
 
     return {
