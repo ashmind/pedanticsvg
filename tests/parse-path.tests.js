@@ -19,7 +19,7 @@ describe('app/services/parsing/parse-path', function(parse) {
         it('can parse path ' + (index + 1), function() {
             var result = parse(pair.path);
             var segmentValues = result.segments.map(function(s) {
-                return s.stringify();
+                return s.toSVG();
             });
 
             expect(segmentValues).toEqual(pair.segments);

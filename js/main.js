@@ -45,6 +45,6 @@ require([
     trace(editor, preview);
 
     editor.astchange(function(ast) {
-        preview.render(ast.stringify());
+        preview.render(ast.root.toSVG());
     });
 });

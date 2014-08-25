@@ -1,4 +1,4 @@
-define(['app/services/linker', 'app/utils/jquery.svg'], function(linker) { 'use strict'; return function(editor, preview) {
+define(['app/services/svg-ast', 'app/services/linker', 'app/utils/jquery.svg'], function(astFactory, linker) { 'use strict'; return function(editor, preview) {
     var selectedClassName = 'psvg-selected';
     var traces = {};
 
@@ -20,15 +20,11 @@ define(['app/services/linker', 'app/utils/jquery.svg'], function(linker) { 'use 
         if (!parentTag)
             return;
 
-        parentTag.children.unshift({
-            type: 'tag',
-            name: 'style',
-            attributes: {},
-            children: [
-                // TODO: move to CSS
-                '.psvg-selected { fill: #daa520 !important; stroke: #daa520 !important; }'
-            ]
-        });
+        var style = astFactory.tag('style', null, [
+            // TODO: move to CSS
+            '.psvg-selected { fill: #daa520 !important; stroke: #daa520 !important; }'
+        ]);
+        parentTag.children.unshift(style);
     }
 
     function findFirstTag(astNode) {
@@ -166,7 +162,7 @@ define(['app/services/linker', 'app/utils/jquery.svg'], function(linker) { 'use 
         var start = trace.segments[0].startPoint();
         var d = 'M ' + start.x + ' ' + start.y;
         for (var i = 0; i < trace.segments.length; i++) {
-            d += ' ' + trace.segments[i].toAbsolute().stringify();
+            d += ' ' + trace.segments[i].toAbsolute().toSVG();
         }
 
         trace.$path.attr('d', d);

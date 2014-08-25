@@ -1,4 +1,4 @@
-define(['app/utils/regexp-iterator', 'app/utils/position'], function(RegExpIterator, Position) {
+define(['app/services/svg-ast', 'app/utils/regexp-iterator', 'app/utils/position'], function(ast, RegExpIterator, Position) {
     'use strict';
 
     // This all is pretty terrible and should probably be rewritten
@@ -21,9 +21,6 @@ define(['app/utils/regexp-iterator', 'app/utils/position'], function(RegExpItera
 
     return function (path, outer) {
         outer = outer || {};
-        var idPrefix = outer.id || '';
-        var id = 1;
-
         var result = {
             segments: [],
             errors: []
@@ -117,7 +114,9 @@ define(['app/utils/regexp-iterator', 'app/utils/position'], function(RegExpItera
             /* jshint newcap:false */
 
             var index = result.segments.length;
-            var segment = Segment(idPrefix + '-segment-' + id++, command, coords, start, end);
+            var segment = ast.pathSegment(command, coords);
+            segment.start = start;
+            segment.end = end;
             segment.parent = parent;
             segment.index = index;
             result.segments.push(segment);
@@ -132,108 +131,4 @@ define(['app/utils/regexp-iterator', 'app/utils/position'], function(RegExpItera
             });
         }
     };
-
-    function Segment(id, command, coords, start, end) {
-        var segment = {
-            id: id,
-            type: 'path-segment',
-            command: command,
-            coords: coords,
-            start: start,
-            end: end,
-
-            _cache: {}
-        };
-
-        segment.isAbsolute = function() {
-            return segment._cache.absolute === this
-                || segment.command.toUpperCase() === segment.command;
-        };
-
-        segment.startPoint = function() {
-            /* jshint shadow:true */
-            if (this._cache.startPoint)
-                return this._cache.startPoint;
-
-            if (this.isAbsolute()) {
-                var startPoint = Object.freeze({
-                    x: this.coords.x || 0,
-                    y: this.coords.y || 0
-                });
-                this._cache.startPoint = startPoint;
-                return startPoint;
-            }
-
-            var siblings = this.parent.segments;
-            var firstUncachedIndex = 0;
-            for (var i = this.index-1; i >= 0; i--) {
-                if (siblings[i]._cache.absolute) {
-                    firstUncachedIndex = i+1;
-                    break;
-                }
-            }
-
-            // this prevents stack explosion that might have happened
-            // if I just called toAbsolute() on previous
-            for (var i = firstUncachedIndex; i < this.index; i++) {
-                siblings[i].toAbsolute();
-            }
-
-            // and one more time backwards,
-            // in case there are any H or V that do not give both coords
-            var x;
-            var y;
-            for (var i = this.index-1; i >= 0; i--) {
-                var precedingCoords = siblings[i].toAbsolute().coords;
-                if (precedingCoords.x !== undefined)
-                    x = precedingCoords.x;
-
-                if (precedingCoords.y !== undefined)
-                    y = precedingCoords.y;
-
-                if (x !== undefined && y !== undefined)
-                    break;
-            }
-            x = x || 0;
-            y = y || 0;
-
-            var startPoint = Object.freeze({ x: x, y: y });
-            this._cache.startPoint = startPoint;
-            return startPoint;
-        };
-
-        segment.toAbsolute = function() {
-            /* jshint newcap:false, shadow:true */
-            if (this._cache.absolute)
-                return this._cache.absolute;
-
-            if (this.command.toUpperCase() === this.command) {
-                this._cache.absolute = this;
-                return this; // already absolute
-            }
-
-            var start = this.startPoint();
-            var coords = this.coords;
-            var newCoords = {};
-            for (var key in coords) {
-                newCoords[key] = coords[key] +
-                    ((key === 'x' || key === 'x1' || key === 'x2') ? start.x : start.y);
-            }
-
-            var absolute = Segment('_clone_', this.command.toUpperCase(), newCoords);
-            absolute._cache = this._cache;
-            segment._cache.absolute = absolute;
-            return absolute;
-        };
-
-        segment.stringify = function() {
-            var string = this.command;
-            for (var key in this.coords) {
-                string += ' ' + this.coords[key];
-            }
-            return string;
-        };
-
-        return segment;
-    }
 });
