@@ -148,7 +148,7 @@ section .content {
   }
 }
 .preview .size {
-  position: relative;
+  position: absolute;
 }
 .preview .size:after {
   content: '';
