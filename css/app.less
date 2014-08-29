@@ -1,5 +1,6 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans);
 @import url(http://fonts.googleapis.com/css?family=Roboto+Condensed);
+@import url('jquery-ui.custom.less');
 
 .display-flex() {
   display: -webkit-flex;
@@ -96,37 +97,6 @@ section header {
     font-family: 'Roboto Condensed', sans-serif;
   }
 
-  select {
-    font-family: 'Roboto Condensed', sans-serif;
-    background: transparent;
-    outline: none;
-    border: none;
-    -webkit-appearance:none;
-    padding-right: 10px;
-  }
-
-  .select-wrapper {
-    position: relative;
-    border: 1px solid #fff;
-
-    &::after {
-      content: '▾';
-      position: absolute;
-      right: 2px;
-      top: 0;
-      pointer-events: none;
-    }
-  }
-
-  > .select-wrapper {
-    position: absolute;
-    margin-top: -2px;
-  }
-
-  option {
-    color: #000;
-  }
-
   a {
     position: absolute;
     right: 0;
@@ -165,6 +135,16 @@ section .content {
   .content {
     border-left: 1px solid #aaa;
     overflow: hidden;
+
+    .aligner {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+
+      .display-flex();
+      align-items: center;
+      justify-content: center;
+    }
   }
 
   @media (orientation: portrait) {
@@ -178,19 +158,44 @@ section .content {
     }
   }
 
+  iframe {
+    @margin: 20px;
+    border: 0;
+  }
+
+  .wrapper {
+    @border-width: 5px;
+
+    position: relative;
+    border: @border-width dashed transparent;
+    max-height: 100%;
+    max-width: 100%;
+
+    top: auto !important;
+    left: auto !important;
+
+    .ui-resizable(5px, 10px);
+
+    transition: border-color 0.2s linear;
+  }
+
+  &:hover .wrapper {
+    border-color: #eee;
+  }
+
   .size {
     position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    border: 5px dashed #eee;
+  }
 
-    &:after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      border-right: 5px dashed #eee;
-      border-bottom: 5px dashed #eee;
-    }
+  .size.fill {
+    width: 100%;
+    height: 100%;
   }
 
   .size-label {
@@ -205,17 +210,8 @@ section .content {
     font-size: 120%;
   }
 
-  .size-label.inside {
+  .size.fill .size-label {
     margin-top: -30px;
-  }
-
-  iframe {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100%;
-    border: 0;
   }
 }
 
@@ -236,3 +232,4 @@ textarea, .CodeMirror {
 .cm-node-in-selection {
   background-color: rgba(218, 165, 32, 0.1);
 }
+

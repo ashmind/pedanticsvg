@@ -6,6 +6,7 @@
             app:                          '../js',
             sax:                          '../external/sax',
             jquery:                       'https://code.jquery.com/jquery-2.0.3.min',
+            'jquery-ui':                  'https://code.jquery.com/ui/1.11.1/jquery-ui.min',
             codemirror:                   codeMirrorBase + 'codemirror',
             'codemirror/addon':           codeMirrorBase + 'addon'
         },
@@ -40,7 +41,7 @@ require([
     'use strict';
 
     var editor = editorFactory($('#code'));
-    var preview = previewFactory($('.preview .content'));
+    var preview = previewFactory($('.preview .content .aligner'));
     autosave(editor);
     trace(editor, preview);
 
