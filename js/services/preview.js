@@ -2,6 +2,7 @@ define(['jquery', 'jquery-ui'], function($) { 'use strict'; return function($pre
     var $wrapper = $('<div>').addClass('wrapper').appendTo($preview);
     var $iframe = $('<iframe>').appendTo($wrapper);
     var $sizeLabel = $('<div>').addClass('size-label').appendTo($wrapper);
+    var $iframeFix = $('<div>').addClass('iframe-fix').appendTo($wrapper);
 
     var lastUnreleasedUrl;
 
@@ -10,14 +11,18 @@ define(['jquery', 'jquery-ui'], function($) { 'use strict'; return function($pre
 
     var manualSizeSet = false;
 
-    $wrapper.append($('<div style="position: absolute; top:0; left:0; width: 100%; height: 100%">'));
-
     $iframe[0].onload = function() {
         if (resolveLoaded)
             resolveLoaded();
 
         autosize();
     };
+
+    $preview.mousedown(function() {
+        $iframeFix.show();
+    }).mouseup(function() {
+        $iframeFix.hide();
+    });
 
     $(window).resize(function() {
         autosize();
