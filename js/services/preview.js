@@ -83,13 +83,6 @@ define(['jquery', 'jquery-ui'], function($) { 'use strict'; return function($pre
             $wrapper.height(svgHeight);
         }
 
-        /*var previewWidth = $preview.width();
-        var previewHeight = $preview.height();
-
-        $size.width(Math.min(svgWidth, previewWidth))
-             .height(Math.min(svgHeight, previewHeight))
-             .toggleClass('fill', svgWidth >= previewWidth);*/
-
         $sizeLabel.text(svgWidth + ' × ' + svgHeight);
     }
 
@@ -102,26 +95,6 @@ define(['jquery', 'jquery-ui'], function($) { 'use strict'; return function($pre
         $sizeLabel.text(wrapperWidth + ' × ' + wrapperHeight);
         manualSizeSet = true;
     }
-
-    /*function generateResizeHandles() {
-        for (var x = -1; x <= 1; x++) {
-            for (var y = -1; y <= 1; y++) {
-                if (x === 0 && y === 0) continue;
-
-                var css = { position: 'absolute' };
-                if (x < 1)   css.left   = '-5px';
-                if (y < 1)   css.top    = '-5px';
-                if (x > -1)  css.right  = '-5px';
-                if (y > -1)  css.bottom = '-5px';
-                if (x !== 0) css.width  = '5px';
-                if (y !== 0) css.height = '5px';
-                if (x === 0) css.cursor = 'ns-resize';
-                if (y === 0) css.cursor = 'ew-resize';
-
-                $('<div>').css(css).appendTo($wrapper);
-            }
-        }
-    }*/
 
     return {
         render: render,
