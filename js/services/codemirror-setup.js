@@ -6,7 +6,7 @@ define([
     'app/codemirror/svg',
     'app/codemirror/track-nodes',
     'codemirror/addon/hint/show-hint',
-    'codemirror/addon/hint/xml-hint',
+    'app/codemirror/xml-hint-customized',
     'codemirror/addon/edit/closetag',
     'codemirror/addon/edit/closebrackets',
     'codemirror/addon/lint/lint',

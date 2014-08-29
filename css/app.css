@@ -233,8 +233,12 @@ textarea,
   left: 0;
   right: 0;
   height: 100%;
-  font-family: Consolas, Menlo, Monaco, monospace;
   line-height: 1.2;
+}
+textarea,
+.CodeMirror,
+.CodeMirror-hints {
+  font-family: Consolas, Menlo, Monaco, monospace;
 }
 .CodeMirror-cursors {
   z-index: 1000 !important;
