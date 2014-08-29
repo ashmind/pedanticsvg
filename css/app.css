@@ -212,19 +212,6 @@ section .content {
 .preview:hover .wrapper {
   border-color: #eee;
 }
-.preview .size {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  margin: auto;
-  border: 5px dashed #eee;
-}
-.preview .size.fill {
-  width: 100%;
-  height: 100%;
-}
 .preview .size-label {
   position: absolute;
   left: 0;
@@ -234,9 +221,11 @@ section .content {
   text-align: center;
   color: #ddd;
   font-size: 120%;
+  opacity: 0;
+  transition: opacity 0.2s linear;
 }
-.preview .size.fill .size-label {
-  margin-top: -30px;
+.preview:hover .size-label {
+  opacity: 1;
 }
 textarea,
 .CodeMirror {

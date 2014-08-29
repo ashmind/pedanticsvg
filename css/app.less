@@ -183,21 +183,6 @@ section .content {
     border-color: #eee;
   }
 
-  .size {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    margin: auto;
-    border: 5px dashed #eee;
-  }
-
-  .size.fill {
-    width: 100%;
-    height: 100%;
-  }
-
   .size-label {
     position: absolute;
     left: 0;
@@ -208,10 +193,13 @@ section .content {
 
     color: #ddd;
     font-size: 120%;
+    opacity: 0;
+
+    transition: opacity 0.2s linear;
   }
 
-  .size.fill .size-label {
-    margin-top: -30px;
+  &:hover .size-label {
+    opacity: 1;
   }
 }
 
