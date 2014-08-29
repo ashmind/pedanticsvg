@@ -95,10 +95,10 @@ define(function() {
             var y;
             for (var i = this.index-1; i >= 0; i--) {
                 var precedingCoords = siblings[i].toAbsolute().coords;
-                if (precedingCoords.x !== undefined)
+                if (x === undefined && precedingCoords.x !== undefined)
                     x = precedingCoords.x;
 
-                if (precedingCoords.y !== undefined)
+                if (y === undefined && precedingCoords.y !== undefined)
                     y = precedingCoords.y;
 
                 if (x !== undefined && y !== undefined)
@@ -126,6 +126,11 @@ define(function() {
             var coords = this.coords;
             var newCoords = {};
             for (var key in coords) {
+                if (!/^[xy]\d?$/.test(key)) {
+                    newCoords[key] = coords[key];
+                    continue;
+                }
+
                 newCoords[key] = coords[key] +
                     ((key === 'x' || key === 'x1' || key === 'x2') ? start.x : start.y);
             }

@@ -6,17 +6,17 @@ define(['app/services/svg-ast', 'app/utils/regexp-iterator', 'app/utils/position
 
     var segmentRegexp = /([mlhvcsqtaz])((?:[\s,]*[\d\.\-]+)*)|(\s+)/i;
     var coordRegexp = /\-?(?:\d*\.)?\d+|([\s,]+)/i;
-    var coordRules = {
-        m: { count: 2, keys: ['x', 'y'] },
-        l: { count: 2, keys: ['x', 'y'] },
-        h: { count: 1, keys: ['x'] },
-        v: { count: 1, keys: ['y'] },
-        c: { count: 6, keys: ['x1', 'y1', 'x2', 'y2', 'x', 'y'] },
-        s: { count: 4, keys: ['x2', 'y2', 'x', 'y'] },
-        q: { count: 4, keys: ['x1', 'y1', 'x', 'y'] },
-        t: { count: 2, keys: ['x', 'y'] },
-        a: '?', // needs better grammar
-        z: { count: 0 }
+    var coordKeys = {
+        m: ['x', 'y'],
+        l: ['x', 'y'],
+        h: ['x'],
+        v: ['y'],
+        c: ['x1', 'y1', 'x2', 'y2', 'x', 'y'],
+        s: ['x2', 'y2', 'x', 'y'],
+        q: ['x1', 'y1', 'x', 'y'],
+        t: ['x', 'y'],
+        a: ['rx', 'ry', 'x-axis-rotation', 'large-arg-flag', 'sweep-flag', 'x', 'y'], // this is an approximation, needs better numbers grammar
+        z: []
     };
 
     return function (path, outer) {
@@ -61,10 +61,10 @@ define(['app/services/svg-ast', 'app/utils/regexp-iterator', 'app/utils/position
             /* jshint newcap:false */
             var firstCoords = true;
             var coords = { _count: 0 };
-            var rule = coordRules[command.toLowerCase()];
+            var keys = coordKeys[command.toLowerCase()];
             var start = position.toObject();
-            if (rule === '?') {
-                reportError('Segment \'' + command + '\' is not yet supported.', start);
+            if (keys === undefined) {
+                reportError('Unknown command \'' + command + '\'.', start);
                 return;
             }
 
@@ -90,9 +90,9 @@ define(['app/services/svg-ast', 'app/utils/regexp-iterator', 'app/utils/position
                     continue;
                 }
 
-                coords[rule.keys[coords._count]] = parseFloat(string);
+                coords[keys[coords._count]] = parseFloat(string);
                 coords._count += 1;
-                if (coords._count < rule.count)
+                if (coords._count < keys.length)
                     continue;
 
                 var end = position.toObject();
@@ -103,11 +103,11 @@ define(['app/services/svg-ast', 'app/utils/regexp-iterator', 'app/utils/position
                 start = end;
             }
 
-            if (rule.count === 0)
+            if (keys.length === 0)
                 addSegment(command, {}, start, position.toObject());
 
             if (coords._count > 0)
-                reportError('Segment \'' + command + '\' must have exactly ' + rule.count + ' values.', start);
+                reportError('Segment \'' + command + '\' must have exactly ' + keys.length + ' values.', start);
         }
 
         function addSegment(command, coords, start, end) {

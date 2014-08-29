@@ -15,6 +15,9 @@ describe('app/services/parsing/parse-path', function(parse) {
     },{
         path:     'M10,10 L30,40z',
         segments: [ 'M 10 10', 'L 30 40', 'z' ]
+    },{
+        path:     'M300,200 h-150 a150,150 0 1,0 150,-150 z',
+        segments: [ 'M 300 200', 'h -150', 'a 150 150 0 1 0 150 -150', 'z' ]
     }].forEach(function(pair, index) {
         it('can parse path ' + (index + 1), function() {
             var result = parse(pair.path);
@@ -51,12 +54,28 @@ describe('app/services/parsing/parse-path', function(parse) {
         });
     });
 
-    it('produces path that can be converted to absolute', function() {
-        var result = parse('M100 100 c10 10 20 20 40-40 h5 v5 l10 10');
-        var absolute = result.segments[4].toAbsolute();
+    [{
+        path:     'M100 100 c10 10 20 20 40-40 h5 v5 l10 10',
+        expected: {
+            index: 4,
+            value: 'L 155 75'
+        }
+    }, {
+        path:     'M300,200 h-150 a150,150 0 1,0 150,-150 z',
+        expected: {
+            index: 2,
+            value: 'A 150 150 0 1 0 300 50'
+        }
+    }].forEach(function(data, index) {
+        var path = data.path;
+        var expected = data.expected;
 
-        expect(absolute.command).toEqual('L');
-        expect(absolute.coords).toEqual({ x: 155, y: 75 });
+        it('produces path that can be converted to absolute ' + (index + 1), function() {
+            var result = parse(path);
+            var absolute = result.segments[expected.index].toAbsolute();
+
+            expect(absolute.toSVG()).toEqual(expected.value);
+        });
     });
 
     it('reports parsing errors', function() {
