@@ -150,6 +150,9 @@ define(['sax', 'app/services/svg-ast', 'app/services/parsing/parse-path'], funct
             }
         }
 
+        if (firstInRangeCandidate)
+            nodes.push(firstInRangeCandidate);
+
         return nodes;
     }
 
