@@ -69,24 +69,17 @@ define(['jquery', 'jquery-ui'], function($) { 'use strict'; return function($pre
 
         var previewWidth = $preview.width();
         var previewHeight = $preview.height();
-        $iframe.width(previewWidth)
-               .height(previewHeight);
+        $wrapper.width(previewWidth).height(previewHeight);
 
         var $svg = getRootElementImmediate();
         var svgWidth = $svg.width();
         var svgHeight = $svg.height();
 
-        var iframeWidth = $iframe.width();
-        if (iframeWidth > svgWidth) {
-            $iframe.width(svgWidth);
+        if ($wrapper.width() > svgWidth)
             $wrapper.width(svgWidth);
-        }
 
-        var iframeHeight = $iframe.height();
-        if (iframeHeight > svgHeight) {
-            $iframe.height(svgHeight);
+        if ($wrapper.height() > svgHeight)
             $wrapper.height(svgHeight);
-        }
 
         $sizeLabel.text(svgWidth + ' × ' + svgHeight);
     }

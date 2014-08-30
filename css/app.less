@@ -159,15 +159,19 @@ section .content {
   }
 
   iframe {
-    @margin: 20px;
     border: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
   }
 
   .wrapper {
     @border-width: 5px;
 
     position: relative;
-    border: @border-width dashed transparent;
+    border: @border-width dashed #eee;
     max-height: 100%;
     max-width: 100%;
 
@@ -175,12 +179,6 @@ section .content {
     left: auto !important;
 
     .ui-resizable(5px, 10px);
-
-    transition: border-color 0.2s linear;
-  }
-
-  &:hover .wrapper {
-    border-color: #eee;
   }
 
   .iframe-fix {

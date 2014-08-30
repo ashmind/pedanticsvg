@@ -155,15 +155,19 @@ section .content {
 }
 .preview iframe {
   border: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
 }
 .preview .wrapper {
   position: relative;
-  border: 5px dashed transparent;
+  border: 5px dashed #eeeeee;
   max-height: 100%;
   max-width: 100%;
   top: auto !important;
   left: auto !important;
-  transition: border-color 0.2s linear;
 }
 .preview .wrapper .ui-resizable-n,
 .preview .wrapper .ui-resizable-w,
@@ -208,9 +212,6 @@ section .content {
 .preview .wrapper .ui-resizable-sw,
 .preview .wrapper .ui-resizable-se {
   width: 10px;
-}
-.preview:hover .wrapper {
-  border-color: #eee;
 }
 .preview .iframe-fix {
   display: none;
