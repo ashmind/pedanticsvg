@@ -4,11 +4,24 @@ define(['jquery', 'app/services/refactoring/all'], function($, allRefactorings) 
     var $body = $('body');
     var active;
 
+    var $menu = $('<ol class="refactor-menu">')
+        .hide()
+        .appendTo($body);
+
+    var commands = [];
+    for (var i = 0; i < allRefactorings.length; i++) {
+        var $command = $('<li class="refactor-command">')
+            .data('refactoring', allRefactorings[i])
+            .text(allRefactorings[i].display)
+            .appendTo($menu);
+        commands.push($command);
+    }
+
     var hideMenuIfActive = function() {
         if (!active)
             return;
 
-        active.$menu.remove();
+        $menu.hide();
         active.$button.removeClass('active');
         active = null;
     };
@@ -20,39 +33,33 @@ define(['jquery', 'app/services/refactoring/all'], function($, allRefactorings) 
         hideMenuIfActive();
     });
 
-    $(document).on('click', '.refactor-button', function(e) {
+    $(document).on('click', '.refactor-button', function() {
         hideMenuIfActive();
 
         var $button = $(this);
         var context = $button.data('context');
-        var refactorings = $button.data('refactorings');
-
-        $button.addClass('active');
-        var $menu = $('<ol class="refactor-menu">');
-        for (var i = 0; i < refactorings.length; i++) {
-            $('<li class="refactor-command">')
-                .data('refactoring', refactorings[i])
-                .data('context', context)
-                .text(refactorings[i].display)
-                .appendTo($menu);
+        var relevant = $button.data('relevant');
+        for (var i = 0; i < relevant.length; i++) {
+            commands[i].toggle(relevant[i]);
         }
+        $button.addClass('active');
 
         var buttonOffset = $button.offset();
         $menu.css({
             left: buttonOffset.left,
             top: buttonOffset.top + $button.height()
-        });
+        }).show();
 
-        $menu.appendTo($body);
-
-        active = { $button: $button, $menu: $menu };
-        e.stopPropagation();
+        active = {
+            context: context,
+            $button: $button
+        };
     });
 
     $(document).on('click', '.refactor-command', function() {
         var $command = $(this);
         var refactoring = $command.data('refactoring');
-        var context = $command.data('context');
+        var context = active.context;
 
         var result = refactoring.refactor(context.astNode);
 
@@ -61,14 +68,20 @@ define(['jquery', 'app/services/refactoring/all'], function($, allRefactorings) 
     });
 
     return function(astNode, applyChange) {
-        var relevant = allRefactorings.filter(function(r) {
-            return r.relevant(astNode);
-        });
-        if (relevant.length === 0)
+        var anyRelevant = false;
+        var relevantList = new Array(commands.length);
+        for (var i = 0; i < commands.length; i++) {
+            var relevant = allRefactorings[i].relevant(astNode);
+            if (relevant)
+                anyRelevant = true;
+            relevantList[i] = relevant;
+        }
+
+        if (!anyRelevant)
            return;
 
         return $('<button class="refactor-button">')
             .data('context', { astNode: astNode, applyChange: applyChange })
-            .data('refactorings', relevant);
+            .data('relevant', relevantList);
     };
 });
