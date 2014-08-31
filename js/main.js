@@ -68,5 +68,5 @@ require([
         });
     })();
 
-    $('body').removeAttr('hidden');
+    //$('body').removeAttr('hidden');
 });
