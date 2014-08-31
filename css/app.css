@@ -61,20 +61,6 @@ main {
   -webkit-flex: 1 0 auto;
   width: 100%;
 }
-main > * {
-  flex: 0 0 50%;
-  -webkit-flex: 0 0 50%;
-}
-@media (orientation: portrait) {
-  main {
-    flex-direction: column;
-    -webkit-flex-direction: column;
-  }
-  main > * {
-    flex: 1 0 auto;
-    -webkit-flex: 1 0 auto;
-  }
-}
 main + footer {
   flex: 0 0 auto;
   -webkit-flex: 0 0 auto;
@@ -132,8 +118,24 @@ section .content {
   position: relative;
 }
 .code {
-  flex: 1 0 auto;
-  -webkit-flex: 1 0 auto;
+  width: 50%;
+  position: relative;
+}
+.code .ui-resizable-e {
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 5px;
+}
+.code .ui-resizable-e {
+  transition: background-color 0.2s linear;
+}
+.code .ui-resizable-e:hover {
+  background-color: #eee;
+}
+.preview {
+  flex: 1;
+  -webkit-flex: 1;
 }
 .preview header {
   border-left: 1px solid #fff;
@@ -176,44 +178,52 @@ section .content {
   top: auto !important;
   left: auto !important;
 }
-.preview .wrapper .ui-resizable-n,
-.preview .wrapper .ui-resizable-w,
-.preview .wrapper .ui-resizable-e,
+.preview .wrapper .ui-resizable-n {
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  height: 10px;
+}
+.preview .wrapper .ui-resizable-s {
+  bottom: -5px;
+  left: -5px;
+  right: -5px;
+  height: 10px;
+}
+.preview .wrapper .ui-resizable-w {
+  top: -5px;
+  bottom: -5px;
+  left: -5px;
+  width: 10px;
+}
+.preview .wrapper .ui-resizable-e {
+  top: -5px;
+  bottom: -5px;
+  right: -5px;
+  width: 10px;
+}
 .preview .wrapper .ui-resizable-nw,
 .preview .wrapper .ui-resizable-ne {
   top: -5px;
 }
-.preview .wrapper .ui-resizable-s,
-.preview .wrapper .ui-resizable-w,
-.preview .wrapper .ui-resizable-e,
 .preview .wrapper .ui-resizable-se,
 .preview .wrapper .ui-resizable-sw {
   bottom: -5px;
 }
-.preview .wrapper .ui-resizable-n,
-.preview .wrapper .ui-resizable-s,
-.preview .wrapper .ui-resizable-w,
 .preview .wrapper .ui-resizable-nw,
 .preview .wrapper .ui-resizable-sw {
   left: -5px;
 }
-.preview .wrapper .ui-resizable-n,
-.preview .wrapper .ui-resizable-s,
-.preview .wrapper .ui-resizable-e,
 .preview .wrapper .ui-resizable-ne,
 .preview .wrapper .ui-resizable-se {
   right: -5px;
 }
-.preview .wrapper .ui-resizable-n,
-.preview .wrapper .ui-resizable-s,
 .preview .wrapper .ui-resizable-nw,
 .preview .wrapper .ui-resizable-ne,
 .preview .wrapper .ui-resizable-sw,
 .preview .wrapper .ui-resizable-se {
   height: 10px;
 }
-.preview .wrapper .ui-resizable-w,
-.preview .wrapper .ui-resizable-e,
 .preview .wrapper .ui-resizable-nw,
 .preview .wrapper .ui-resizable-ne,
 .preview .wrapper .ui-resizable-sw,

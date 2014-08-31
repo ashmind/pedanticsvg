@@ -18,7 +18,7 @@ define(['jquery', 'jquery-ui'], function($) { 'use strict'; return function($pre
         autosize();
     };
 
-    $preview.mousedown(function() {
+    $(document).mousedown(function() {
         $iframeFix.show();
     }).mouseup(function() {
         $iframeFix.hide();

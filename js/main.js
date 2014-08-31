@@ -37,7 +37,9 @@ require([
     'app/services/preview',
     'app/services/tracer',
     'app/services/autosave',
-], function($, editorFactory, previewFactory, trace, autosave) {
+    'app/services/settings',
+    'jquery-ui'
+], function($, editorFactory, previewFactory, trace, autosave, settings) {
     'use strict';
 
     var editor = editorFactory($('#code'));
@@ -48,4 +50,23 @@ require([
     editor.astchange(function(ast) {
         preview.render(ast.root.toSVG());
     });
+
+    (function setupResize() {
+        var $code = $('section.code');
+        var width = settings.get('code.section.width');
+        if (width)
+            $code.css('width', width);
+
+        $code.resizable({
+            handles: 'e',
+            stop: function(_, uie) {
+                var percent = 100 * (uie.size.width / $(document).width());
+                percent = (Math.round(percent * 100) / 100) + '%';
+                uie.element.css('width', percent);
+                settings.set('code.section.width', percent);
+            }
+        });
+    })();
+
+    $('body').removeAttr('hidden');
 });
