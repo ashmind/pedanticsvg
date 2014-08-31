@@ -52,18 +52,6 @@ main {
   .display-flex();
   .flex (1 0 auto);
   width: 100%;
-
-  > * {
-    .flex (0 0 50%);
-  }
-
-  @media (orientation: portrait) {
-    .flex-direction(column);
-
-    > * {
-      .flex (1 0 auto);
-    }
-  }
 }
 
 main + footer {
@@ -130,10 +118,21 @@ section .content {
 }
 
 .code {
-  .flex (1 0 auto);
+  width: 50%;
+  position: relative;
+  .ui-resizable-for-e(0, 5px);
+
+  .ui-resizable-e {
+    transition: background-color 0.2s linear;
+    &:hover {
+      background-color: #eee;
+    }
+  }
 }
 
 .preview  {
+  .flex(1);
+
   header {
     border-left: 1px solid #fff;
   }
@@ -184,7 +183,7 @@ section .content {
     top: auto !important;
     left: auto !important;
 
-    .ui-resizable(5px, 10px);
+    .ui-resizable-for-all(5px, 10px);
   }
 
   .iframe-fix {

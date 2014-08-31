@@ -1,38 +1,65 @@
-.ui-resizable(@border-offset-size, @area-size: @border-offset-size) {
-    .ui-resizable-n,
-    .ui-resizable-w,
-    .ui-resizable-e,
+.ui-resizable-for-n(@border-offset-size, @area-size: @border-offset-size) {
+  .ui-resizable-n {
+    top: -@border-offset-size;
+    left: -@border-offset-size;
+    right: -@border-offset-size;
+    height: @area-size;
+  }
+}
+
+.ui-resizable-for-s(@border-offset-size, @area-size: @border-offset-size) {
+  .ui-resizable-s {
+    bottom: -@border-offset-size;
+    left: -@border-offset-size;
+    right: -@border-offset-size;
+    height: @area-size;
+  }
+}
+
+.ui-resizable-for-w(@border-offset-size, @area-size: @border-offset-size) {
+  .ui-resizable-w {
+    top: -@border-offset-size;
+    bottom: -@border-offset-size;
+    left: -@border-offset-size;
+    width: @area-size;
+  }
+}
+
+.ui-resizable-for-e(@border-offset-size, @area-size: @border-offset-size) {
+  .ui-resizable-e {
+    top: -@border-offset-size;
+    bottom: -@border-offset-size;
+    right: -@border-offset-size;
+    width: @area-size;
+  }
+}
+
+.ui-resizable-for-all(@border-offset-size, @area-size: @border-offset-size) {
+    .ui-resizable-for-n(@border-offset-size, @area-size);
+    .ui-resizable-for-s(@border-offset-size, @area-size);
+    .ui-resizable-for-w(@border-offset-size, @area-size);
+    .ui-resizable-for-e(@border-offset-size, @area-size);
+
     .ui-resizable-nw,
     .ui-resizable-ne {
       top: -@border-offset-size;
     }
 
-    .ui-resizable-s,
-    .ui-resizable-w,
-    .ui-resizable-e,
     .ui-resizable-se,
     .ui-resizable-sw {
       bottom: -@border-offset-size;
     }
 
-    .ui-resizable-n,
-    .ui-resizable-s,
-    .ui-resizable-w,
     .ui-resizable-nw,
     .ui-resizable-sw {
       left: -@border-offset-size;
     }
 
-    .ui-resizable-n,
-    .ui-resizable-s,
-    .ui-resizable-e,
     .ui-resizable-ne,
     .ui-resizable-se {
       right: -@border-offset-size;
     }
 
-    .ui-resizable-n,
-    .ui-resizable-s,
     .ui-resizable-nw,
     .ui-resizable-ne,
     .ui-resizable-sw,
@@ -40,8 +67,6 @@
       height: @area-size;
     }
 
-    .ui-resizable-w,
-    .ui-resizable-e,
     .ui-resizable-nw,
     .ui-resizable-ne,
     .ui-resizable-sw,
