@@ -296,6 +296,8 @@ textarea,
   opacity: 1;
 }
 .refactor-menu {
+  top: 0;
+  left: 0;
   font-size: 90%;
   position: absolute;
   background-color: #fff;
