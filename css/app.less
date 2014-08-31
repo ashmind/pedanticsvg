@@ -250,7 +250,6 @@ textarea, .CodeMirror, .CodeMirror-hints {
   background-repeat: no-repeat;
   background-size: calc(~'100% - 2px');
   background-position: center;
-  /*border: 1px solid #aaa;*/
   border: 0;
   z-index: 1000;
   outline: none;
@@ -270,6 +269,15 @@ textarea, .CodeMirror, .CodeMirror-hints {
   border: 1px solid #eee;
   z-index: 2000;
   margin-top: 5px;
+  max-height: 100px;
+  overflow: hidden;
+  transition: max-height 0.5s ease-out;
+
+  &[hidden] {
+    display: block;
+    max-height: 0;
+    visibility: hidden;
+  }
 
   li {
     padding: 4px;

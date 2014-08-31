@@ -14,7 +14,7 @@ define(function() {
         var convertibleIsAbsolute = (type === 'relative');
 
         return {
-            display: 'Convert <path> to ' + type + '.',
+            display: 'Convert <path> to ' + type,
             refactor: function(path) {
                 var segments = path.segments;
                 var first = segments[0];
@@ -51,7 +51,7 @@ define(function() {
         var convertibleIsAbsolute = (type === 'relative');
 
         return {
-            display: 'Convert this to ' + type + '.',
+            display: 'Convert this to ' + type,
             refactor: function(segment) {
                 return {
                     start: segment.start,

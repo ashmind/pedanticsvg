@@ -4,8 +4,7 @@ define(['jquery', 'app/services/refactoring/all'], function($, allRefactorings) 
     var $body = $('body');
     var active;
 
-    var $menu = $('<ol class="refactor-menu">')
-        .hide()
+    var $menu = $('<ol class="refactor-menu" hidden>')
         .appendTo($body);
 
     var commands = [];
@@ -21,19 +20,22 @@ define(['jquery', 'app/services/refactoring/all'], function($, allRefactorings) 
         if (!active)
             return;
 
-        $menu.hide();
+        $menu.attr('hidden', '');
         active.$button.removeClass('active');
         active = null;
     };
 
     $body.on('mousedown', function(e) {
-        if ($(e.target).is('.refactor-command'))
+        if ($(e.target).is('.refactor-command, .refactor-button'))
             return;
 
         hideMenuIfActive();
     });
 
     $(document).on('click', '.refactor-button', function() {
+        if (active && active.$button[0] === this)
+            return;
+
         hideMenuIfActive();
 
         var $button = $(this);
@@ -48,7 +50,7 @@ define(['jquery', 'app/services/refactoring/all'], function($, allRefactorings) 
         $menu.css({
             left: buttonOffset.left,
             top: buttonOffset.top + $button.height()
-        }).show();
+        }).removeAttr('hidden');
 
         active = {
             context: context,
