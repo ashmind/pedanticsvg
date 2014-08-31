@@ -97,20 +97,20 @@ define(['app/services/svg-ast', 'app/utils/regexp-iterator', 'app/utils/position
 
                 var end = position.toObject();
                 delete coords._count;
-                addSegment(command, coords, start, end);
+                addSegment(command, coords, start, end, firstCoords);
                 coords = { _count: 0 };
                 firstCoords = false;
                 start = end;
             }
 
             if (keys.length === 0)
-                addSegment(command, {}, start, position.toObject());
+                addSegment(command, {}, start, position.toObject(), firstCoords);
 
             if (coords._count > 0)
                 reportError('Segment \'' + command + '\' must have exactly ' + keys.length + ' values.', start);
         }
 
-        function addSegment(command, coords, start, end) {
+        function addSegment(command, coords, start, end, first) {
             /* jshint newcap:false */
 
             var index = result.segments.length;
@@ -119,6 +119,7 @@ define(['app/services/svg-ast', 'app/utils/regexp-iterator', 'app/utils/position
             segment.end = end;
             segment.parent = parent;
             segment.index = index;
+            segment.implicitCommand = !first;
             result.segments.push(segment);
         }
 

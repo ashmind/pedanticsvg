@@ -4,7 +4,7 @@ define([
     'app/services/codemirror-setup',
     'app/services/svg-parser',
     'app/services/refactoring/ui-builder'
-], function($, event, setupCodeMirror, parse, buildRefactorWidget) { 'use strict'; return function($editor) {
+], function($, event, setupCodeMirror, parse, refactorUI) { 'use strict'; return function($editor) {
     var ast;
     var code;
 
@@ -24,33 +24,6 @@ define([
     cm.setOption('trackNodesInSelection', {
         getNodes: getNodesInSelection
     });
-
-    (function setupRefactorings() {
-        var activePoints = {};
-        cm.on('nodesInSelectionChanged', function(cm, e) {
-            /* jshint shadow:true */
-            for (var i = 0; i < e.removed.length; i++) {
-                var id = e.removed[i].id;
-                if (!activePoints[id])
-                    continue;
-
-                activePoints[id].clear();
-                delete activePoints[id];
-            }
-
-            for (var i = 0; i < e.added.length; i++) {
-                var node = e.added[i];
-                var $widget = buildRefactorWidget(node.astNode, applyRefactoringResult);
-                if (!$widget)
-                    continue;
-
-                activePoints[node.id] = cm.setBookmark(node.start, {
-                    widget: $widget[0]
-                });
-            }
-        });
-    })();
-
     cm.setOption('lint', {
         async: true,
         getAnnotations: (function processChange(_, updateLinting) {
@@ -60,6 +33,8 @@ define([
             service.codechange(code);
         })
     });
+
+    setupRefactorings();
 
     Object.defineProperty(service, 'code', {
         get: function() { return code; },
@@ -133,6 +108,64 @@ define([
             });
         }
         return mappedNodes;
+    }
+
+    function setupRefactorings() {
+        var activePoints = [];
+        cm.on('nodesInSelectionChanged', function(cm, e) {
+            /* jshint shadow:true */
+            var newGroups = {};
+            var nodes = e.nodes;
+
+            var newGroup;
+            var newGroupEndIndex;
+            for (var i = 0; i < nodes.length; i++) {
+                var astNode = nodes[i].astNode;
+                if (newGroup && astNode.index === newGroupEndIndex + 1) {
+                    newGroup.push(astNode);
+                }
+                else {
+                    if (newGroup)
+                        newGroups[newGroup[0].id] = newGroup;
+                    newGroup = [astNode];
+                }
+
+                newGroupEndIndex = astNode.index;
+            }
+            if (newGroup)
+                newGroups[newGroup[0].id] = newGroup;
+
+            for (var i = 0; i < activePoints.length; i++) {
+                var point = activePoints[i];
+                var keep = false;
+                var group = newGroups[point.startId];
+                if (group) {
+                    keep = refactorUI.updateWidget(point.$widget, group);
+                    delete newGroups[point.startId];
+                }
+
+                if (!keep) {
+                    point.mark.clear();
+                    activePoints.splice(i, 1);
+                    i -= 1;
+                }
+            }
+
+            for (var id in newGroups) {
+                var group = newGroups[id];
+                var $widget = refactorUI.buildWidget(group, applyRefactoringResult);
+                if (!$widget)
+                    continue;
+
+                activePoints.push({
+                    startId: id,
+                    mark: cm.setBookmark(toCMPosition(group[0].start), {
+                        widget: $widget[0]
+                    }),
+                    $widget: $widget
+                });
+            }
+        });
     }
 
     function applyRefactoringResult(result) {

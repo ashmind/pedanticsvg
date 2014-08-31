@@ -4,7 +4,8 @@
         paths: {
             app:                    '../js',
             sax:                    '../external/sax',
-            jquery:                 'https://code.jquery.com/jquery-2.0.3.min',
+            codemirror:             'utils/codemirror-fake',
+            jquery:                 'external/jquery-2.0.3',
             jasmine:                'external/jasmine/jasmine',
             'jasmine/jasmine-html': 'external/jasmine/jasmine-html',
             'jasmine/boot':         'external/jasmine/boot'
@@ -27,15 +28,22 @@
     var tests = [
         'svg-parser.tests.js',
         'parse-path.tests.js',
+        'track-nodes.tests.js'
     ];
 
 
     require(['jasmine/boot'], function () {
         var jasmineDescribe = window.describe;
-        window.describe = function(name, tests) {
-            define([name], function(instance) {
+        window.describe = function(name, deps, tests) {
+            if (!(deps instanceof Array)) {
+                tests = deps;
+                deps = [];
+            }
+
+            define([name].concat(deps), function() {
+                var required = arguments;
                 jasmineDescribe(name, function() {
-                    tests(instance);
+                    tests.apply(undefined, required);
                 });
             });
         };

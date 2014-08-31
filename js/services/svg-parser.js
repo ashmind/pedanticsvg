@@ -33,6 +33,7 @@ define(['sax', 'app/services/svg-ast', 'app/services/parsing/parse-path'], funct
             var tag = ast.tag(node.name, node.attributes);
             tag.parent = parent;
             tag.start = getPosition(parser, 'startTag');
+            tag.index = parent.children.length;
 
             parent.children.push(tag);
             flat.push(tag);
@@ -50,7 +51,9 @@ define(['sax', 'app/services/svg-ast', 'app/services/parsing/parse-path'], funct
         };
 
         var pushChild = function(child) {
-            topOf(stack).children.push(child);
+            var parent = topOf(stack);
+            child.index = parent.children.length;
+            parent.children.push(child);
         };
         parser.ontext = function(text) {
             pushChild(text);

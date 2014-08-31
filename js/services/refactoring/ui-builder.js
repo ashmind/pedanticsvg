@@ -63,27 +63,65 @@ define(['jquery', 'app/services/refactoring/all'], function($, allRefactorings) 
         var refactoring = $command.data('refactoring');
         var context = active.context;
 
-        var result = refactoring.refactor(context.astNode);
+        var arg = context.astNodes;
+        if (!refactoring.multiple)
+            arg = arg[0];
+
+        var result = refactoring.refactor(arg);
 
         hideMenuIfActive();
-        context.applyChange(result);
+        context.applyChanges(result);
     });
 
-    return function(astNode, applyChange) {
-        var anyRelevant = false;
-        var relevantList = new Array(commands.length);
+    var buildRelevantMap = function(astNodes) {
+        var any = false;
+        var map = new Array(commands.length);
         for (var i = 0; i < commands.length; i++) {
-            var relevant = allRefactorings[i].relevant(astNode);
-            if (relevant)
-                anyRelevant = true;
-            relevantList[i] = relevant;
+            var relevantToAll = false;
+            if (astNodes.length === 1 || allRefactorings[i].multiple) {
+                relevantToAll = true;
+                for (var j = 0; j < astNodes.length; j++) {
+                    var relevant = allRefactorings[i].relevant(astNodes[j]);
+                    if (!relevant) {
+                        relevantToAll = false;
+                        break;
+                    }
+                }
+            }
+
+            map[i] = relevantToAll;
+            any = relevantToAll || any;
         }
 
-        if (!anyRelevant)
+        if (!any)
            return;
 
-        return $('<button class="refactor-button">')
-            .data('context', { astNode: astNode, applyChange: applyChange })
-            .data('relevant', relevantList);
+        return map;
     };
+
+    var buildButton = function(astNodes, applyChanges) {
+        var relevant = buildRelevantMap(astNodes);
+        if (!relevant)
+            return;
+
+        return $('<button class="refactor-button">')
+            .data('context', { astNodes: astNodes, applyChanges: applyChanges })
+            .data('relevant', relevant);
+    };
+
+    var updateButton = function($button, astNodes) {
+        var relevant = buildRelevantMap(astNodes);
+        if (!relevant)
+            return false;
+
+        var context = $button.data('context');
+        context.astNodes = astNodes;
+        $button.data('relevant', relevant);
+        return true;
+    };
+
+    return Object.freeze({
+        buildWidget: buildButton,
+        updateWidget: updateButton
+    });
 });

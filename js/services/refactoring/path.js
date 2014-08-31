@@ -15,21 +15,9 @@ define(function() {
 
         return {
             display: 'Convert <path> to ' + type,
+            multiple: false,
             refactor: function(path) {
-                var segments = path.segments;
-                var first = segments[0];
-                if (!isFirstMove(first))
-                    first = first[convert]();
-
-                var svg = segments[0].toSVG();
-                for (var i = 1; i < segments.length; i++) {
-                    svg += ' ' + segments[i][convert]().toSVG();
-                }
-                return {
-                    start: segments[0].start,
-                    end:   segments[segments.length - 1].end,
-                    text:  svg
-                };
+                return refactorSegmentsToRelativeOrAbsolute(path.segments, convert);
             },
 
             relevant: function(astNode) {
@@ -51,13 +39,10 @@ define(function() {
         var convertibleIsAbsolute = (type === 'relative');
 
         return {
-            display: 'Convert this to ' + type,
-            refactor: function(segment) {
-                return {
-                    start: segment.start,
-                    end:   segment.end,
-                    text:  segment[convert]().toSVG()
-                };
+            display: 'Convert to ' + type,
+            multiple: true,
+            refactor: function(segments) {
+                return refactorSegmentsToRelativeOrAbsolute(segments, convert);
             },
 
             relevant: function(astNode) {
@@ -65,6 +50,31 @@ define(function() {
                     && astNode.isAbsolute === convertibleIsAbsolute
                     && !isFirstMove(astNode);
             }
+        };
+    }
+
+    function refactorSegmentsToRelativeOrAbsolute(segments, convert) {
+        var first = segments[0];
+
+        var svg = (isFirstMove(first) ? first : first[convert]()).toSVG();
+        for (var i = 1; i < segments.length; i++) {
+            svg += ' ' + segments[i][convert]().toSVG();
+        }
+        var last = segments[segments.length - 1];
+        var end = last.end;
+
+        // need to check that following segment isn't dependent
+        // on current segment's command
+        var afterLast = last.parent.segments[last.index + 1];
+        if (afterLast && afterLast.implicitCommand) {
+            svg += ' ' + afterLast.toSVG(); // this always adds command at the moment
+            end = afterLast.end;
+        }
+
+        return {
+            start: first.start,
+            end:   end,
+            text:  svg
         };
     }
 
