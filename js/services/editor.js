@@ -2,8 +2,9 @@ define([
     'jquery',
     'app/utils/eventLib',
     'app/services/codemirror-setup',
-    'app/services/svg-parser'
-], function($, event, setupCodeMirror, parse) { 'use strict'; return function($editor) {
+    'app/services/svg-parser',
+    'app/services/refactoring/ui-builder'
+], function($, event, setupCodeMirror, parse, buildRefactorWidget) { 'use strict'; return function($editor) {
     var ast;
     var code;
 
@@ -23,6 +24,33 @@ define([
     cm.setOption('trackNodesInSelection', {
         getNodes: getNodesInSelection
     });
+
+    (function setupRefactorings() {
+        var activePoints = {};
+        cm.on('nodesInSelectionChanged', function(cm, e) {
+            /* jshint shadow:true */
+            for (var i = 0; i < e.removed.length; i++) {
+                var id = e.removed[i].id;
+                if (!activePoints[id])
+                    continue;
+
+                activePoints[id].clear();
+                delete activePoints[id];
+            }
+
+            for (var i = 0; i < e.added.length; i++) {
+                var node = e.added[i];
+                var $widget = buildRefactorWidget(node.astNode, applyRefactoringResult);
+                if (!$widget)
+                    continue;
+
+                activePoints[node.id] = cm.setBookmark(node.start, {
+                    widget: $widget[0]
+                });
+            }
+        });
+    })();
+
     cm.setOption('lint', {
         async: true,
         getAnnotations: (function processChange(_, updateLinting) {
@@ -105,6 +133,15 @@ define([
             });
         }
         return mappedNodes;
+    }
+
+    function applyRefactoringResult(result) {
+        cm.replaceRange(
+            result.text,
+            toCMPosition(result.start),
+            toCMPosition(result.end)
+        );
+        cm.focus();
     }
 
     function fromCMPosition(position) {

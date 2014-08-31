@@ -47,6 +47,13 @@ a {
 a:hover {
   text-decoration: underline;
 }
+ol,
+ul,
+li {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
 main {
   display: -webkit-flex;
   display: flex;
@@ -254,4 +261,44 @@ textarea,
 }
 .cm-node-in-selection {
   background-color: rgba(218, 165, 32, 0.1);
+}
+.refactor-button {
+  display: inline-block;
+  text-align: center;
+  position: absolute;
+  margin-left: calc(-1.1em + -0.1em);
+  width: 1.1em;
+  height: 1.1em;
+  background-color: #fff;
+  background-image: url('../icons/refactor.svg');
+  background-repeat: no-repeat;
+  background-size: calc(100% - 2px);
+  background-position: center;
+  /*border: 1px solid #aaa;*/
+  border: 0;
+  z-index: 1000;
+  outline: none;
+  opacity: 0.2;
+  transition: opacity 0.2s linear;
+  border-radius: 50%;
+}
+.refactor-button:hover,
+.refactor-button.active {
+  opacity: 1;
+}
+.refactor-menu {
+  font-size: 90%;
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #eee;
+  z-index: 2000;
+  margin-top: 5px;
+}
+.refactor-menu li {
+  padding: 4px;
+}
+.refactor-menu li:hover {
+  background-color: #428bca;
+  color: #fff;
+  cursor: pointer;
 }

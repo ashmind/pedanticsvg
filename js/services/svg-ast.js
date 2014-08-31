@@ -65,15 +65,6 @@ define(function() {
             if (this._cache.startPoint)
                 return this._cache.startPoint;
 
-            if (this.isAbsolute) {
-                var startPoint = Object.freeze({
-                    x: this.coords.x || 0,
-                    y: this.coords.y || 0
-                });
-                this._cache.startPoint = startPoint;
-                return startPoint;
-            }
-
             var siblings = this.parent.segments;
             var firstUncachedIndex = 0;
             for (var i = this.index-1; i >= 0; i--) {
@@ -112,8 +103,24 @@ define(function() {
             return startPoint;
         },
 
+        toRelative: function() {
+            /* jshint newcap:false */
+            if (this._cache.relative)
+                return this._cache.relative;
+
+            if (this.command.toLowerCase() === this.command) {
+                this._cache.relative = this;
+                return this;
+            }
+
+            var newCoords = this._addOrSubtractFromStartPoint(-1);
+            var relative = new SvgPathSegment(this.command.toLowerCase(), newCoords, this._cache);
+            this._cache.relative = relative;
+            return relative;
+        },
+
         toAbsolute: function() {
-            /* jshint newcap:false, shadow:true */
+            /* jshint newcap:false */
             if (this._cache.absolute)
                 return this._cache.absolute;
 
@@ -122,6 +129,13 @@ define(function() {
                 return this; // already absolute
             }
 
+            var newCoords = this._addOrSubtractFromStartPoint(+1);
+            var absolute = new SvgPathSegment(this.command.toUpperCase(), newCoords, this._cache);
+            this._cache.absolute = absolute;
+            return absolute;
+        },
+
+        _addOrSubtractFromStartPoint : function(change) {
             var start = this.startPoint();
             var coords = this.coords;
             var newCoords = {};
@@ -131,13 +145,11 @@ define(function() {
                     continue;
                 }
 
-                newCoords[key] = coords[key] +
-                    ((key === 'x' || key === 'x1' || key === 'x2') ? start.x : start.y);
+                var startCoord = (key === 'x' || key === 'x1' || key === 'x2')
+                               ? start.x : start.y;
+                newCoords[key] = coords[key] + (change * startCoord);
             }
-
-            var absolute = new SvgPathSegment(this.command.toUpperCase(), newCoords, this._cache);
-            this._cache.absolute = absolute;
-            return absolute;
+            return newCoords;
         },
 
         toSVG: function() {
