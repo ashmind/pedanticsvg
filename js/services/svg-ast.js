@@ -46,11 +46,12 @@ define(function() {
     };
     makeAllPropertiesReadOnly(SvgTag.prototype);
 
-    var SvgPathSegment = function(command, coords, _cache) {
+    var SvgPathSegment = function(command, coords, separators, _cache) {
         this.id = id++;
         this.type = 'path-segment';
         this.command = command;
         this.coords = coords;
+        this.separators = separators;
         this._cache = _cache || {};
         makeAllPropertiesReadOnly(this);
     };
@@ -114,7 +115,7 @@ define(function() {
             }
 
             var newCoords = this._addOrSubtractFromStartPoint(-1);
-            var relative = new SvgPathSegment(this.command.toLowerCase(), newCoords, this._cache);
+            var relative = new SvgPathSegment(this.command.toLowerCase(), newCoords, this.separators, this._cache);
             this._cache.relative = relative;
             return relative;
         },
@@ -130,7 +131,7 @@ define(function() {
             }
 
             var newCoords = this._addOrSubtractFromStartPoint(+1);
-            var absolute = new SvgPathSegment(this.command.toUpperCase(), newCoords, this._cache);
+            var absolute = new SvgPathSegment(this.command.toUpperCase(), newCoords, this.separators, this._cache);
             this._cache.absolute = absolute;
             return absolute;
         },
@@ -154,8 +155,15 @@ define(function() {
 
         toSVG: function() {
             var string = this.command;
+            var separatorIndex = 0;
             for (var key in this.coords) {
-                string += ' ' + this.coords[key];
+                var coord = this.coords[key];
+                var separator = this.separators[separatorIndex];
+                if (separator === '' && /^\d/.test(coord) && /\d$/.test(string))
+                    separator = ' ';
+
+                string += separator + coord;
+                separatorIndex += 1;
             }
             return string;
         }
@@ -173,15 +181,19 @@ define(function() {
     };
 
     return {
-        root: function() { return new SvgRoot(); },
-        tag: function(name, attributes, children) {
-            return new SvgTag(name, attributes, children);
-        },
-        pathSegment: function(command, coords) {
-            return new SvgPathSegment(command, coords);
-        },
+        root: constructorToFunction(SvgRoot),
+        tag: constructorToFunction(SvgTag),
+        pathSegment: constructorToFunction(SvgPathSegment),
         other: SvgOther
     };
+
+    function constructorToFunction(constructor) {
+        return function() {
+            var instance = Object.create(constructor.prototype);
+            constructor.apply(instance, arguments);
+            return instance;
+        };
+    }
 
     function arrayToSVG(nodes) {
         var results = [];

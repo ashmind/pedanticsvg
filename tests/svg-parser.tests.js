@@ -30,7 +30,7 @@ describe('app/services/svg-parser', function(parse) {
         }, {
             code: '<path d="M570 664 c-19 -49 27 -87 69 -57 23 16 28 52 9 71 -7 7 -25 12 -40 12 -21 0 -31 -6 -38 -26z"/>',
             ranges: [{ start: at(0, 13), end: at(0, 13) }],
-            expected: [ 'M 570 664' ]
+            expected: [ 'M570 664' ]
         }, {
             code: ['<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" version="1.1">',
                    '  <path d="M 10 90 A 70 70 0 0 1 90 10"',

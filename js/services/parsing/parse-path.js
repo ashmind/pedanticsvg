@@ -61,6 +61,7 @@ define(['app/services/svg-ast', 'app/utils/regexp-iterator', 'app/utils/position
             /* jshint newcap:false */
             var firstCoords = true;
             var coords = { _count: 0 };
+            var separators = [];
             var keys = coordKeys[command.toLowerCase()];
             var start = position.toObject();
             if (keys === undefined) {
@@ -81,40 +82,46 @@ define(['app/services/svg-ast', 'app/utils/regexp-iterator', 'app/utils/position
                     continue;
                 }
 
-                if (item.value.match[1]) { // whitespace
+                var separator = item.value.match[1];
+                if (separator) {
                     if (coords._count === 0 && !firstCoords) {
-                        // skip initial whitespace
+                        // ignore separator between groups for position
                         start = position.toObject();
                     }
 
+                    separators.push(separator);
                     continue;
                 }
 
                 coords[keys[coords._count]] = parseFloat(string);
                 coords._count += 1;
+                if (separators.length < coords._count)
+                    separators.push('');
+
                 if (coords._count < keys.length)
                     continue;
 
                 var end = position.toObject();
                 delete coords._count;
-                addSegment(command, coords, start, end, firstCoords);
+                addSegment(command, coords, separators, start, end, firstCoords);
+                separators = [];
                 coords = { _count: 0 };
                 firstCoords = false;
                 start = end;
             }
 
             if (keys.length === 0)
-                addSegment(command, {}, start, position.toObject(), firstCoords);
+                addSegment(command, {}, [], start, position.toObject(), firstCoords);
 
             if (coords._count > 0)
                 reportError('Segment \'' + command + '\' must have exactly ' + keys.length + ' values.', start);
         }
 
-        function addSegment(command, coords, start, end, first) {
+        function addSegment(command, coords, separators, start, end, first) {
             /* jshint newcap:false */
 
             var index = result.segments.length;
-            var segment = ast.pathSegment(command, coords);
+            var segment = ast.pathSegment(command, coords, separators);
             segment.start = start;
             segment.end = end;
             segment.parent = parent;

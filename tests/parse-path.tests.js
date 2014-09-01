@@ -8,24 +8,24 @@ describe('app/services/parsing/parse-path', function(parse) {
         segments: [ 'M 100 100', 'L 300 100', 'L 200 300', 'z' ]
     }, {
         path:     'M100-200L0.6.5H.3V-.1',
-        segments: [ 'M 100 -200', 'L 0.6 0.5', 'H 0.3', 'V -0.1' ]
+        segments: [ 'M100-200', 'L0.6 0.5', 'H0.3', 'V-0.1' ]
     }, {
         path:     'M570 664 c-19-49 27-87 69-57 23 16 28 52 9 71-7 7-25 12-40 12-21 0-31 -6 -38 -26z',
-        segments: [ 'M 570 664', 'c -19 -49 27 -87 69 -57', 'c 23 16 28 52 9 71', 'c -7 7 -25 12 -40 12', 'c -21 0 -31 -6 -38 -26', 'z' ]
+        segments: [ 'M570 664', 'c-19-49 27-87 69-57', 'c 23 16 28 52 9 71', 'c-7 7-25 12-40 12', 'c-21 0-31 -6 -38 -26', 'z' ]
     },{
         path:     'M10,10 L30,40z',
-        segments: [ 'M 10 10', 'L 30 40', 'z' ]
+        segments: [ 'M10,10', 'L30,40', 'z' ]
     },{
         path:     'M300,200 h-150 a150,150 0 1,0 150,-150 z',
-        segments: [ 'M 300 200', 'h -150', 'a 150 150 0 1 0 150 -150', 'z' ]
-    }].forEach(function(pair, index) {
+        segments: [ 'M300,200', 'h-150', 'a150,150 0 1,0 150,-150', 'z' ]
+    }].forEach(function(test, index) {
         it('can parse path ' + (index + 1), function() {
-            var result = parse(pair.path);
+            var result = parse(test.path);
             var segmentValues = result.segments.map(function(s) {
                 return s.toSVG();
             });
 
-            expect(segmentValues).toEqual(pair.segments);
+            expect(segmentValues).toEqual(test.segments);
         });
     });
 
@@ -58,13 +58,13 @@ describe('app/services/parsing/parse-path', function(parse) {
         path:     'M100 100 c10 10 20 20 40-40 h5 v5 l10 10',
         expected: {
             index: 4,
-            value: 'L 155 75'
+            value: 'L155 75'
         }
     }, {
         path:     'M300,200 h-150 a150,150 0 1,0 150,-150 z',
         expected: {
             index: 2,
-            value: 'A 150 150 0 1 0 300 50'
+            value: 'A150,150 0 1,0 300,50'
         }
     }].forEach(function(data, index) {
         var path = data.path;
