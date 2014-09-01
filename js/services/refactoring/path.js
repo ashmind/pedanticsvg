@@ -15,9 +15,12 @@ define(function() {
 
         return {
             display: 'Convert <path> to ' + type,
-            multiple: false,
-            refactor: function(path) {
-                return refactorSegmentsToRelativeOrAbsolute(path.segments, convert);
+            refactor: function(paths) {
+                var changes = [];
+                for (var i = 0; i < paths.length; i++) {
+                    changes.push.apply(changes, refactorSegmentsToRelativeOrAbsolute(paths[i].segments, convert));
+                }
+                return changes;
             },
 
             relevant: function(astNode) {
@@ -40,7 +43,6 @@ define(function() {
 
         return {
             display: 'Convert to ' + type,
-            multiple: true,
             refactor: function(segments) {
                 return refactorSegmentsToRelativeOrAbsolute(segments, convert);
             },
@@ -55,26 +57,31 @@ define(function() {
 
     function refactorSegmentsToRelativeOrAbsolute(segments, convert) {
         var first = segments[0];
+        var firstSVG = (isFirstMove(first) ? first : first[convert]()).toSVG();
+        var changes = [rewrite(first, firstSVG)];
 
-        var svg = (isFirstMove(first) ? first : first[convert]()).toSVG();
         for (var i = 1; i < segments.length; i++) {
-            svg += ' ' + segments[i][convert]().toSVG();
+            var segment = segments[i];
+            changes.push(rewrite(segment, segment[convert]().toSVG()));
         }
+
         var last = segments[segments.length - 1];
-        var end = last.end;
 
         // need to check that following segment isn't dependent
         // on current segment's command
         var afterLast = last.parent.segments[last.index + 1];
         if (afterLast && afterLast.implicitCommand) {
-            svg += ' ' + afterLast.toSVG(); // this always adds command at the moment
-            end = afterLast.end;
+            changes.push(rewrite(afterLast, afterLast.toSVG() /* this always adds command at the moment */));
         }
 
+        return changes;
+    }
+
+    function rewrite(astNode, newSVG) {
         return {
-            start: first.start,
-            end:   end,
-            text:  svg
+            start: astNode.start,
+            end:   astNode.end,
+            text:  newSVG
         };
     }
 

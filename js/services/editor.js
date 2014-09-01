@@ -153,7 +153,7 @@ define([
 
             for (var id in newGroups) {
                 var group = newGroups[id];
-                var $widget = refactorUI.buildWidget(group, applyRefactoringResult);
+                var $widget = refactorUI.buildWidget(group, applyRefactoringChanges);
                 if (!$widget)
                     continue;
 
@@ -168,12 +168,26 @@ define([
         });
     }
 
-    function applyRefactoringResult(result) {
-        cm.replaceRange(
-            result.text,
-            toCMPosition(result.start),
-            toCMPosition(result.end)
-        );
+    function applyRefactoringChanges(changes) {
+        cm.operation(function() {
+            /* jshint shadow:true */
+
+            for (var i = 0; i < changes.length; i++) {
+                var change = changes[i];
+                change.startMarker = cm.setBookmark(toCMPosition(change.start));
+                change.endMarker = cm.setBookmark(toCMPosition(change.end));
+            }
+
+            for (var i = 0; i < changes.length; i++) {
+                var change = changes[i];
+                var from = change.startMarker.find();
+                var to = change.endMarker.find();
+                cm.replaceRange(change.text, from, to);
+
+                change.startMarker.clear();
+                change.endMarker.clear();
+            }
+        });
         cm.focus();
     }
 

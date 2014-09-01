@@ -63,29 +63,22 @@ define(['jquery', 'app/services/refactoring/all'], function($, allRefactorings) 
         var refactoring = $command.data('refactoring');
         var context = active.context;
 
-        var arg = context.astNodes;
-        if (!refactoring.multiple)
-            arg = arg[0];
-
-        var result = refactoring.refactor(arg);
+        var changes = refactoring.refactor(context.astNodes);
 
         hideMenuIfActive();
-        context.applyChanges(result);
+        context.applyChanges(changes);
     });
 
     var buildRelevantMap = function(astNodes) {
         var any = false;
         var map = new Array(commands.length);
         for (var i = 0; i < commands.length; i++) {
-            var relevantToAll = false;
-            if (astNodes.length === 1 || allRefactorings[i].multiple) {
-                relevantToAll = true;
-                for (var j = 0; j < astNodes.length; j++) {
-                    var relevant = allRefactorings[i].relevant(astNodes[j]);
-                    if (!relevant) {
-                        relevantToAll = false;
-                        break;
-                    }
+            var relevantToAll = true;
+            for (var j = 0; j < astNodes.length; j++) {
+                var relevant = allRefactorings[i].relevant(astNodes[j]);
+                if (!relevant) {
+                    relevantToAll = false;
+                    break;
                 }
             }
 
