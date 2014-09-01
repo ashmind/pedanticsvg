@@ -3,18 +3,31 @@
 describe('app/codemirror/track-nodes', ['codemirror'], function(_, CodeMirrorFake) {
     'use strict';
 
-    it('preserves node order on update', function() {
-        var nodesRef = { nodes: [{id:1},{id:3}] };
-        var cm = fakeCodeMirror(nodesRef);
+    [{
+        initial:  [1,3],
+        updated:  [1,2,5],
+        expected: [1,2,5]
+    },{
+        initial:  [4],
+        updated:  [1,2,3,4],
+        expected: [1,2,3,4]
+    }].forEach(function(test, index) {
+        it('preserves node order on update ' + index, function() {
+            var nodesRef = { nodes: test.initial.map(node) };
+            var cm = fakeCodeMirror(nodesRef);
 
-        cm.refreshNodesInSelection();
-        nodesRef.nodes = [{id:1},{id:2},{id:5}];
-        var change = cm.refreshNodesInSelection();
+            cm.refreshNodesInSelection();
+            nodesRef.nodes = test.updated.map(node);
+            var change = cm.refreshNodesInSelection();
 
-        expect(change.nodes.map(function(n) {
-            return n.id;
-        })).toEqual([1, 2, 5]);
+            expect(change.nodes.map(function(n) { return n.id; }))
+                .toEqual(test.expected);
+        });
     });
+
+    function node(id) {
+        return { id: id };
+    }
 
     function fakeCodeMirror(nodesRef) {
         /* jshint newcap:false */

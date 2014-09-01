@@ -31,7 +31,9 @@
 
         var currentNodes = [];
         var updateNodesWrapper = function() {
-            return updateNodes(cm, currentNodes, option.getNodes);
+            var updated = updateNodes(cm, currentNodes, option.getNodes);
+            currentNodes = updated.nodes;
+            return updated;
         };
 
         option._updateNodes = updateNodesWrapper;
@@ -51,51 +53,39 @@
         var nodesChanged = false;
         var event = { nodes: [], added: [], removed: [] };
 
-        var newMap = {};
+        var newUnmatched = {};
         for (var i = 0; i < newNodes.length; i++) {
             var newNode = newNodes[i];
-            newMap[newNode.id] = newNode;
+            newUnmatched[newNode.id] = newNode;
         }
 
         for (var i = 0; i < currentNodes.length; i++) {
             var node = currentNodes[i];
-            var matched = newMap[node.id];
-            if (!matched) {
+            var matched = newUnmatched[node.id];
+            if (matched) {
+                matched._marker = node._marker;
+                delete newUnmatched[node.id];
+            }
+            else {
                 nodesChanged = true;
                 node._marker.clear();
-                currentNodes.splice(i, 1);
-                i -= 1;
                 event.removed.push(node);
-                continue;
             }
-
-            newMap[node.id] = i;
         }
 
-        var nextIndex;
-        var indexShift = 0;
-        for (var key in newMap) {
-            var indexOrNode = newMap[key];
-            var newNode = typeof indexOrNode !== 'number' ? indexOrNode : undefined;
-            if (!newNode) {
-                nextIndex = indexOrNode;
-                continue;
-            }
-
+        for (var key in newUnmatched) {
             nodesChanged = true;
+            var newNode = newUnmatched[key];
             newNode._marker = cm.markText(newNode.start, newNode.end, {
                 className: 'cm-node-in-selection'
             });
-            currentNodes.splice(nextIndex + indexShift + 1, 0, newNode);
-            indexShift += 1;
             event.added.push(newNode);
         }
 
-        if (!nodesChanged)
-            return;
+        event.nodes = newNodes;
+        if (nodesChanged)
+            CodeMirror.signal(cm, 'nodesInSelectionChanged', cm, event);
 
-        event.nodes = currentNodes;
-        CodeMirror.signal(cm, 'nodesInSelectionChanged', cm, event);
         return event;
     }
 });
