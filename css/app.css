@@ -153,15 +153,6 @@ section .content {
   align-items: center;
   justify-content: center;
 }
-@media (orientation: portrait) {
-  .preview header {
-    border-left: none;
-    border-top: 1px solid #aaa;
-  }
-  .preview .content {
-    border-left: none;
-  }
-}
 .preview iframe {
   border: 0;
   position: absolute;
