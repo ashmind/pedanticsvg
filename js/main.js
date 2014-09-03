@@ -33,17 +33,19 @@
 
 require([
     'jquery',
+    'app/open-on-drop',
     'app/services/editor',
     'app/preview/preview',
     'app/preview/tracer',
-    'app/services/autosave',
+    'app/autosave',
     'app/services/settings',
     'jquery-ui'
-], function($, editorFactory, previewFactory, trace, autosave, settings) {
+], function($, openOnDrop, editorFactory, previewFactory, trace, autosave, settings) {
     'use strict';
 
     var editor = editorFactory($('#code'));
     var preview = previewFactory($('.preview .content .aligner'));
+    openOnDrop($('body'), editor);
     autosave(editor);
     trace(editor, preview);
 
