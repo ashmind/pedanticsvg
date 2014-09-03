@@ -34,8 +34,8 @@
 require([
     'jquery',
     'app/services/editor',
-    'app/services/preview',
-    'app/services/tracer',
+    'app/preview/preview',
+    'app/preview/tracer',
     'app/services/autosave',
     'app/services/settings',
     'jquery-ui'
