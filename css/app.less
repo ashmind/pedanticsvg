@@ -117,6 +117,31 @@ section .content {
   position: relative;
 }
 
+.commands {
+  position: absolute;
+  right: 7px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 1.4em;
+}
+
+.command {
+  border: none;
+  height: 1.4em;
+  width: 1.4em;
+  background: transparent;
+  background-size: contain;
+  opacity: 0.5;
+  transition: opacity 0.2s linear;
+  outline: none;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.command-download { background-image: url('../icons/download.svg'); }
+
 .code {
   width: 50%;
   position: relative;
@@ -248,8 +273,8 @@ section .content {
 textarea, .CodeMirror {
   position: absolute;
   left: 0;
-  right: 0;
   height: 100%;
+  width: 100%;
 
   line-height: 1.2;
 }

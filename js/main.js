@@ -5,6 +5,7 @@
         paths: {
             app:                          '../js',
             sax:                          '../external/sax',
+            FileSaver:                    '../external/FileSaver',
             jquery:                       'https://code.jquery.com/jquery-2.0.3.min',
             'jquery-ui':                  'https://code.jquery.com/ui/1.11.1/jquery-ui.min',
             codemirror:                   codeMirrorBase + 'codemirror',
@@ -37,10 +38,11 @@ require([
     'app/services/editor',
     'app/preview/preview',
     'app/preview/tracer',
+    'app/commands',
     'app/autosave',
     'app/services/settings',
     'jquery-ui'
-], function($, openOnDrop, editorFactory, previewFactory, trace, autosave, settings) {
+], function($, openOnDrop, editorFactory, previewFactory, trace, commands, autosave, settings) {
     'use strict';
 
     var editor = editorFactory($('#code'));
@@ -52,6 +54,23 @@ require([
     editor.astchange(function(ast) {
         preview.render(ast.root.toSVG());
     });
+
+    (function setupCommands() {
+        var locations = { code: $('section.code .commands') };
+        var handler = function(command) {
+            return function() { command.action(editor, preview); };
+        };
+
+        for (var i = 0; i < commands.length; i++) {
+            var command = commands[i];
+            var $location = locations[command.section];
+            $('<button>')
+                .addClass('command command-' + command.name)
+                .attr('title', command.name)
+                .appendTo($location)
+                .click(handler(command));
+        }
+    })();
 
     (function setupResize() {
         var $code = $('section.code');
