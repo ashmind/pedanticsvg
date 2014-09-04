@@ -44,7 +44,7 @@ require([
     'use strict';
 
     var editor = editorFactory($('#code'));
-    var preview = previewFactory($('.preview .content .aligner'));
+    var preview = previewFactory($('.preview .content'));
     openOnDrop($('body'), editor);
     autosave(editor);
     trace(editor, preview);

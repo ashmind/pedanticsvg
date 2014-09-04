@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/4.2.0/addon/lint/lint.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.0/normalize.min.css" />
     <link rel="stylesheet" href="css/app.css" />
+
+    <script src="external/html-template-polyfill.js"></script>
   </head>
   <body>
     <main>
@@ -109,6 +111,15 @@ m-714 -364 c69 -23 99 -48 58 -48 -10 0 -35 -5 -56 -11 -41 -11 -69 -54 -60
         </header>
         <div class="content">
           <div class="aligner">
+            <template id="wrapper">
+              <div class="wrapper">
+                <iframe></iframe>
+                <div class="size">
+                  <span></span>
+                  <input class="mode" type="checkbox" />
+                </div>
+              </div>
+            </template>
           </div>
         </div>
       </section>

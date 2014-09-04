@@ -1,7 +1,13 @@
 define(['jquery', 'jquery-ui'], function($) { 'use strict'; return function($preview) {
-    var $wrapper = $('<div>').addClass('wrapper').appendTo($preview);
-    var $iframe = $('<iframe>').appendTo($wrapper);
-    var $sizeLabel = $('<div>').addClass('size-label').appendTo($wrapper);
+    var $template = $preview.find('template');
+    var $templateTarget = $template.parent();
+    $(document.importNode($template[0].content, true))
+        .appendTo($templateTarget);
+
+    var $wrapper = $templateTarget.find('.wrapper');
+    var $sizeText = $templateTarget.find('.size :first-child');
+    var $sizeMode = $templateTarget.find('.size .mode');
+    var $iframe = $templateTarget.find('iframe');
     var $iframeFix = $('<div>').addClass('iframe-fix').appendTo($wrapper);
 
     var lastUnreleasedUrl;
@@ -28,9 +34,8 @@ define(['jquery', 'jquery-ui'], function($) { 'use strict'; return function($pre
         autosize();
     });
 
-    $wrapper.resizable({
-        handles: 'all'
-    }).on('resize', manualResize);
+    $wrapper.resizable({ handles: 'all' })
+            .on('resize', manualResize);
 
     function render(svg) {
         setLoadPromise();
@@ -63,6 +68,13 @@ define(['jquery', 'jquery-ui'], function($) { 'use strict'; return function($pre
         });
     }
 
+    $sizeMode.click(function() {
+        manualSizeSet = this.checked;
+        $wrapper.toggleClass('manual-size', manualSizeSet);
+        if (!manualSizeSet)
+            autosize();
+    });
+
     function autosize() {
         if (manualSizeSet)
             return;
@@ -70,6 +82,7 @@ define(['jquery', 'jquery-ui'], function($) { 'use strict'; return function($pre
         var previewWidth = $preview.width();
         var previewHeight = $preview.height();
         $wrapper.width(previewWidth).height(previewHeight);
+        $iframe.width(previewWidth).height(previewHeight);
 
         var $svg = getRootElementImmediate();
         var svgWidth = $svg.width();
@@ -81,7 +94,8 @@ define(['jquery', 'jquery-ui'], function($) { 'use strict'; return function($pre
         if ($wrapper.height() > svgHeight)
             $wrapper.height(svgHeight);
 
-        $sizeLabel.text(svgWidth + ' × ' + svgHeight);
+        showSize(svgWidth, svgHeight);
+        $sizeMode[0].checked = false;
     }
 
     function manualResize() {
@@ -90,8 +104,17 @@ define(['jquery', 'jquery-ui'], function($) { 'use strict'; return function($pre
         $iframe.width(wrapperWidth)
                .height(wrapperHeight);
 
-        $sizeLabel.text(wrapperWidth + ' × ' + wrapperHeight);
+        showSize(wrapperWidth, wrapperHeight);
+        if (!manualSizeSet) {
+            $wrapper.addClass('manual-size');
+            $sizeMode[0].checked = true;
+        }
+
         manualSizeSet = true;
+    }
+
+    function showSize(width, height) {
+        $sizeText.text(width + ' × ' + height);
     }
 
     return {

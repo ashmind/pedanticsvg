@@ -173,6 +173,23 @@ section .content {
     left: auto !important;
 
     .ui-resizable-for-all(5px, 10px);
+
+    .ui-resizable-nw,
+    .ui-resizable-ne,
+    .ui-resizable-sw,
+    .ui-resizable-se {
+      background-color: #fff;
+      border: 3px solid #eee;
+    }
+
+    &.manual-size {
+      .ui-resizable-nw,
+      .ui-resizable-ne,
+      .ui-resizable-sw,
+      .ui-resizable-se {
+        background-color: #eee;
+      }
+    }
   }
 
   .iframe-fix {
@@ -184,22 +201,46 @@ section .content {
     height: 100%
   }
 
-  .size-label {
+  .size {
     position: absolute;
-    left: 0;
-    right: 0;
+    left: 50%;
     top: 100%;
+    transform: translateX(-50%);
     margin-top: 10px;
     text-align: center;
+    white-space: nowrap;
 
     color: #ddd;
     font-size: 120%;
     opacity: 0;
 
     transition: opacity 0.2s linear;
+
+    span {
+      vertical-align: middle;
+    }
+
+    .mode {
+      vertical-align: middle;
+      display: inline-block;
+      border: 2px solid #ddd;
+      width: 12px;
+      height: 12px;
+      background: none;
+      padding: 0;
+      margin: 0;
+      margin-left: 2px;
+      outline: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+    }
+
+    .mode:checked {
+      background-color: #ddd;
+    }
   }
 
-  &:hover .size-label {
+  &:hover .size {
     opacity: 1;
   }
 }
