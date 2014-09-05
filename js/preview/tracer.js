@@ -1,5 +1,6 @@
 define(['app/services/svg-ast', 'app/services/linker', 'app/utils/jquery.svg'], function(astFactory, linker) { 'use strict'; return function(editor, preview) {
-    var selectedClassName = 'psvg-selected';
+    // TODO: move to CSS
+    var highlightColor = '#daa520';
     var traces = {};
 
     var tracers = {
@@ -16,30 +17,6 @@ define(['app/services/svg-ast', 'app/services/linker', 'app/utils/jquery.svg'], 
     editor.astchange(processAst);
     function processAst(ast) {
         linker.annotate(ast.root);
-        var parentTag = findFirstTag(ast.root);
-        if (!parentTag)
-            return;
-
-        var style = astFactory.tag('style', null, [
-            // TODO: move to CSS
-            '.psvg-selected { fill: #daa520 !important; stroke: #daa520 !important; }'
-        ]);
-        parentTag.children.unshift(style);
-    }
-
-    function findFirstTag(astNode) {
-        if (astNode.type === 'tag')
-            return astNode;
-
-        var children = astNode.children;
-        if (!children)
-            return;
-
-        for (var i = 0; i < children.length; i++) {
-            var tag = findFirstTag(children[i]);
-            if (tag)
-                return tag;
-        }
     }
 
     editor.codeMirror.on('nodesInSelectionChanged', function(cm, nodeChange) {
@@ -82,12 +59,19 @@ define(['app/services/svg-ast', 'app/services/linker', 'app/utils/jquery.svg'], 
         if ($element.length === 0)
             return;
 
-        $element.svgAddClass(selectedClassName);
+        var traceCss = getTraceCss($element);
+        var savedCss = {
+            fill: $element[0].style.fill,
+            stroke: $element[0].style.stroke
+        };
+
+        $element.data('psvg.untrace', savedCss)
+                .css(traceCss);
         return $element;
     }
 
     function untraceElement($element) {
-        $element.svgRemoveClass(selectedClassName);
+        $element.css($element.data('psvg.untrace'));
     }
 
     function tracePathSegment($previewRoot, segment) {
@@ -110,7 +94,7 @@ define(['app/services/svg-ast', 'app/services/linker', 'app/utils/jquery.svg'], 
             segmentIndexInTrace = 0;
             traces[commonParentTraceKey] = trace;
             trace.$path = $path.clone()
-                               .svgAddClass(selectedClassName)
+                               .css(getTraceCss($path))
                                .appendTo($path.parent());
         }
         else {
@@ -166,5 +150,22 @@ define(['app/services/svg-ast', 'app/services/linker', 'app/utils/jquery.svg'], 
         }
 
         trace.$path.attr('d', d);
+    }
+
+    function getTraceCss($element) {
+        var css = {};
+        var currentStyle = $element[0].ownerDocument.defaultView.getComputedStyle($element[0]);
+        if (currentStyle.fill !== 'none')
+            css.fill = highlightColor;
+
+        if (currentStyle.stroke !== 'none')
+            css.stroke = highlightColor;
+
+        if (!css.fill && !css.stroke) {
+            // ¯\_(ツ)_/¯
+            css.fill = highlightColor;
+        }
+
+        return css;
     }
 };});
