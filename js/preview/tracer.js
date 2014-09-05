@@ -47,7 +47,7 @@ define(['app/services/svg-ast', 'app/services/linker', 'app/utils/jquery.svg'], 
             updateTrace($previewRoot, nodeChange);
         }).catch(function(e) {
             if (window.console && window.console.error)
-                console.error(e);
+                window.console.error(e);
         });
     });
 
