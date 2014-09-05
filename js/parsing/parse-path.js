@@ -1,4 +1,4 @@
-define(['app/services/svg-ast', 'app/utils/regexp-iterator', 'app/utils/position'], function(ast, RegExpIterator, Position) {
+define(['app/parsing/svg-ast', 'app/utils/regexp-iterator', 'app/utils/position'], function(ast, RegExpIterator, Position) {
     'use strict';
 
     // This all is pretty terrible and should probably be rewritten

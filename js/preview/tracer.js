@@ -1,4 +1,4 @@
-define(['app/services/svg-ast', 'app/services/linker', 'app/utils/jquery.svg'], function(astFactory, linker) { 'use strict'; return function(editor, preview) {
+define(['app/services/linker', 'app/utils/jquery.svg'], function(linker) { 'use strict'; return function(editor, preview) {
     // TODO: move to CSS
     var highlightColor = '#daa520';
     var traces = {};

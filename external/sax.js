@@ -695,6 +695,11 @@ function attrib (parser) {
     return parser.attribName = parser.attribValue = ""
   }
 
+  var attribute = { name: parser.attribName, value: parser.attribValue };
+  if (parser.trackPosition) {
+    attribute.valueStartLine = parser.attribValueStartLine;
+    attribute.valueStartColumn = parser.attribValueStartColumn;
+  }
   if (parser.opt.xmlns) {
     var qn = qname(parser.attribName, true)
       , prefix = qn.prefix
@@ -723,14 +728,14 @@ function attrib (parser) {
     // defer onattribute events until all attributes have been seen
     // so any new bindings can take effect; preserve attribute order
     // so deferred events can be emitted in document order
-    parser.attribList.push([parser.attribName, parser.attribValue])
+    parser.attribList.push(attribute)
   } else {
     // in non-xmlns mode, we can emit the event right away
     parser.tag.attributes[parser.attribName] = parser.attribValue
+
     emitNode( parser
             , "onattribute"
-            , { name: parser.attribName
-              , value: parser.attribValue } )
+            , attribute )
   }
 
   parser.attribName = parser.attribValue = ""
@@ -766,28 +771,22 @@ function openTag (parser, selfClosing) {
     // Note: do not apply default ns to attributes:
     //   http://www.w3.org/TR/REC-xml-names/#defaulting
     for (var i = 0, l = parser.attribList.length; i < l; i ++) {
-      var nv = parser.attribList[i]
-      var name = nv[0]
-        , value = nv[1]
-        , qualName = qname(name, true)
-        , prefix = qualName.prefix
-        , local = qualName.local
-        , uri = prefix == "" ? "" : (tag.ns[prefix] || "")
-        , a = { name: name
-              , value: value
-              , prefix: prefix
-              , local: local
-              , uri: uri
-              }
+      var a = parser.attribList[i]
+      var qn = qname(a.name, true)
+        , prefix = qn.prefix;
+
+      a.prefix = prefix;
+      a.local = qn.local;
+      a.uri = prefix == "" ? "" : (tag.ns[prefix] || "");
 
       // if there's any attributes with an undefined namespace,
       // then fail on them now.
-      if (prefix && prefix != "xmlns" && !uri) {
+      if (prefix && prefix != "xmlns" && !a.uri) {
         strictFail(parser, "Unbound namespace prefix: "
                          + JSON.stringify(prefix))
         a.uri = prefix
       }
-      parser.tag.attributes[name] = a
+      parser.tag.attributes[a.name] = a
       emitNode(parser, "onattribute", a)
     }
     parser.attribList.length = 0

@@ -1,8 +1,9 @@
-define(['sax', 'app/services/svg-ast', 'app/services/parsing/parse-path'], function(sax, ast, parsePath) {
+define(['sax', 'app/parsing/svg-ast', 'app/parsing/parse-path'], function(sax, ast, parsePath) {
     'use strict';
 
     var parser = sax.parser(true, {
-        position: true
+        position: true,
+        xmlns: true
     });
 
     function parse(code) {
@@ -13,7 +14,7 @@ define(['sax', 'app/services/svg-ast', 'app/services/parsing/parse-path'], funct
 
         var tagExtra = [];
         var onpath = function(a) {
-            var valueStart = getPosition(parser, 'attribValueStart');
+            var valueStart = getPosition(a, 'valueStart');
             tagExtra.push(function(tag) {
                 var parsed = parsePath(a.value, { position: valueStart, parent: tag });
                 errors.push.apply(errors, parsed.errors);
@@ -30,7 +31,12 @@ define(['sax', 'app/services/svg-ast', 'app/services/parsing/parse-path'], funct
         parser.onopentag = function(node) {
             var parent = topOf(stack);
 
-            var tag = ast.tag(node.name, node.attributes);
+            var attributes = {};
+            for (var key in node.attributes) {
+                attributes[key] = node.attributes[key].value;
+            }
+
+            var tag = ast.tag(node.name, attributes);
             tag.parent = parent;
             tag.start = getPosition(parser, 'startTag');
             tag.index = parent.children.length;
@@ -99,10 +105,10 @@ define(['sax', 'app/services/svg-ast', 'app/services/parsing/parse-path'], funct
         return stack[stack.length - 1];
     }
 
-    function getPosition(parser, prefix) {
+    function getPosition(sax, prefix) {
         return prefix
-             ? { line: parser[prefix + 'Line'], column: parser[prefix + 'Column'] }
-             : { line: parser.line, column: parser.column };
+             ? { line: sax[prefix + 'Line'], column: sax[prefix + 'Column'] }
+             : { line: sax.line, column: sax.column };
     }
 
     function getNodesInRanges(flat, ranges) {

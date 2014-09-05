@@ -2,7 +2,7 @@ define([
     'jquery',
     'app/utils/eventLib',
     'app/services/codemirror-setup',
-    'app/services/svg-parser',
+    'app/parsing/svg-parser',
     'app/services/refactoring/ui-builder'
 ], function($, event, setupCodeMirror, parse, refactorUI) { 'use strict'; return function($editor) {
     var ast;

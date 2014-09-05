@@ -3,11 +3,11 @@ define(function() {
 
     var id = 1;
 
-    var SvgRoot = function() {
+    function SvgRoot() {
         this.type = 'root';
         this.children = [];
         makeAllPropertiesReadOnly(this);
-    };
+    }
     SvgRoot.prototype = {
         toSVG: function() {
            return arrayToSVG(this.children);
@@ -15,16 +15,19 @@ define(function() {
     };
     makeAllPropertiesReadOnly(SvgRoot.prototype);
 
-    var SvgTag = function(name, attributes, children) {
+    function SvgTag(name, attributes, children) {
         this.id = id++;
         this.type = 'tag';
         this.name = name;
         this.attributes = attributes || {};
         this.children = children || [];
         makeAllPropertiesReadOnly(this);
-    };
-
+    }
     SvgTag.prototype = {
+        toString: function() {
+            return this.toSVG();
+        },
+
         toSVG: function() {
             /* jshint validthis:true */
             var result = '<' + this.name;
@@ -46,7 +49,7 @@ define(function() {
     };
     makeAllPropertiesReadOnly(SvgTag.prototype);
 
-    var SvgPathSegment = function(command, coords, separators, _cache) {
+    function SvgPathSegment(command, coords, separators, _cache) {
         this.id = id++;
         this.type = 'path-segment';
         this.command = command;
@@ -54,7 +57,7 @@ define(function() {
         this.separators = separators;
         this._cache = _cache || {};
         makeAllPropertiesReadOnly(this);
-    };
+    }
     SvgPathSegment.prototype = {
         get isAbsolute() {
             return this._cache.absolute === this
@@ -170,7 +173,7 @@ define(function() {
     };
     makeAllPropertiesReadOnly(SvgPathSegment.prototype);
 
-    var SvgOther = function(type, raw) {
+    function SvgOther(type, raw) {
         var object = {
             id: id++,
             type: type,
@@ -178,7 +181,7 @@ define(function() {
         };
         makeAllPropertiesReadOnly(object);
         return object;
-    };
+    }
 
     return {
         root: constructorToFunction(SvgRoot),
@@ -191,6 +194,12 @@ define(function() {
         return function() {
             var instance = Object.create(constructor.prototype);
             constructor.apply(instance, arguments);
+            Object.defineProperty(instance, 'constructor', {
+                writable: false,
+                configurable: false,
+                enumerable: false,
+                value: constructor
+            });
             return instance;
         };
     }
