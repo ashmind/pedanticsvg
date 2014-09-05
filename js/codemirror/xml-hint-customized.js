@@ -29,7 +29,7 @@
     var inner = CodeMirror.innerMode(cm.getMode(), token.state);
     if (inner.mode.name !== "xml") return;
     var result = [], replaceToken = false, prefix;
-    var tag = /\btag\b/.test(token.type), tagName = tag && /^\w/.test(token.string), tagStart;
+    var tag = /\btag\b/.test(token.type), tagName = tag && /^[\w:]/.test(token.string), tagStart;
     var tagType;
     var hintType;
     if (tagName) {
@@ -45,22 +45,29 @@
       if (tagName)
         prefix = token.string;
       replaceToken = tagType;
-      var cx = inner.state.context, curTag = cx && tags[cx.tagName];
+      var cx = inner.state.context;
+      var curTagName = cx && cx.tagName.split(/:/);
+      var curNs = (cx && curTagName.length > 1 && (curTagName[0] + ':')) || '';
+      var curTag = cx && tags[curTagName[1] || curTagName[0]];
       var childList = cx ? curTag && curTag.children : tags["!top"];
       if (childList && tagType !== "close") {
-        for (var i = 0; i < childList.length; ++i) if (!prefix || childList[i].lastIndexOf(prefix, 0) === 0)
-          result.push("<" + childList[i]);
+        for (var i = 0; i < childList.length; ++i) {
+          var childName = curNs + childList[i];
+          if (!prefix || childName.lastIndexOf(prefix, 0) === 0)
+            result.push("<" + childName);
+        }
       } else if (tagType !== "close") {
         for (var name in tags)
           if (tags.hasOwnProperty(name) && name !== "!top" && name !== "!attrs" && (!prefix || name.lastIndexOf(prefix, 0) === 0))
-            result.push("<" + name);
+            result.push("<" + curNs + name);
       }
       if (cx && (!prefix || tagType === "close" && cx.tagName.lastIndexOf(prefix, 0) === 0))
         result.push("</" + cx.tagName + ">");
       hintType = "tag";
     } else {
       // Attribute completion
-      var curTag = tags[inner.state.tagName], attrs = curTag && curTag.attrs;
+      var curTagName = inner.state.tagName.split(/:/);
+      var curTag =  tags[curTagName[1] || curTagName[0]], attrs = curTag && curTag.attrs;
       var globalAttrs = tags["!attrs"];
       if (!attrs && !globalAttrs) return;
       if (!attrs) {
