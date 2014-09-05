@@ -24,7 +24,7 @@ define(function() {
             },
 
             relevant: function(astNode) {
-                if (astNode.name !== 'path' || astNode.segments.length === 0)
+                if (astNode.name !== 'path' || !astNode.segments || astNode.segments.length === 0)
                     return false;
 
                 for (var i = 1; i < astNode.segments.length; i++) {
