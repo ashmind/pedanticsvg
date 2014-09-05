@@ -27,6 +27,7 @@ define([
                     }
                 }
             }),
+            lineWrapping: true,
             indentUnit:  2,
             tabSize:     2,
             autoCloseTags: true,
