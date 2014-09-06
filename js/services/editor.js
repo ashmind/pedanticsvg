@@ -1,24 +1,21 @@
 define([
     'jquery',
-    'app/utils/eventLib',
+    'app/utils/setup-events',
     'app/services/codemirror-setup',
     'app/parsing/svg-parser',
     'app/services/refactoring/ui-builder'
-], function($, event, setupCodeMirror, parse, refactorUI) { 'use strict'; return function($editor) {
+], function($, setupEvents, setupCodeMirror, parse, refactorUI) { 'use strict'; return function($editor) {
     var ast;
     var code;
 
-    var service = {
-        astchange: event(),
-        codechange: event()
-    };
-
-    service.astchange.onsubscribe = function() {
+    var service = setupEvents({}, ['astchange', 'codechange']);
+    service.on('subscribe', function(e) {
         // since service does not currently provide editable ast
         // as a property, this is the only way to get it to any new
         // subscribers
-        service.astchange(ast);
-    };
+        if (e.name === 'astchange')
+            e.handler.call(undefined, ast);
+    });
 
     var cm = setupCodeMirror($editor[0]);
     cm.setOption('trackNodesInSelection', {
@@ -30,7 +27,7 @@ define([
             code = cm.getValue();
             updateAstFromCode(updateLinting);
             cm.refreshNodesInSelection();
-            service.codechange(code);
+            service.trigger('codechange', code);
         })
     });
 
@@ -45,7 +42,7 @@ define([
             code = value;
             updateAstFromCode();
             cm.setValue(code);
-            service.codechange(code);
+            service.trigger('codechange', code);
         }
     });
 
@@ -65,7 +62,7 @@ define([
             return;
 
         ast = parsed;
-        service.astchange(ast);
+        service.trigger('astchange', ast);
     }
 
     function reportParseErrors(errors, updateLinting) {

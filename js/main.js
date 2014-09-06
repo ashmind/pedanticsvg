@@ -51,7 +51,7 @@ require([
     autosave(editor);
     trace(editor, preview);
 
-    editor.astchange(function(ast) {
+    editor.on('astchange', function(ast) {
         preview.render(ast.root.toSVG());
     });
 

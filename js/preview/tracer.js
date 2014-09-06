@@ -14,7 +14,7 @@ define(['app/services/linker', 'app/utils/jquery.svg'], function(linker) { 'use 
         }
     };
 
-    editor.astchange(processAst);
+    editor.on('astchange', processAst);
     function processAst(ast) {
         linker.annotate(ast.root);
     }
