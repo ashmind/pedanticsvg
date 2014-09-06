@@ -21,12 +21,36 @@
 
     'use strict';
 
+    CodeMirror.defineOption('xmlHintExtra', null, function(cm, option) {
+        var mapName = 'xmlHintKeys';
+
+        if (!option) {
+            cm.removeKeyMap(mapName);
+            return;
+        }
+
+        cm.addKeyMap({
+            name:  mapName,
+            "'<'": completeAfter,
+            "'/'": completeIfAfterLt,
+            "' '": completeIfInTag,
+            "'='": insertQuotesIfInTag,
+            "'":   completeIfInTag,
+            "Ctrl-Space": "autocomplete"
+        });
+        cm.on('pickCompletion', function(cm) {
+            var completion = cm.state.completionActive;
+            var data = completion.widget.data;
+            insertExtraAfterPick(cm, data);
+        });
+    });
+
     var showHintOptions = {
         completeSingle: false,
         closeCharacters: /[\?!\s()\[\]{};>,]/,
         extraKeys: {
-            Space: pickAndInsert('tag', ' '),
-            '=':   pickAndInsert('attribute-name', '')
+            Space: pickIf('tag'),
+            '=':   pickIf('attribute-name')
         }
     };
 
@@ -43,19 +67,17 @@
             return;
 
         cm.showHint(showHintOptions);
-        var completion = cm.state.completionActive;
-        if (!completion || !completion.widget)
-            return;
-
-        var data = completion.widget.data;
-        CodeMirror.on(data, 'pick', function() {
-            insertExtraAfterPick(cm, data);
-        });
     }
 
     function insertExtraAfterPick(cm, data) {
         if (data.type === 'attribute-name') {
             insertAroundCursor(cm, '="', '"');
+            completeIfInTag(cm);
+            return;
+        }
+
+        if (data.type === 'tag') {
+            insertAroundCursor(cm, ' ');
             completeIfInTag(cm);
             return;
         }
@@ -91,14 +113,12 @@
         return inner.tagName;
     }
 
-    function pickAndInsert(hintType, beforeCursor, afterCursor) {
+    function pickIf(hintType) {
         return function(cm, handle) {
             if (handle.data.type !== hintType)
                 return CodeMirror.Pass;
 
             handle.pick();
-            insertAroundCursor(cm, beforeCursor, afterCursor);
-            completeIfInTag(cm);
         };
     }
 
@@ -111,13 +131,4 @@
         cm.replaceSelection(after);
         cm.setCursor(cursor);
     }
-
-    return {
-        "'<'": completeAfter,
-        "'/'": completeIfAfterLt,
-        "' '": completeIfInTag,
-        "'='": insertQuotesIfInTag,
-        "'":   completeIfInTag,
-        "Ctrl-Space": "autocomplete"
-    };
 }));

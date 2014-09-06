@@ -102,7 +102,7 @@
         for (var i = 0; i < atValues.length; ++i) if (!prefix || atValues[i].lastIndexOf(prefix, 0) === 0)
           result.push({ displayText: atValues[i], text: quote + atValues[i] + quote });
         hintType = "attribute-value";
-      } else if (token.string[token.string.length - 1] === ' ') { // An attribute name
+      } else if (token.string[token.string.length - 1] === ' ' || token.type === "attribute") { // An attribute name
         if (token.type === "attribute") {
           prefix = token.string;
           replaceToken = true;
