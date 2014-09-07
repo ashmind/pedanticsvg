@@ -1,0 +1,50 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans);
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: auto !important;
+  font-family: 'Open Sans', sans-serif !important;
+}
+
+parsererror {
+  box-sizing: border-box;
+  margin: 0 !important;
+  padding: 1em !important;
+  border: none !important;
+  background: none !important;
+  white-space: pre-wrap !important;
+  font-weight: normal;
+
+  h3 {
+    display: none;
+  }
+
+  &::before {
+    content: 'SVG preview failed';
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.5em;
+  }
+
+  & + svg {
+    display: none;
+  }
+
+  div {
+    display: block;
+    font-family: inherit !important;
+    font-size: inherit !important;
+
+    &::first-letter {
+      text-transform: uppercase;
+    }
+  }
+
+  sourcetext {
+    margin-top: 1em;
+    color: inherit;
+    font-weight: normal;
+    font-family: 'Consolas', monospace;
+  }
+}

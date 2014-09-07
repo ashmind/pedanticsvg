@@ -184,6 +184,9 @@ section .content {
   width: 100%;
   height: 100%;
 }
+.preview iframe.loading {
+  visibility: hidden;
+}
 .preview .wrapper {
   position: relative;
   border: 5px dashed #eeeeee;

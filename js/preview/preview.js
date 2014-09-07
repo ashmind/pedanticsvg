@@ -18,10 +18,24 @@ define(['jquery', 'app/preview/linker', 'jquery-ui'], function($, linker) { 'use
     var manualSizeSet = false;
 
     $iframe[0].onload = function() {
-        if (resolveLoaded)
-            resolveLoaded();
+        function done() {
+            $iframe.removeClass('loading');
+            if (resolveLoaded)
+                resolveLoaded();
 
-        autosize();
+            autosize();
+        }
+
+        var $root = getRootElementImmediate();
+        if ($root.find('parsererror')) { // something failed?
+            var stylesheetURL = new URL('css/preview-errors.css', document.baseURI);
+            var $link = $('<link rel="stylesheet" href="' + stylesheetURL + '">');
+            $link[0].onload = function() { done(); };
+            $root.find('head,body').andSelf().eq(0).prepend($link);
+            return;
+        }
+
+        done();
     };
 
     $(document).mousedown(function() {
@@ -44,6 +58,7 @@ define(['jquery', 'app/preview/linker', 'jquery-ui'], function($, linker) { 'use
 
         var blob = new Blob([svg], {type: 'image/svg+xml'});
         var url = URL.createObjectURL(blob);
+        $iframe.addClass('loading');
         $iframe[0].src = url;
 
         if (lastUnreleasedUrl)
