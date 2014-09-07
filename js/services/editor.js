@@ -2,13 +2,21 @@ define([
     'jquery',
     'app/utils/setup-events',
     'app/services/codemirror-setup',
-    'app/parsing/svg-parser',
+    'app/parsing/parse-svg',
     'app/services/refactoring/ui-builder'
 ], function($, setupEvents, setupCodeMirror, parse, refactorUI) { 'use strict'; return function($editor) {
-    var ast;
     var code;
+    var ast;
+    var errors;
+    var getNodesInRanges;
+    var firstParse = true;
 
-    var service = setupEvents({}, ['astchange', 'codechange']);
+    var service = setupEvents({}, [
+        'codechange',
+        'astchange',
+        'errorchange'
+    ]);
+
     service.on('subscribe', function(e) {
         // since service does not currently provide editable ast
         // as a property, this is the only way to get it to any new
@@ -25,7 +33,7 @@ define([
         async: true,
         getAnnotations: (function processChange(_, updateLinting) {
             code = cm.getValue();
-            updateAstFromCode(updateLinting);
+            parseCurrentCode(updateLinting);
             cm.refreshNodesInSelection();
             service.trigger('codechange', code);
         })
@@ -40,28 +48,40 @@ define([
                 return;
 
             code = value;
-            updateAstFromCode();
+            parseCurrentCode();
             cm.setValue(code);
             service.trigger('codechange', code);
         }
+    });
+    Object.defineProperty(service, 'errors', {
+        value: errors,
+        writable: false
+    });
+    Object.defineProperty(service, 'codeMirror', {
+        value: cm,
+        writable: false
     });
 
     if (!code)
         code = cm.getValue();
 
-    Object.defineProperty(service, 'codeMirror', {
-        value: cm,
-        writable: false
-    });
     return service;
 
-    function updateAstFromCode(updateLinting) {
-        var parsed = parse(code);
-        reportParseErrors(parsed.errors, updateLinting);
-        if (parsed.errors.length > 0)
-            return;
+    function parseCurrentCode(updateLinting) {
+        if (firstParse) {
+            firstParse = false;
+            if (code === '')
+                return;
+        }
 
-        ast = parsed;
+        var parsed = parse(code);
+        getNodesInRanges = parsed.getNodesInRanges;
+        reportParseErrors(parsed.errors, updateLinting);
+
+        errors = parsed.errors;
+        service.trigger('errorchange', errors);
+
+        ast = parsed.root;
         service.trigger('astchange', ast);
     }
 
@@ -93,7 +113,7 @@ define([
                 end: fromCMPosition(selections[i].to())
             });
         }
-        var astNodes = ast.getNodesInRanges(ranges);
+        var astNodes = getNodesInRanges(ranges);
         var mappedNodes = [];
         for (var i = 0; i < astNodes.length; i++) {
             var astNode = astNodes[i];

@@ -4,7 +4,7 @@
     var config = {
         paths: {
             app:                          '../js',
-            sax:                          '../external/sax',
+            sax:                          '../external/sax-customized',
             FileSaver:                    '../external/FileSaver',
             jquery:                       'https://code.jquery.com/jquery-2.0.3.min',
             'jquery-ui':                  'https://code.jquery.com/ui/1.11.1/jquery-ui.min',
@@ -51,8 +51,11 @@ require([
     autosave(editor);
     trace(editor, preview);
 
+    if (!editor.code)
+        editor.code = $('#default').text();
+
     editor.on('astchange', function(ast) {
-        preview.render(ast.root.toSVG());
+        preview.render(editor.code, ast);
     });
 
     (function setupCommands() {

@@ -667,6 +667,12 @@ function newTag (parser) {
   var parent = parser.tags[parser.tags.length - 1] || parser
     , tag = parser.tag = { name : parser.tagName, attributes : {} }
 
+  if (parser.trackPosition) {
+    tag.nameEndLine = parser.tagNameEndLine;
+    tag.nameEndColumn = parser.tagNameEndColumn;
+    tag.nameEndPosition = parser.tagNameEndPosition;
+  }
+
   // will be overridden if tag contails an xmlns="foo" or xmlns:foo="bar"
   if (parser.opt.xmlns) tag.ns = parent.ns
   parser.attribList.length = 0
@@ -699,6 +705,10 @@ function attrib (parser) {
   if (parser.trackPosition) {
     attribute.valueStartLine = parser.attribValueStartLine;
     attribute.valueStartColumn = parser.attribValueStartColumn;
+    attribute.valueStartPosition = parser.attribValueStartPosition;
+    attribute.endColumn = parser.column;
+    attribute.endLine = parser.line;
+    attribute.endPosition = parser.position;
   }
   if (parser.opt.xmlns) {
     var qn = qname(parser.attribName, true)
@@ -907,6 +917,16 @@ function parseEntity (parser) {
   return String.fromCodePoint(num)
 }
 
+function recordPosition(parser, prefix) {
+  if (!parser.trackPosition) {
+    return;
+  }
+
+  parser[prefix + 'Line'] = parser.line;
+  parser[prefix + 'Column'] = parser.column;
+  parser[prefix + 'Position'] = parser.position;
+}
+
 function write (chunk) {
   var parser = this
   if (this.error) throw this.error
@@ -997,6 +1017,7 @@ function write (chunk) {
         } else if (is(nameStart,c)) {
           parser.state = S.OPEN_TAG
           parser.tagName = c
+          recordPosition(parser, 'tagNameEnd');
         } else if (c === "/") {
           parser.state = S.CLOSE_TAG
           parser.tagName = ""
@@ -1172,7 +1193,13 @@ function write (chunk) {
       continue
 
       case S.OPEN_TAG:
-        if (is(nameBody, c)) parser.tagName += c
+        if (is(nameBody, c)) {
+          parser.tagName += c
+
+          if (parser.trackPosition) {
+            recordPosition(parser, 'tagNameEnd');
+          }
+        }
         else {
           newTag(parser)
           if (c === ">") openTag(parser)
@@ -1255,6 +1282,7 @@ function write (chunk) {
           // modification by Andrey Shchekin
           parser.attribValueStartLine = parser.line;
           parser.attribValueStartColumn = parser.column;
+          parser.attribValueStartPosition = parser.position;
           // end of modification
         }
       continue

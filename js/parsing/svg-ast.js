@@ -19,32 +19,13 @@ define(function() {
         this.id = id++;
         this.type = 'tag';
         this.name = name;
-        this.attributes = attributes || {};
+        this.attributes = attributes || [];
         this.children = children || [];
         makeAllPropertiesReadOnly(this);
     }
     SvgTag.prototype = {
-        toString: function() {
-            return this.toSVG();
-        },
-
         toSVG: function() {
-            /* jshint validthis:true */
-            var result = '<' + this.name;
-            var attributes = this.attributes;
-            for (var name in attributes) {
-                result += ' ' + name + '="' + attributes[name] + '"';
-            }
-
-            if (this.children.length > 0) {
-                result += '>';
-                result += arrayToSVG(this.children);
-                result += '</' + this.name + '>';
-            }
-            else {
-                result += '/>';
-            }
-            return result;
+            throw new Error('SvgTag.toSVG is currently not implemented.');
         }
     };
     makeAllPropertiesReadOnly(SvgTag.prototype);
@@ -214,7 +195,9 @@ define(function() {
     }
 
     function makeAllPropertiesReadOnly(object) {
-        for (var key in object) {
+        var keys = Object.getOwnPropertyNames(object);
+        for (var i = 0; i < keys.length; i++) {
+            var key = keys[i];
             var descriptor = Object.getOwnPropertyDescriptor(object, key);
             if (!descriptor || descriptor.get)
                 continue;

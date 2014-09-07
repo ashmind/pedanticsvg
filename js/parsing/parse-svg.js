@@ -31,14 +31,20 @@ define(['sax', 'app/parsing/svg-ast', 'app/parsing/parse-path'], function(sax, a
         parser.onopentag = function(node) {
             var parent = topOf(stack);
 
-            var attributes = {};
-            for (var key in node.attributes) {
-                attributes[key] = node.attributes[key].value;
+            var attributes = [];
+            for (var name in node.attributes) {
+                var attribute = node.attributes[name];
+                attributes.push({
+                    name: name,
+                    value: attribute.value,
+                    end: getPosition(attribute, 'end')
+                });
             }
 
             var tag = ast.tag(node.name, attributes);
             tag.parent = parent;
             tag.start = getPosition(parser, 'startTag');
+            tag.nameEnd = getPosition(node, 'nameEnd');
             tag.index = parent.children.length;
 
             parent.children.push(tag);
@@ -85,12 +91,7 @@ define(['sax', 'app/parsing/svg-ast', 'app/parsing/parse-path'], function(sax, a
             });
         };
 
-        try {
-            parser.write(code);
-        }
-        finally {
-            parser.resume().close();
-        }
+        process(parser, code);
 
         return {
             root: root,
@@ -101,14 +102,25 @@ define(['sax', 'app/parsing/svg-ast', 'app/parsing/parse-path'], function(sax, a
         };
     }
 
+    // try/finally needs to be in a separate function
+    // to be optimized in V8
+    function process(parser, code) {
+        try {
+            parser.write(code);
+        }
+        finally {
+            parser.resume().close();
+        }
+    }
+
     function topOf(stack) {
         return stack[stack.length - 1];
     }
 
     function getPosition(sax, prefix) {
         return prefix
-             ? { line: sax[prefix + 'Line'], column: sax[prefix + 'Column'] }
-             : { line: sax.line, column: sax.column };
+             ? { line: sax[prefix + 'Line'], column: sax[prefix + 'Column'], offset: sax[prefix + 'Position'] }
+             : { line: sax.line, column: sax.column, offset: sax.position };
     }
 
     function getNodesInRanges(flat, ranges) {

@@ -54,7 +54,7 @@ main {
   width: 100%;
 }
 
-main + footer {
+main ~ footer {
   .flex (0 0 auto);
   padding: 5px;
   padding-left: 7px;
@@ -155,7 +155,7 @@ section .content {
   }
 }
 
-.preview  {
+.preview {
   .flex(1);
 
   header {
@@ -267,6 +267,10 @@ section .content {
 
   &:hover .size {
     opacity: 1;
+  }
+
+  &.failed {
+    iframe { display: none }
   }
 }
 

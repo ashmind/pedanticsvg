@@ -1,4 +1,4 @@
-define(['jquery', 'jquery-ui'], function($) { 'use strict'; return function($preview) {
+define(['jquery', 'app/preview/linker', 'jquery-ui'], function($, linker) { 'use strict'; return function($preview) {
     var $template = $preview.find('template');
     var $templateTarget = $template.parent();
     $(document.importNode($template[0].content, true))
@@ -37,8 +37,10 @@ define(['jquery', 'jquery-ui'], function($) { 'use strict'; return function($pre
     $wrapper.resizable({ handles: 'all' })
             .on('resize', manualResize);
 
-    function render(svg) {
+    function render(svg, ast) {
         setLoadPromise();
+
+        svg = linker.annotate(svg, ast);
 
         var blob = new Blob([svg], {type: 'image/svg+xml'});
         var url = URL.createObjectURL(blob);

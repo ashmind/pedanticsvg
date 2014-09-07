@@ -61,7 +61,7 @@ main {
   -webkit-flex: 1 0 auto;
   width: 100%;
 }
-main + footer {
+main ~ footer {
   flex: 0 0 auto;
   -webkit-flex: 0 0 auto;
   padding: 5px;
@@ -71,7 +71,7 @@ main + footer {
   font-size: 90%;
   text-align: right;
 }
-main + footer a {
+main ~ footer a {
   color: inherit;
 }
 section {
@@ -300,6 +300,9 @@ section .content {
 }
 .preview:hover .size {
   opacity: 1;
+}
+.preview.failed iframe {
+  display: none;
 }
 textarea,
 .CodeMirror {

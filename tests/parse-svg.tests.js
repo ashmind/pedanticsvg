@@ -1,22 +1,20 @@
 /* globals describe:false, it:false, expect:false */
 
-describe('app/parsing/svg-parser', function(parse) {
+describe('app/parsing/parse-svg', function(parse) {
     'use strict';
 
-    it('can roundtrip a simple SVG', function() {
+    it('can parse a simple SVG', function() {
         var original = '<svg xmlns="http://www.w3.org/2000/svg" width="10px" height="10px" viewBox="0 0 10 10"><metadata>dog</metadata><g><path d="M2 2 l3 3z"/></g></svg>';
-        var ast = parse(original);
-        var rendered = ast.root.toSVG();
+        var ast = parse(original).root;
 
-        expect(rendered).toBe(original);
+        expect(toTestSVG(ast)).toEqual(original);
     });
 
-    it('can roundtrip namespaces', function() {
+    it('can parse namespaces', function() {
         var original = '<svg:svg xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><svg:a xlink:href="#nowhere"><svg:text>/svg/index.html</svg:text></svg:a></svg:svg>';
-        var ast = parse(original);
-        var rendered = ast.root.toSVG();
+        var ast = parse(original).root;
 
-        expect(rendered).toBe(original);
+        expect(toTestSVG(ast)).toEqual(original);
     });
 
     it('finds nodes by range correctly (simple 1)', function() {
@@ -66,6 +64,43 @@ describe('app/parsing/svg-parser', function(parse) {
             ['A 70 70 0 0 1 90 10']
         );
     });
+
+    function toTestSVG(astNode) {
+        /* jshint shadow:true */
+
+        if (typeof(astNode) === 'string')
+            return astNode;
+
+        if (astNode.type === 'root') {
+            var result = '';
+            for (var i = 0; i < astNode.children.length; i++) {
+                result += toTestSVG(astNode.children[i]);
+            }
+            return result;
+        }
+
+        if (astNode.type === 'tag') {
+            var result = '<' + astNode.name;
+            var attributes = astNode.attributes;
+            for (var i = 0; i < attributes.length; i++) {
+                result += ' ' + attributes[i].name + '="' + attributes[i].value + '"';
+            }
+
+            if (astNode.children.length > 0) {
+                result += '>';
+                for (var i = 0; i < astNode.children.length; i++) {
+                    result += toTestSVG(astNode.children[i]);
+                }
+                result += '</' + astNode.name + '>';
+            }
+            else {
+                result += '/>';
+            }
+            return result;
+        }
+
+        throw new Error('Unknown AST node: ' + astNode.type);
+    }
 
     function testFindsNodesByRange(code, ranges, expected) {
         var ast = parse(code);

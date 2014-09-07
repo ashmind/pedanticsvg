@@ -1,4 +1,4 @@
-define(['app/services/linker', 'app/utils/jquery.svg'], function(linker) { 'use strict'; return function(editor, preview) {
+define(['app/preview/linker', 'app/utils/jquery.svg'], function(linker) { 'use strict'; return function(editor, preview) {
     // TODO: move to CSS
     var highlightColor = '#daa520';
     var traces = {};
@@ -13,11 +13,6 @@ define(['app/services/linker', 'app/utils/jquery.svg'], function(linker) { 'use 
             untrace: untracePathSegment
         }
     };
-
-    editor.on('astchange', processAst);
-    function processAst(ast) {
-        linker.annotate(ast.root);
-    }
 
     editor.codeMirror.on('nodesInSelectionChanged', function(cm, nodeChange) {
         preview.getRootElement().then(function ($previewRoot) {

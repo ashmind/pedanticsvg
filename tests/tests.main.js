@@ -3,7 +3,7 @@
     var config = {
         paths: {
             app:                    '../js',
-            sax:                    '../external/sax',
+            sax:                    '../external/sax-customized',
             codemirror:             'utils/codemirror-fake',
             jquery:                 'external/jquery-2.0.3',
             jasmine:                'external/jasmine/jasmine',
@@ -26,9 +26,10 @@
     require.config(config);
 
     var tests = [
-        'svg-parser.tests.js',
+        'parse-svg.tests.js',
         'parse-path.tests.js',
-        'track-nodes.tests.js'
+        'track-nodes.tests.js',
+        'linker.tests.js'
     ];
 
 
