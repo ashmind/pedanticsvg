@@ -159,6 +159,9 @@ section .content {
 .preview {
   flex: 1;
   -webkit-flex: 1;
+  /*iframe.loading {
+    visibility: hidden;
+  }*/
 }
 .preview header {
   border-left: 1px solid #fff;
@@ -183,9 +186,6 @@ section .content {
   top: 0;
   width: 100%;
   height: 100%;
-}
-.preview iframe.loading {
-  visibility: hidden;
 }
 .preview .wrapper {
   position: relative;
@@ -303,9 +303,6 @@ section .content {
 }
 .preview:hover .size {
   opacity: 1;
-}
-.preview.failed iframe {
-  display: none;
 }
 textarea,
 .CodeMirror {
