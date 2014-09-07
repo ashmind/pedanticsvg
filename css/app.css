@@ -323,6 +323,13 @@ textarea,
 .cm-node-in-selection {
   background-color: rgba(218, 165, 32, 0.1);
 }
+.CodeMirror-hints {
+  font-size: 16px;
+}
+.CodeMirror-hint {
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
 .refactor-button {
   display: inline-block;
   text-align: center;

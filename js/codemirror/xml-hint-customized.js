@@ -54,12 +54,12 @@
         for (var i = 0; i < childList.length; ++i) {
           var childName = curNs + childList[i];
           if (!prefix || childName.lastIndexOf(prefix, 0) === 0)
-            result.push("<" + childName);
+            result.push({ displayText: childName, text: "<" + childName });
         }
       } else if (tagType !== "close") {
         for (var name in tags)
           if (tags.hasOwnProperty(name) && name !== "!top" && name !== "!attrs" && (!prefix || name.lastIndexOf(prefix, 0) === 0))
-            result.push("<" + curNs + name);
+            result.push({ displayText: curNs + name, text: "<" + curNs + name });
       }
       if (cx && (!prefix || tagType === "close" && cx.tagName.lastIndexOf(prefix, 0) === 0))
         result.push("</" + cx.tagName + ">");
@@ -100,7 +100,7 @@
           replaceToken = true;
         }
         for (var i = 0; i < atValues.length; ++i) if (!prefix || atValues[i].lastIndexOf(prefix, 0) === 0)
-          result.push({ displayText: atValues[i], text: quote + atValues[i] + quote });
+          result.push({ displayText: atValues[i], text: quote + atValues[i] + quote, className: 'cm-hint-string' });
         hintType = "attribute-value";
       } else if (token.string[token.string.length - 1] === ' ' || token.type === "attribute") { // An attribute name
         if (token.type === "attribute") {
@@ -108,7 +108,7 @@
           replaceToken = true;
         }
         for (var attr in attrs) if (attrs.hasOwnProperty(attr) && (!prefix || attr.lastIndexOf(prefix, 0) === 0))
-          result.push(attr);
+          result.push({ text: attr, className: 'cm-hint-attribute' });
         hintType = "attribute-name";
       }
     }
