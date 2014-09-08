@@ -24,12 +24,6 @@
         ],
         "svg": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "alignment-baseline": [
                     "auto",
                     "baseline",
@@ -307,6 +301,12 @@
                 "zoomAndPan": [
                     "disable",
                     "magnify"
+                ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
                 ]
             },
             "children": [
@@ -353,12 +353,6 @@
         },
         "g": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "alignment-baseline": [
                     "auto",
                     "baseline",
@@ -615,6 +609,12 @@
                     "rl",
                     "tb",
                     "inherit"
+                ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
                 ]
             },
             "children": [
@@ -661,12 +661,6 @@
         },
         "defs": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "alignment-baseline": [
                     "auto",
                     "baseline",
@@ -923,6 +917,12 @@
                     "rl",
                     "tb",
                     "inherit"
+                ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
                 ]
             },
             "children": [
@@ -969,49 +969,43 @@
         },
         "desc": {
             "attrs": {
+                "class": null,
+                "id": null,
+                "style": null,
                 "xml:base": null,
                 "xml:lang": null,
                 "xml:space": [
                     "default",
                     "preserve"
-                ],
-                "class": null,
-                "id": null,
-                "style": null
+                ]
             }
         },
         "title": {
             "attrs": {
+                "class": null,
+                "id": null,
+                "style": null,
                 "xml:base": null,
                 "xml:lang": null,
                 "xml:space": [
                     "default",
                     "preserve"
-                ],
-                "class": null,
-                "id": null,
-                "style": null
+                ]
             }
         },
         "metadata": {
             "attrs": {
+                "id": null,
                 "xml:base": null,
                 "xml:lang": null,
                 "xml:space": [
                     "default",
                     "preserve"
-                ],
-                "id": null
+                ]
             }
         },
         "symbol": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "alignment-baseline": [
                     "auto",
                     "baseline",
@@ -1266,6 +1260,12 @@
                     "rl",
                     "tb",
                     "inherit"
+                ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
                 ]
             },
             "children": [
@@ -1312,37 +1312,6 @@
         },
         "use": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
-                "xlink:type": [
-                    "simple",
-                    "extended",
-                    "title",
-                    "resource",
-                    "locator",
-                    "arc"
-                ],
-                "xlink:href": null,
-                "xlink:role": null,
-                "xlink:arcrole": null,
-                "xlink:title": null,
-                "xlink:show": [
-                    "new",
-                    "replace",
-                    "embed",
-                    "other",
-                    "none"
-                ],
-                "xlink:actuate": [
-                    "onLoad",
-                    "onRequest",
-                    "other",
-                    "none"
-                ],
                 "alignment-baseline": [
                     "auto",
                     "baseline",
@@ -1603,7 +1572,38 @@
                     "inherit"
                 ],
                 "x": null,
-                "y": null
+                "y": null,
+                "xlink:type": [
+                    "simple",
+                    "extended",
+                    "title",
+                    "resource",
+                    "locator",
+                    "arc"
+                ],
+                "xlink:href": null,
+                "xlink:role": null,
+                "xlink:arcrole": null,
+                "xlink:title": null,
+                "xlink:show": [
+                    "new",
+                    "replace",
+                    "embed",
+                    "other",
+                    "none"
+                ],
+                "xlink:actuate": [
+                    "onLoad",
+                    "onRequest",
+                    "other",
+                    "none"
+                ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
             },
             "children": [
                 "animate",
@@ -1618,12 +1618,6 @@
         },
         "switch": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "alignment-baseline": [
                     "auto",
                     "baseline",
@@ -1880,6 +1874,12 @@
                     "rl",
                     "tb",
                     "inherit"
+                ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
                 ]
             },
             "children": [
@@ -1910,37 +1910,6 @@
         },
         "image": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
-                "xlink:type": [
-                    "simple",
-                    "extended",
-                    "title",
-                    "resource",
-                    "locator",
-                    "arc"
-                ],
-                "xlink:href": null,
-                "xlink:role": null,
-                "xlink:arcrole": null,
-                "xlink:title": null,
-                "xlink:show": [
-                    "new",
-                    "replace",
-                    "embed",
-                    "other",
-                    "none"
-                ],
-                "xlink:actuate": [
-                    "onLoad",
-                    "onRequest",
-                    "other",
-                    "none"
-                ],
                 "class": null,
                 "clip": null,
                 "clip-path": null,
@@ -2057,7 +2026,38 @@
                 ],
                 "width": null,
                 "x": null,
-                "y": null
+                "y": null,
+                "xlink:type": [
+                    "simple",
+                    "extended",
+                    "title",
+                    "resource",
+                    "locator",
+                    "arc"
+                ],
+                "xlink:href": null,
+                "xlink:role": null,
+                "xlink:arcrole": null,
+                "xlink:title": null,
+                "xlink:show": [
+                    "new",
+                    "replace",
+                    "embed",
+                    "other",
+                    "none"
+                ],
+                "xlink:actuate": [
+                    "onLoad",
+                    "onRequest",
+                    "other",
+                    "none"
+                ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
             },
             "children": [
                 "animate",
@@ -2072,26 +2072,20 @@
         },
         "style": {
             "attrs": {
+                "id": null,
+                "media": null,
+                "title": null,
+                "type": null,
                 "xml:space": [
                     "default",
                     "preserve"
                 ],
                 "xml:base": null,
-                "xml:lang": null,
-                "id": null,
-                "media": null,
-                "title": null,
-                "type": null
+                "xml:lang": null
             }
         },
         "path": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "class": null,
                 "clip-path": null,
                 "clip-rule": [
@@ -2222,6 +2216,12 @@
                     "visible",
                     "hidden",
                     "inherit"
+                ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
                 ]
             },
             "children": [
@@ -2237,12 +2237,6 @@
         },
         "rect": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "class": null,
                 "clip-path": null,
                 "clip-rule": [
@@ -2374,7 +2368,13 @@
                 ],
                 "width": null,
                 "x": null,
-                "y": null
+                "y": null,
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
             },
             "children": [
                 "animate",
@@ -2389,12 +2389,6 @@
         },
         "circle": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "class": null,
                 "clip-path": null,
                 "clip-rule": [
@@ -2523,6 +2517,12 @@
                     "visible",
                     "hidden",
                     "inherit"
+                ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
                 ]
             },
             "children": [
@@ -2538,12 +2538,6 @@
         },
         "line": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "class": null,
                 "clip-path": null,
                 "clip-rule": [
@@ -2676,7 +2670,13 @@
                 "x1": null,
                 "x2": null,
                 "y1": null,
-                "y2": null
+                "y2": null,
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
             },
             "children": [
                 "animate",
@@ -2691,12 +2691,6 @@
         },
         "ellipse": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "class": null,
                 "clip-path": null,
                 "clip-rule": [
@@ -2826,6 +2820,12 @@
                     "visible",
                     "hidden",
                     "inherit"
+                ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
                 ]
             },
             "children": [
@@ -2841,12 +2841,6 @@
         },
         "polyline": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "class": null,
                 "clip-path": null,
                 "clip-rule": [
@@ -2976,6 +2970,12 @@
                     "visible",
                     "hidden",
                     "inherit"
+                ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
                 ]
             },
             "children": [
@@ -2991,12 +2991,6 @@
         },
         "polygon": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "class": null,
                 "clip-path": null,
                 "clip-rule": [
@@ -3126,6 +3120,12 @@
                     "visible",
                     "hidden",
                     "inherit"
+                ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
                 ]
             },
             "children": [
@@ -3141,12 +3141,6 @@
         },
         "text": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "alignment-baseline": [
                     "auto",
                     "baseline",
@@ -3389,7 +3383,13 @@
                     "inherit"
                 ],
                 "x": null,
-                "y": null
+                "y": null,
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
             },
             "children": [
                 "a",
@@ -3409,12 +3409,6 @@
         },
         "tspan": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "alignment-baseline": [
                     "auto",
                     "baseline",
@@ -3647,7 +3641,13 @@
                 ],
                 "word-spacing": null,
                 "x": null,
-                "y": null
+                "y": null,
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
             },
             "children": [
                 "a",
@@ -3664,37 +3664,6 @@
         },
         "tref": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
-                "xlink:type": [
-                    "simple",
-                    "extended",
-                    "title",
-                    "resource",
-                    "locator",
-                    "arc"
-                ],
-                "xlink:href": null,
-                "xlink:role": null,
-                "xlink:arcrole": null,
-                "xlink:title": null,
-                "xlink:show": [
-                    "new",
-                    "replace",
-                    "embed",
-                    "other",
-                    "none"
-                ],
-                "xlink:actuate": [
-                    "onLoad",
-                    "onRequest",
-                    "other",
-                    "none"
-                ],
                 "alignment-baseline": [
                     "auto",
                     "baseline",
@@ -3927,25 +3896,7 @@
                 ],
                 "word-spacing": null,
                 "x": null,
-                "y": null
-            },
-            "children": [
-                "animate",
-                "animateColor",
-                "desc",
-                "metadata",
-                "set",
-                "title"
-            ]
-        },
-        "textPath": {
-            "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
+                "y": null,
                 "xlink:type": [
                     "simple",
                     "extended",
@@ -3971,6 +3922,24 @@
                     "other",
                     "none"
                 ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
+            },
+            "children": [
+                "animate",
+                "animateColor",
+                "desc",
+                "metadata",
+                "set",
+                "title"
+            ]
+        },
+        "textPath": {
+            "attrs": {
                 "alignment-baseline": [
                     "auto",
                     "baseline",
@@ -4207,29 +4176,7 @@
                     "hidden",
                     "inherit"
                 ],
-                "word-spacing": null
-            },
-            "children": [
-                "a",
-                "altGlyph",
-                "animate",
-                "animateColor",
-                "desc",
-                "metadata",
-                "set",
-                "title",
-                "tref",
-                "tspan"
-            ]
-        },
-        "altGlyph": {
-            "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
+                "word-spacing": null,
                 "xlink:type": [
                     "simple",
                     "extended",
@@ -4255,6 +4202,28 @@
                     "other",
                     "none"
                 ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
+            },
+            "children": [
+                "a",
+                "altGlyph",
+                "animate",
+                "animateColor",
+                "desc",
+                "metadata",
+                "set",
+                "title",
+                "tref",
+                "tspan"
+            ]
+        },
+        "altGlyph": {
+            "attrs": {
                 "alignment-baseline": [
                     "auto",
                     "baseline",
@@ -4484,46 +4453,7 @@
                 ],
                 "word-spacing": null,
                 "x": null,
-                "y": null
-            }
-        },
-        "altGlyphDef": {
-            "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
-                "id": null
-            },
-            "children": [
-                "altGlyphItem",
-                "glyphRef"
-            ]
-        },
-        "altGlyphItem": {
-            "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
-                "id": null
-            },
-            "children": [
-                "glyphRef"
-            ]
-        },
-        "glyphRef": {
-            "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
+                "y": null,
                 "xlink:type": [
                     "simple",
                     "extended",
@@ -4549,6 +4479,45 @@
                     "other",
                     "none"
                 ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
+            }
+        },
+        "altGlyphDef": {
+            "attrs": {
+                "id": null,
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
+            },
+            "children": [
+                "altGlyphItem",
+                "glyphRef"
+            ]
+        },
+        "altGlyphItem": {
+            "attrs": {
+                "id": null,
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
+            },
+            "children": [
+                "glyphRef"
+            ]
+        },
+        "glyphRef": {
+            "attrs": {
                 "class": null,
                 "dx": null,
                 "dy": null,
@@ -4601,17 +4570,42 @@
                 "id": null,
                 "style": null,
                 "x": null,
-                "y": null
-            }
-        },
-        "marker": {
-            "attrs": {
+                "y": null,
+                "xlink:type": [
+                    "simple",
+                    "extended",
+                    "title",
+                    "resource",
+                    "locator",
+                    "arc"
+                ],
+                "xlink:href": null,
+                "xlink:role": null,
+                "xlink:arcrole": null,
+                "xlink:title": null,
+                "xlink:show": [
+                    "new",
+                    "replace",
+                    "embed",
+                    "other",
+                    "none"
+                ],
+                "xlink:actuate": [
+                    "onLoad",
+                    "onRequest",
+                    "other",
+                    "none"
+                ],
                 "xml:base": null,
                 "xml:lang": null,
                 "xml:space": [
                     "default",
                     "preserve"
-                ],
+                ]
+            }
+        },
+        "marker": {
+            "attrs": {
                 "alignment-baseline": [
                     "auto",
                     "baseline",
@@ -4865,6 +4859,12 @@
                     "rl",
                     "tb",
                     "inherit"
+                ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
                 ]
             },
             "children": [
@@ -4911,11 +4911,15 @@
         },
         "color-profile": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
+                "id": null,
+                "local": null,
+                "name": null,
+                "rendering-intent": [
+                    "auto",
+                    "perceptual",
+                    "relative-colorimetric",
+                    "saturation",
+                    "absolute-colorimetric"
                 ],
                 "xlink:type": [
                     "simple",
@@ -4942,15 +4946,11 @@
                     "other",
                     "none"
                 ],
-                "id": null,
-                "local": null,
-                "name": null,
-                "rendering-intent": [
-                    "auto",
-                    "perceptual",
-                    "relative-colorimetric",
-                    "saturation",
-                    "absolute-colorimetric"
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
                 ]
             },
             "children": [
@@ -4961,37 +4961,6 @@
         },
         "linearGradient": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
-                "xlink:type": [
-                    "simple",
-                    "extended",
-                    "title",
-                    "resource",
-                    "locator",
-                    "arc"
-                ],
-                "xlink:href": null,
-                "xlink:role": null,
-                "xlink:arcrole": null,
-                "xlink:title": null,
-                "xlink:show": [
-                    "new",
-                    "replace",
-                    "embed",
-                    "other",
-                    "none"
-                ],
-                "xlink:actuate": [
-                    "onLoad",
-                    "onRequest",
-                    "other",
-                    "none"
-                ],
                 "class": null,
                 "color": null,
                 "color-interpolation": [
@@ -5027,26 +4996,7 @@
                 "x1": null,
                 "x2": null,
                 "y1": null,
-                "y2": null
-            },
-            "children": [
-                "animate",
-                "animateTransform",
-                "desc",
-                "metadata",
-                "set",
-                "stop",
-                "title"
-            ]
-        },
-        "radialGradient": {
-            "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
+                "y2": null,
                 "xlink:type": [
                     "simple",
                     "extended",
@@ -5072,6 +5022,25 @@
                     "other",
                     "none"
                 ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
+            },
+            "children": [
+                "animate",
+                "animateTransform",
+                "desc",
+                "metadata",
+                "set",
+                "stop",
+                "title"
+            ]
+        },
+        "radialGradient": {
+            "attrs": {
                 "class": null,
                 "color": null,
                 "color-interpolation": [
@@ -5108,60 +5077,7 @@
                 ],
                 "stop-color": null,
                 "stop-opacity": null,
-                "style": null
-            },
-            "children": [
-                "animate",
-                "animateTransform",
-                "desc",
-                "metadata",
-                "set",
-                "stop",
-                "title"
-            ]
-        },
-        "stop": {
-            "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
-                "class": null,
-                "color": null,
-                "color-interpolation": [
-                    "auto",
-                    "sRGB",
-                    "linearRGB",
-                    "inherit"
-                ],
-                "color-rendering": [
-                    "auto",
-                    "optimizeSpeed",
-                    "optimizeQuality",
-                    "inherit"
-                ],
-                "id": null,
-                "offset": null,
-                "stop-color": null,
-                "stop-opacity": null,
-                "style": null
-            },
-            "children": [
-                "animate",
-                "animateColor",
-                "set"
-            ]
-        },
-        "pattern": {
-            "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
+                "style": null,
                 "xlink:type": [
                     "simple",
                     "extended",
@@ -5187,6 +5103,59 @@
                     "other",
                     "none"
                 ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
+            },
+            "children": [
+                "animate",
+                "animateTransform",
+                "desc",
+                "metadata",
+                "set",
+                "stop",
+                "title"
+            ]
+        },
+        "stop": {
+            "attrs": {
+                "class": null,
+                "color": null,
+                "color-interpolation": [
+                    "auto",
+                    "sRGB",
+                    "linearRGB",
+                    "inherit"
+                ],
+                "color-rendering": [
+                    "auto",
+                    "optimizeSpeed",
+                    "optimizeQuality",
+                    "inherit"
+                ],
+                "id": null,
+                "offset": null,
+                "stop-color": null,
+                "stop-opacity": null,
+                "style": null,
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
+            },
+            "children": [
+                "animate",
+                "animateColor",
+                "set"
+            ]
+        },
+        "pattern": {
+            "attrs": {
                 "alignment-baseline": [
                     "auto",
                     "baseline",
@@ -5447,7 +5416,38 @@
                     "inherit"
                 ],
                 "x": null,
-                "y": null
+                "y": null,
+                "xlink:type": [
+                    "simple",
+                    "extended",
+                    "title",
+                    "resource",
+                    "locator",
+                    "arc"
+                ],
+                "xlink:href": null,
+                "xlink:role": null,
+                "xlink:arcrole": null,
+                "xlink:title": null,
+                "xlink:show": [
+                    "new",
+                    "replace",
+                    "embed",
+                    "other",
+                    "none"
+                ],
+                "xlink:actuate": [
+                    "onLoad",
+                    "onRequest",
+                    "other",
+                    "none"
+                ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
             },
             "children": [
                 "a",
@@ -5493,12 +5493,6 @@
         },
         "clipPath": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "alignment-baseline": [
                     "auto",
                     "baseline",
@@ -5725,6 +5719,12 @@
                     "rl",
                     "tb",
                     "inherit"
+                ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
                 ]
             },
             "children": [
@@ -5750,12 +5750,6 @@
         },
         "mask": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "alignment-baseline": [
                     "auto",
                     "baseline",
@@ -6013,7 +6007,13 @@
                     "inherit"
                 ],
                 "x": null,
-                "y": null
+                "y": null,
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
             },
             "children": [
                 "a",
@@ -6059,37 +6059,6 @@
         },
         "filter": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
-                "xlink:type": [
-                    "simple",
-                    "extended",
-                    "title",
-                    "resource",
-                    "locator",
-                    "arc"
-                ],
-                "xlink:href": null,
-                "xlink:role": null,
-                "xlink:arcrole": null,
-                "xlink:title": null,
-                "xlink:show": [
-                    "new",
-                    "replace",
-                    "embed",
-                    "other",
-                    "none"
-                ],
-                "xlink:actuate": [
-                    "onLoad",
-                    "onRequest",
-                    "other",
-                    "none"
-                ],
                 "alignment-baseline": [
                     "auto",
                     "baseline",
@@ -6345,7 +6314,38 @@
                     "inherit"
                 ],
                 "x": null,
-                "y": null
+                "y": null,
+                "xlink:type": [
+                    "simple",
+                    "extended",
+                    "title",
+                    "resource",
+                    "locator",
+                    "arc"
+                ],
+                "xlink:href": null,
+                "xlink:role": null,
+                "xlink:arcrole": null,
+                "xlink:title": null,
+                "xlink:show": [
+                    "new",
+                    "replace",
+                    "embed",
+                    "other",
+                    "none"
+                ],
+                "xlink:actuate": [
+                    "onLoad",
+                    "onRequest",
+                    "other",
+                    "none"
+                ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
             },
             "children": [
                 "animate",
@@ -6373,12 +6373,6 @@
         },
         "feBlend": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "color-interpolation-filters": [
                     "auto",
                     "sRGB",
@@ -6399,7 +6393,13 @@
                 "result": null,
                 "width": null,
                 "x": null,
-                "y": null
+                "y": null,
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
             },
             "children": [
                 "animate",
@@ -6408,12 +6408,6 @@
         },
         "feColorMatrix": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "color-interpolation-filters": [
                     "auto",
                     "sRGB",
@@ -6433,7 +6427,13 @@
                 "values": null,
                 "width": null,
                 "x": null,
-                "y": null
+                "y": null,
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
             },
             "children": [
                 "animate",
@@ -6442,12 +6442,6 @@
         },
         "feComponentTransfer": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "color-interpolation-filters": [
                     "auto",
                     "sRGB",
@@ -6460,7 +6454,13 @@
                 "result": null,
                 "width": null,
                 "x": null,
-                "y": null
+                "y": null,
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
             },
             "children": [
                 "feFuncA",
@@ -6471,12 +6471,6 @@
         },
         "feComposite": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "color-interpolation-filters": [
                     "auto",
                     "sRGB",
@@ -6502,7 +6496,13 @@
                 "result": null,
                 "width": null,
                 "x": null,
-                "y": null
+                "y": null,
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
             },
             "children": [
                 "animate",
@@ -6511,12 +6511,6 @@
         },
         "feConvolveMatrix": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "bias": null,
                 "color-interpolation-filters": [
                     "auto",
@@ -6545,7 +6539,13 @@
                 "targetY": null,
                 "width": null,
                 "x": null,
-                "y": null
+                "y": null,
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
             },
             "children": [
                 "animate",
@@ -6554,12 +6554,6 @@
         },
         "feDiffuseLighting": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "class": null,
                 "color": null,
                 "color-interpolation": [
@@ -6591,7 +6585,13 @@
                 "surfaceScale": null,
                 "width": null,
                 "x": null,
-                "y": null
+                "y": null,
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
             },
             "children": [
                 "animate",
@@ -6604,12 +6604,6 @@
         },
         "feDisplacementMap": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "color-interpolation-filters": [
                     "auto",
                     "sRGB",
@@ -6636,6 +6630,12 @@
                     "G",
                     "B",
                     "A"
+                ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
                 ]
             },
             "children": [
@@ -6645,12 +6645,6 @@
         },
         "feFlood": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "class": null,
                 "color": null,
                 "color-interpolation": [
@@ -6680,7 +6674,13 @@
                 "style": null,
                 "width": null,
                 "x": null,
-                "y": null
+                "y": null,
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
             },
             "children": [
                 "animate",
@@ -6690,12 +6690,6 @@
         },
         "feGaussianBlur": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "color-interpolation-filters": [
                     "auto",
                     "sRGB",
@@ -6709,7 +6703,13 @@
                 "stdDeviation": null,
                 "width": null,
                 "x": null,
-                "y": null
+                "y": null,
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
             },
             "children": [
                 "animate",
@@ -6718,37 +6718,6 @@
         },
         "feImage": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
-                "xlink:type": [
-                    "simple",
-                    "extended",
-                    "title",
-                    "resource",
-                    "locator",
-                    "arc"
-                ],
-                "xlink:href": null,
-                "xlink:role": null,
-                "xlink:arcrole": null,
-                "xlink:title": null,
-                "xlink:show": [
-                    "new",
-                    "replace",
-                    "embed",
-                    "other",
-                    "none"
-                ],
-                "xlink:actuate": [
-                    "onLoad",
-                    "onRequest",
-                    "other",
-                    "none"
-                ],
                 "alignment-baseline": [
                     "auto",
                     "baseline",
@@ -6997,7 +6966,38 @@
                     "inherit"
                 ],
                 "x": null,
-                "y": null
+                "y": null,
+                "xlink:type": [
+                    "simple",
+                    "extended",
+                    "title",
+                    "resource",
+                    "locator",
+                    "arc"
+                ],
+                "xlink:href": null,
+                "xlink:role": null,
+                "xlink:arcrole": null,
+                "xlink:title": null,
+                "xlink:show": [
+                    "new",
+                    "replace",
+                    "embed",
+                    "other",
+                    "none"
+                ],
+                "xlink:actuate": [
+                    "onLoad",
+                    "onRequest",
+                    "other",
+                    "none"
+                ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
             },
             "children": [
                 "animate",
@@ -7007,12 +7007,6 @@
         },
         "feMerge": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "color-interpolation-filters": [
                     "auto",
                     "sRGB",
@@ -7024,7 +7018,13 @@
                 "result": null,
                 "width": null,
                 "x": null,
-                "y": null
+                "y": null,
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
             },
             "children": [
                 "feMergeNode"
@@ -7032,14 +7032,14 @@
         },
         "feMergeNode": {
             "attrs": {
+                "id": null,
+                "in": null,
                 "xml:base": null,
                 "xml:lang": null,
                 "xml:space": [
                     "default",
                     "preserve"
-                ],
-                "id": null,
-                "in": null
+                ]
             },
             "children": [
                 "animate",
@@ -7048,12 +7048,6 @@
         },
         "feMorphology": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "color-interpolation-filters": [
                     "auto",
                     "sRGB",
@@ -7071,7 +7065,13 @@
                 "result": null,
                 "width": null,
                 "x": null,
-                "y": null
+                "y": null,
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
             },
             "children": [
                 "animate",
@@ -7080,12 +7080,6 @@
         },
         "feOffset": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "color-interpolation-filters": [
                     "auto",
                     "sRGB",
@@ -7100,7 +7094,13 @@
                 "result": null,
                 "width": null,
                 "x": null,
-                "y": null
+                "y": null,
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
             },
             "children": [
                 "animate",
@@ -7109,12 +7109,6 @@
         },
         "feSpecularLighting": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "class": null,
                 "color": null,
                 "color-interpolation": [
@@ -7147,7 +7141,13 @@
                 "surfaceScale": null,
                 "width": null,
                 "x": null,
-                "y": null
+                "y": null,
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
             },
             "children": [
                 "animate",
@@ -7160,12 +7160,6 @@
         },
         "feTile": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "color-interpolation-filters": [
                     "auto",
                     "sRGB",
@@ -7178,7 +7172,13 @@
                 "result": null,
                 "width": null,
                 "x": null,
-                "y": null
+                "y": null,
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
             },
             "children": [
                 "animate",
@@ -7187,12 +7187,6 @@
         },
         "feTurbulence": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "baseFrequency": null,
                 "color-interpolation-filters": [
                     "auto",
@@ -7215,7 +7209,13 @@
                 ],
                 "width": null,
                 "x": null,
-                "y": null
+                "y": null,
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
             },
             "children": [
                 "animate",
@@ -7224,15 +7224,15 @@
         },
         "feDistantLight": {
             "attrs": {
+                "azimuth": null,
+                "elevation": null,
+                "id": null,
                 "xml:base": null,
                 "xml:lang": null,
                 "xml:space": [
                     "default",
                     "preserve"
-                ],
-                "azimuth": null,
-                "elevation": null,
-                "id": null
+                ]
             },
             "children": [
                 "animate",
@@ -7241,16 +7241,16 @@
         },
         "fePointLight": {
             "attrs": {
+                "id": null,
+                "x": null,
+                "y": null,
+                "z": null,
                 "xml:base": null,
                 "xml:lang": null,
                 "xml:space": [
                     "default",
                     "preserve"
-                ],
-                "id": null,
-                "x": null,
-                "y": null,
-                "z": null
+                ]
             },
             "children": [
                 "animate",
@@ -7259,12 +7259,6 @@
         },
         "feSpotLight": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "id": null,
                 "limitingConeAngle": null,
                 "pointsAtX": null,
@@ -7273,7 +7267,13 @@
                 "specularExponent": null,
                 "x": null,
                 "y": null,
-                "z": null
+                "z": null,
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
             },
             "children": [
                 "animate",
@@ -7282,12 +7282,6 @@
         },
         "feFuncR": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "amplitude": null,
                 "exponent": null,
                 "id": null,
@@ -7301,6 +7295,12 @@
                     "discrete",
                     "linear",
                     "gamma"
+                ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
                 ]
             },
             "children": [
@@ -7310,12 +7310,6 @@
         },
         "feFuncG": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "amplitude": null,
                 "exponent": null,
                 "id": null,
@@ -7329,6 +7323,12 @@
                     "discrete",
                     "linear",
                     "gamma"
+                ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
                 ]
             },
             "children": [
@@ -7338,12 +7338,6 @@
         },
         "feFuncB": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "amplitude": null,
                 "exponent": null,
                 "id": null,
@@ -7357,6 +7351,12 @@
                     "discrete",
                     "linear",
                     "gamma"
+                ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
                 ]
             },
             "children": [
@@ -7366,12 +7366,6 @@
         },
         "feFuncA": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "amplitude": null,
                 "exponent": null,
                 "id": null,
@@ -7385,6 +7379,12 @@
                     "discrete",
                     "linear",
                     "gamma"
+                ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
                 ]
             },
             "children": [
@@ -7394,37 +7394,6 @@
         },
         "cursor": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
-                "xlink:type": [
-                    "simple",
-                    "extended",
-                    "title",
-                    "resource",
-                    "locator",
-                    "arc"
-                ],
-                "xlink:href": null,
-                "xlink:role": null,
-                "xlink:arcrole": null,
-                "xlink:title": null,
-                "xlink:show": [
-                    "new",
-                    "replace",
-                    "embed",
-                    "other",
-                    "none"
-                ],
-                "xlink:actuate": [
-                    "onLoad",
-                    "onRequest",
-                    "other",
-                    "none"
-                ],
                 "externalResourcesRequired": [
                     "false",
                     "true"
@@ -7434,22 +7403,7 @@
                 "requiredFeatures": null,
                 "systemLanguage": null,
                 "x": null,
-                "y": null
-            },
-            "children": [
-                "desc",
-                "metadata",
-                "title"
-            ]
-        },
-        "a": {
-            "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
+                "y": null,
                 "xlink:type": [
                     "simple",
                     "extended",
@@ -7475,6 +7429,21 @@
                     "other",
                     "none"
                 ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
+            },
+            "children": [
+                "desc",
+                "metadata",
+                "title"
+            ]
+        },
+        "a": {
+            "attrs": {
                 "alignment-baseline": [
                     "auto",
                     "baseline",
@@ -7732,6 +7701,37 @@
                     "rl",
                     "tb",
                     "inherit"
+                ],
+                "xlink:type": [
+                    "simple",
+                    "extended",
+                    "title",
+                    "resource",
+                    "locator",
+                    "arc"
+                ],
+                "xlink:href": null,
+                "xlink:role": null,
+                "xlink:arcrole": null,
+                "xlink:title": null,
+                "xlink:show": [
+                    "new",
+                    "replace",
+                    "embed",
+                    "other",
+                    "none"
+                ],
+                "xlink:actuate": [
+                    "onLoad",
+                    "onRequest",
+                    "other",
+                    "none"
+                ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
                 ]
             },
             "children": [
@@ -7778,12 +7778,6 @@
         },
         "view": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "externalResourcesRequired": [
                     "false",
                     "true"
@@ -7795,6 +7789,12 @@
                 "zoomAndPan": [
                     "disable",
                     "magnify"
+                ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
                 ]
             },
             "children": [
@@ -7805,53 +7805,12 @@
         },
         "script": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
-                "xlink:type": [
-                    "simple",
-                    "extended",
-                    "title",
-                    "resource",
-                    "locator",
-                    "arc"
-                ],
-                "xlink:href": null,
-                "xlink:role": null,
-                "xlink:arcrole": null,
-                "xlink:title": null,
-                "xlink:show": [
-                    "new",
-                    "replace",
-                    "embed",
-                    "other",
-                    "none"
-                ],
-                "xlink:actuate": [
-                    "onLoad",
-                    "onRequest",
-                    "other",
-                    "none"
-                ],
                 "externalResourcesRequired": [
                     "false",
                     "true"
                 ],
                 "id": null,
-                "type": null
-            }
-        },
-        "animate": {
-            "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
+                "type": null,
                 "xlink:type": [
                     "simple",
                     "extended",
@@ -7877,6 +7836,16 @@
                     "other",
                     "none"
                 ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
+            }
+        },
+        "animate": {
+            "attrs": {
                 "accumulate": [
                     "none",
                     "sum"
@@ -7926,22 +7895,7 @@
                 ],
                 "systemLanguage": null,
                 "to": null,
-                "values": null
-            },
-            "children": [
-                "desc",
-                "metadata",
-                "title"
-            ]
-        },
-        "set": {
-            "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
+                "values": null,
                 "xlink:type": [
                     "simple",
                     "extended",
@@ -7967,6 +7921,21 @@
                     "other",
                     "none"
                 ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
+            },
+            "children": [
+                "desc",
+                "metadata",
+                "title"
+            ]
+        },
+        "set": {
+            "attrs": {
                 "attributeName": null,
                 "attributeType": null,
                 "begin": null,
@@ -7997,22 +7966,7 @@
                     "whenNotActive"
                 ],
                 "systemLanguage": null,
-                "to": null
-            },
-            "children": [
-                "desc",
-                "metadata",
-                "title"
-            ]
-        },
-        "animateMotion": {
-            "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
+                "to": null,
                 "xlink:type": [
                     "simple",
                     "extended",
@@ -8038,6 +7992,21 @@
                     "other",
                     "none"
                 ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
+            },
+            "children": [
+                "desc",
+                "metadata",
+                "title"
+            ]
+        },
+        "animateMotion": {
+            "attrs": {
                 "accumulate": [
                     "none",
                     "sum"
@@ -8089,23 +8058,7 @@
                 "rotate": null,
                 "systemLanguage": null,
                 "to": null,
-                "values": null
-            },
-            "children": [
-                "desc",
-                "metadata",
-                "mpath",
-                "title"
-            ]
-        },
-        "animateColor": {
-            "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
+                "values": null,
                 "xlink:type": [
                     "simple",
                     "extended",
@@ -8131,6 +8084,22 @@
                     "other",
                     "none"
                 ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
+            },
+            "children": [
+                "desc",
+                "metadata",
+                "mpath",
+                "title"
+            ]
+        },
+        "animateColor": {
+            "attrs": {
                 "accumulate": [
                     "none",
                     "sum"
@@ -8180,22 +8149,7 @@
                 ],
                 "systemLanguage": null,
                 "to": null,
-                "values": null
-            },
-            "children": [
-                "desc",
-                "metadata",
-                "title"
-            ]
-        },
-        "animateTransform": {
-            "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
+                "values": null,
                 "xlink:type": [
                     "simple",
                     "extended",
@@ -8221,6 +8175,21 @@
                     "other",
                     "none"
                 ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
+            },
+            "children": [
+                "desc",
+                "metadata",
+                "title"
+            ]
+        },
+        "animateTransform": {
+            "attrs": {
                 "accumulate": [
                     "none",
                     "sum"
@@ -8277,22 +8246,7 @@
                     "skewX",
                     "skewY"
                 ],
-                "values": null
-            },
-            "children": [
-                "desc",
-                "metadata",
-                "title"
-            ]
-        },
-        "mpath": {
-            "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
+                "values": null,
                 "xlink:type": [
                     "simple",
                     "extended",
@@ -8318,11 +8272,57 @@
                     "other",
                     "none"
                 ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
+            },
+            "children": [
+                "desc",
+                "metadata",
+                "title"
+            ]
+        },
+        "mpath": {
+            "attrs": {
                 "externalResourcesRequired": [
                     "false",
                     "true"
                 ],
-                "id": null
+                "id": null,
+                "xlink:type": [
+                    "simple",
+                    "extended",
+                    "title",
+                    "resource",
+                    "locator",
+                    "arc"
+                ],
+                "xlink:href": null,
+                "xlink:role": null,
+                "xlink:arcrole": null,
+                "xlink:title": null,
+                "xlink:show": [
+                    "new",
+                    "replace",
+                    "embed",
+                    "other",
+                    "none"
+                ],
+                "xlink:actuate": [
+                    "onLoad",
+                    "onRequest",
+                    "other",
+                    "none"
+                ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
             },
             "children": [
                 "desc",
@@ -8332,12 +8332,6 @@
         },
         "font": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "alignment-baseline": [
                     "auto",
                     "baseline",
@@ -8586,6 +8580,12 @@
                     "rl",
                     "tb",
                     "inherit"
+                ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
                 ]
             },
             "children": [
@@ -8601,12 +8601,6 @@
         },
         "font-face": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "accent-height": null,
                 "alphabetic": null,
                 "ascent": null,
@@ -8640,7 +8634,13 @@
                 "v-ideographic": null,
                 "v-mathematical": null,
                 "widths": null,
-                "x-height": null
+                "x-height": null,
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
             },
             "children": [
                 "definition-src",
@@ -8652,12 +8652,6 @@
         },
         "glyph": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "alignment-baseline": [
                     "auto",
                     "baseline",
@@ -8906,6 +8900,12 @@
                     "rl",
                     "tb",
                     "inherit"
+                ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
                 ]
             },
             "children": [
@@ -8952,12 +8952,6 @@
         },
         "missing-glyph": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "alignment-baseline": [
                     "auto",
                     "baseline",
@@ -9201,6 +9195,12 @@
                     "rl",
                     "tb",
                     "inherit"
+                ],
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
                 ]
             },
             "children": [
@@ -9247,45 +9247,45 @@
         },
         "hkern": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "g1": null,
                 "g2": null,
                 "id": null,
                 "k": null,
                 "u1": null,
-                "u2": null
+                "u2": null,
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
             }
         },
         "vkern": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
                 "g1": null,
                 "g2": null,
                 "id": null,
                 "k": null,
                 "u1": null,
-                "u2": null
-            }
-        },
-        "font-face-src": {
-            "attrs": {
+                "u2": null,
                 "xml:base": null,
                 "xml:lang": null,
                 "xml:space": [
                     "default",
                     "preserve"
-                ],
-                "id": null
+                ]
+            }
+        },
+        "font-face-src": {
+            "attrs": {
+                "id": null,
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
             },
             "children": [
                 "font-face-name",
@@ -9294,12 +9294,7 @@
         },
         "font-face-uri": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
+                "id": null,
                 "xlink:type": [
                     "simple",
                     "extended",
@@ -9325,7 +9320,12 @@
                     "other",
                     "none"
                 ],
-                "id": null
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
             },
             "children": [
                 "font-face-format"
@@ -9333,36 +9333,31 @@
         },
         "font-face-format": {
             "attrs": {
+                "id": null,
+                "string": null,
                 "xml:base": null,
                 "xml:lang": null,
                 "xml:space": [
                     "default",
                     "preserve"
-                ],
-                "id": null,
-                "string": null
+                ]
             }
         },
         "font-face-name": {
             "attrs": {
+                "id": null,
+                "name": null,
                 "xml:base": null,
                 "xml:lang": null,
                 "xml:space": [
                     "default",
                     "preserve"
-                ],
-                "id": null,
-                "name": null
+                ]
             }
         },
         "definition-src": {
             "attrs": {
-                "xml:base": null,
-                "xml:lang": null,
-                "xml:space": [
-                    "default",
-                    "preserve"
-                ],
+                "id": null,
                 "xlink:type": [
                     "simple",
                     "extended",
@@ -9388,17 +9383,16 @@
                     "other",
                     "none"
                 ],
-                "id": null
-            }
-        },
-        "foreignObject": {
-            "attrs": {
                 "xml:base": null,
                 "xml:lang": null,
                 "xml:space": [
                     "default",
                     "preserve"
-                ],
+                ]
+            }
+        },
+        "foreignObject": {
+            "attrs": {
                 "alignment-baseline": [
                     "auto",
                     "baseline",
@@ -9659,7 +9653,13 @@
                     "inherit"
                 ],
                 "x": null,
-                "y": null
+                "y": null,
+                "xml:base": null,
+                "xml:lang": null,
+                "xml:space": [
+                    "default",
+                    "preserve"
+                ]
             }
         }
     }
