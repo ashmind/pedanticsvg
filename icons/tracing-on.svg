@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+	 viewBox="0 0 512 512">
+    
+  <polygon points="63,231 189,42 357,105 462,273 387,462 155,462"
+           fill="none"
+           stroke="#888" 
+           stroke-width="40" />
+  
+  <polyline points="189,42 357,105 462,273"
+            fill="none"
+            stroke="#daa520" 
+            stroke-width="40" />
+  
+  <polyline points="170,280 260,355 350,240"
+            fill="none"
+            stroke="#daa520" 
+            stroke-width="40" />
+  
+  <polyline points="155,462 63,231"
+            fill="none"
+            stroke="#daa520" 
+            stroke-width="40" />
+</svg>

@@ -1,7 +1,9 @@
-define(['app/preview/linker', 'app/utils/jquery.svg'], function(linker) { 'use strict'; return function(editor, preview) {
+define(['app/settings', 'app/preview/linker', 'app/utils/jquery.svg'], function(settings, linker) { 'use strict'; return function(editor, preview) {
     // TODO: move to CSS
     var highlightColor = '#daa520';
+    var enabled = settings('preview.tracing', true);
     var traces = {};
+    var lastSelectionChange;
 
     var tracers = {
         tag: {
@@ -15,21 +17,46 @@ define(['app/preview/linker', 'app/utils/jquery.svg'], function(linker) { 'use s
     };
 
     editor.codeMirror.on('nodesInSelectionChanged', function(cm, nodeChange) {
-        preview.getRootElement().then(function ($previewRoot) {
-            updateTrace($previewRoot, nodeChange);
-        }).catch(function(e) {
-            if (window.console && window.console.error)
-                window.console.error(e);
+        getPreviewRoot().then(function ($previewRoot) {
+            if (enabled.value)
+                updateTrace($previewRoot, nodeChange.added, nodeChange.removed);
+
+            lastSelectionChange = nodeChange;
         });
     });
 
-    function updateTrace($previewRoot, change) {
+    enabled.watch(function(newValue) {
+        if (!lastSelectionChange)
+            return;
+
+        var add = [];
+        var remove = [];
+        if (newValue) {
+            add = lastSelectionChange.added;
+        }
+        else {
+            // remove all
+            remove = lastSelectionChange.added;
+        }
+
+        getPreviewRoot().then(function($previewRoot) {
+            updateTrace($previewRoot, add, remove);
+        });
+    });
+
+    function getPreviewRoot() {
+        return preview.getRootElement().catch(function(e) {
+            if (window.console && window.console.error)
+                window.console.error(e);
+        });
+    }
+
+    function updateTrace($previewRoot, add, remove) {
         /* jshint shadow:true */
 
-        var removed = change.removed;
-        for (var i = 0; i < removed.length; i++) {
-            var id = removed[i].id;
-            var tracer = tracers[removed[i].astNode.type];
+        for (var i = 0; i < remove.length; i++) {
+            var id = remove[i].id;
+            var tracer = tracers[remove[i].astNode.type];
             var trace = traces[id];
             if (!tracer || !trace)
                 continue;
@@ -38,14 +65,13 @@ define(['app/preview/linker', 'app/utils/jquery.svg'], function(linker) { 'use s
             delete traces[id];
         }
 
-        var added = change.added;
-        for (var i = 0; i < added.length; i++) {
-            var astNode = added[i].astNode;
+        for (var i = 0; i < add.length; i++) {
+            var astNode = add[i].astNode;
             var tracer = tracers[astNode.type];
             if (!tracer)
                 continue;
 
-            traces[added[i].id] = tracer.trace($previewRoot, astNode);
+            traces[add[i].id] = tracer.trace($previewRoot, astNode);
         }
     }
 

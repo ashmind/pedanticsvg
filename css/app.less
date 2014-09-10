@@ -119,10 +119,13 @@ section .content {
 
 .commands {
   position: absolute;
-  right: 7px;
+  margin-left: 20px;
+  padding-left: 10px;
   top: 50%;
   transform: translateY(-50%);
   height: 1.4em;
+
+  border-left: 3px solid #e0e0e0;
 }
 
 .command {
@@ -135,12 +138,17 @@ section .content {
   transition: opacity 0.2s linear;
   outline: none;
 
+  -webkit-appearance: none;
+  cursor: pointer;
+
   &:hover {
     opacity: 1;
   }
 }
 
 .command-download { background-image: url('../icons/download.svg'); }
+.command-tracing:checked { background-image: url('../icons/tracing-on.svg'); }
+.command-tracing         { background-image: url('../icons/tracing-off.svg'); }
 
 .code {
   width: 50%;

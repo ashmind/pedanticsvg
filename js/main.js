@@ -38,11 +38,11 @@ require([
     'app/services/editor',
     'app/preview/preview',
     'app/preview/tracer',
-    'app/commands',
+    'app/commands/ui',
     'app/autosave',
-    'app/services/settings',
+    'app/settings',
     'jquery-ui'
-], function($, openOnDrop, editorFactory, previewFactory, trace, commands, autosave, settings) {
+], function($, openOnDrop, editorFactory, previewFactory, trace, buildCommands, autosave, settings) {
     'use strict';
 
     var editor = editorFactory($('#code'));
@@ -58,28 +58,16 @@ require([
         preview.render(editor.code, ast);
     });
 
-    (function setupCommands() {
-        var locations = { code: $('section.code .commands') };
-        var handler = function(command) {
-            return function() { command.action(editor, preview); };
-        };
-
-        for (var i = 0; i < commands.length; i++) {
-            var command = commands[i];
-            var $location = locations[command.section];
-            $('<button>')
-                .addClass('command command-' + command.name)
-                .attr('title', command.name)
-                .appendTo($location)
-                .click(handler(command));
-        }
-    })();
+    buildCommands({
+        code:    $('section.code .commands'),
+        preview: $('section.preview .commands'),
+    }, editor, preview);
 
     (function setupResize() {
         var $code = $('section.code');
-        var width = settings.get('code.section.width');
-        if (width)
-            $code.css('width', width);
+        var width = settings('code.section.width');
+        if (width.value)
+            $code.css('width', width.value);
 
         $code.resizable({
             handles: 'e',
@@ -87,7 +75,7 @@ require([
                 var percent = 100 * (uie.size.width / $(document).width());
                 percent = (Math.round(percent * 100) / 100) + '%';
                 uie.element.css('width', percent);
-                settings.set('code.section.width', percent);
+                width.value = percent;
             }
         });
     })();
