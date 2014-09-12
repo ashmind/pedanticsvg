@@ -1,21 +1,7 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans);
 @import url(http://fonts.googleapis.com/css?family=Roboto+Condensed);
-@import url('jquery-ui.custom.less');
-
-.display-flex() {
-  display: -webkit-flex;
-  display: flex;
-}
-
-.flex(@args) {
-  flex: @args;
-  -webkit-flex: @args;
-}
-
-.flex-direction(@args) {
-  flex-direction: @args;
-  -webkit-flex-direction: @args;
-}
+@import url('imports/jquery-ui.custom.less');
+@import url('imports/common.less');
 
 * {
   box-sizing: border-box;
@@ -163,124 +149,7 @@ section .content {
   }
 }
 
-.preview {
-  .flex(1);
-
-  header {
-    border-left: 1px solid #fff;
-  }
-
-  .content {
-    border-left: 1px solid #aaa;
-    overflow: hidden;
-
-    .aligner {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-
-      .display-flex();
-      align-items: center;
-      justify-content: center;
-    }
-  }
-
-  iframe {
-    border: 0;
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-  }
-
-  /*iframe.loading {
-    visibility: hidden;
-  }*/
-
-  .wrapper {
-    @border-width: 5px;
-
-    position: relative;
-    border: @border-width dashed #eee;
-    max-height: 100%;
-    max-width: 100%;
-
-    top: auto !important;
-    left: auto !important;
-
-    .ui-resizable-for-all(5px, 10px);
-
-    .ui-resizable-nw,
-    .ui-resizable-ne,
-    .ui-resizable-sw,
-    .ui-resizable-se {
-      background-color: #fff;
-      border: 3px solid #eee;
-    }
-
-    &.manual-size {
-      .ui-resizable-nw,
-      .ui-resizable-ne,
-      .ui-resizable-sw,
-      .ui-resizable-se {
-        background-color: #eee;
-      }
-    }
-  }
-
-  .iframe-fix {
-    display: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%
-  }
-
-  .size {
-    position: absolute;
-    left: 50%;
-    top: 100%;
-    transform: translateX(-50%);
-    margin-top: 10px;
-    text-align: center;
-    white-space: nowrap;
-
-    color: #ddd;
-    font-size: 120%;
-    opacity: 0;
-
-    transition: opacity 0.2s linear;
-
-    span {
-      vertical-align: middle;
-    }
-
-    .mode {
-      vertical-align: middle;
-      display: inline-block;
-      border: 2px solid #ddd;
-      width: 12px;
-      height: 12px;
-      background: none;
-      padding: 0;
-      margin: 0;
-      margin-left: 2px;
-      outline: none;
-      -webkit-appearance: none;
-      cursor: pointer;
-    }
-
-    .mode:checked {
-      background-color: #ddd;
-    }
-  }
-
-  &:hover .size {
-    opacity: 1;
-  }
-}
+@import url('imports/preview.less');
 
 textarea, .CodeMirror {
   position: absolute;

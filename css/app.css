@@ -166,6 +166,13 @@ section .content {
 .code .ui-resizable-e:hover {
   background-color: #eee;
 }
+.preview-error-title {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 0.5em;
+  margin-top: 0;
+  font-size: inherit;
+}
 .preview {
   flex: 1;
   -webkit-flex: 1;
@@ -313,6 +320,26 @@ section .content {
 }
 .preview:hover .size {
   opacity: 1;
+}
+.preview .not-supported {
+  display: inline-block;
+  padding: 1em;
+}
+.preview .not-supported h3 {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 0.5em;
+  margin-top: 0;
+  font-size: inherit;
+}
+.preview .not-supported p {
+  margin-bottom: 0.5em;
+  margin-top: 0.5em;
+}
+.preview .not-supported p:last-child {
+  font-size: 80%;
+  color: #888;
+  margin-bottom: 0;
 }
 textarea,
 .CodeMirror {

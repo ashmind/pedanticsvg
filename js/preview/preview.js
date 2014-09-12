@@ -1,4 +1,6 @@
 define(['jquery', 'app/preview/linker', 'jquery-ui'], function($, linker) { 'use strict'; return function($preview) {
+    var SVG_MEDIA_TYPE = 'image/svg+xml';
+
     var $template = $preview.find('template');
     var $templateTarget = $template.parent();
     $(document.importNode($template[0].content, true))
@@ -12,51 +14,97 @@ define(['jquery', 'app/preview/linker', 'jquery-ui'], function($, linker) { 'use
 
     var lastUnreleasedUrl;
 
-    var loaded;
-    var resolveLoaded;
+    var loadControl;
+    var loadPromise;
 
     var manualSizeSet = false;
 
-    $iframe[0].onload = function() {
-        function done() {
-            $iframe.removeClass('loading');
-            if (resolveLoaded)
-                resolveLoaded();
-
-            autosize();
+    var setupPromise = featureDetect().then(
+        function() {
+            setup();
+        },
+        function() {
+            notSupported();
         }
+    );
 
-        var $root = getRootElementImmediate();
-        if ($root.find('parsererror')) { // something failed?
-            var stylesheetURL = new URL('css/preview-errors.css', document.baseURI);
-            var $link = $('<link rel="stylesheet" href="' + stylesheetURL + '">');
-            $link[0].onload = function() { done(); };
-            $root.find('head,body').andSelf().eq(0).prepend($link);
-            return;
-        }
+    function featureDetect() {
+        return new Promise(function(resolve, reject) {
+            $iframe[0].onload = function() {
+                var contentType = $iframe[0].contentDocument.contentType || $iframe[0].contentDocument.mimeType;
+                if (contentType !== SVG_MEDIA_TYPE) {
+                    if (URL.revokeObjectURL)
+                        URL.revokeObjectURL(lastUnreleasedUrl);
+                    reject();
+                    return;
+                }
 
-        done();
-    };
+                resolve();
+            };
 
-    $(document).mousedown(function() {
-        $iframeFix.show();
-    }).mouseup(function() {
-        $iframeFix.hide();
-    });
+            renderRaw('<svg xmlns="http://www.w3.org/2000/svg" />');
+        });
+    }
 
-    $(window).resize(function() {
+    function notSupported() {
+        $iframe.replaceWith(
+            '<div class="not-supported">'+
+                '<h3>Preview not supported</h3>'+
+                '<p>Unfortunately preview is not supported in your browser.</p>'+
+                '<p>As of Sept 2014, latest Chrome and Firefox should do fine, but latest IE doesn\'t support it.</p>'+
+            '</div>'
+        );
+        $iframe = undefined;
         autosize();
-    });
+    }
 
-    $wrapper.resizable({ handles: 'all' })
-            .on('resize', manualResize);
+    function setup() {
+        $iframe[0].onload = function() {
+            function done() {
+                $iframe.removeClass('loading');
+                if (loadControl)
+                    loadControl.resolve();
+
+                autosize();
+            }
+
+            var $root = getRootElementImmediate();
+            if ($root.find('parsererror')) { // something failed?
+                var stylesheetURL = new URL('css/preview-errors.css', document.baseURI);
+                var $link = $('<link rel="stylesheet" href="' + stylesheetURL + '">');
+                $link[0].onload = function() { done(); };
+                $root.find('head,body').andSelf().eq(0).prepend($link);
+                return;
+            }
+
+            done();
+        };
+
+        $(document).mousedown(function() {
+            $iframeFix.show();
+        }).mouseup(function() {
+            $iframeFix.hide();
+        });
+
+        $(window).resize(function() {
+            autosize();
+        });
+
+        $wrapper.resizable({ handles: 'all' })
+                .on('resize', manualResize);
+    }
 
     function render(svg, ast) {
-        setLoadPromise();
+        setupPromise.then(function() {
+            setLoadPromise();
 
-        svg = linker.annotate(svg, ast);
+            svg = linker.annotate(svg, ast);
+            renderRaw(svg);
+        });
+    }
 
-        var blob = new Blob([svg], {type: 'image/svg+xml'});
+    function renderRaw(svg) {
+        var blob = new Blob([svg], {type: SVG_MEDIA_TYPE});
         var url = URL.createObjectURL(blob);
         $iframe.addClass('loading');
         $iframe[0].src = url;
@@ -67,10 +115,10 @@ define(['jquery', 'app/preview/linker', 'jquery-ui'], function($, linker) { 'use
     }
 
     function getRootElement() {
-        if (!loaded)
+        if (!loadPromise)
             setLoadPromise();
 
-        return loaded.then(function() {
+        return loadPromise.then(function() {
             return getRootElementImmediate();
         });
     }
@@ -80,8 +128,8 @@ define(['jquery', 'app/preview/linker', 'jquery-ui'], function($, linker) { 'use
     }
 
     function setLoadPromise() {
-        loaded = new Promise(function(resolve) {
-            resolveLoaded = resolve;
+        loadPromise = new Promise(function(resolve, reject) {
+            loadControl = { resolve: resolve, reject: reject };
         });
     }
 
@@ -96,23 +144,33 @@ define(['jquery', 'app/preview/linker', 'jquery-ui'], function($, linker) { 'use
         if (manualSizeSet)
             return;
 
-        var previewWidth = $preview.width();
-        var previewHeight = $preview.height();
-        $wrapper.width(previewWidth).height(previewHeight);
-        $iframe.width(previewWidth).height(previewHeight);
+        var previewSize = getSize($preview);
+        var auto;
+        if ($iframe) {
+            $wrapper.width(previewSize.width).height(previewSize.height);
+            $iframe.width(previewSize.width).height(previewSize.height);
 
-        var $svg = getRootElementImmediate();
-        var svgWidth = $svg.width();
-        var svgHeight = $svg.height();
+            var $svg = getRootElementImmediate();
 
-        if ($wrapper.width() > svgWidth)
-            $wrapper.width(svgWidth);
+            auto = getSize($svg);
+            if ($wrapper.width() > auto.width)
+                $wrapper.width(auto.width);
 
-        if ($wrapper.height() > svgHeight)
-            $wrapper.height(svgHeight);
+            if ($wrapper.height() > auto.height)
+                $wrapper.height(auto.height);
+        }
+        else {
+            // something failed
+            $wrapper.css({ width: null, height: null });
+            auto = getSize($wrapper);
+        }
 
-        showSize(svgWidth, svgHeight);
+        showSize(auto.width, auto.height);
         $sizeMode[0].checked = false;
+    }
+
+    function getSize($element) {
+        return { width: $element.width(), height: $element.height() };
     }
 
     function manualResize() {

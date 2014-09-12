@@ -20,10 +20,12 @@ parsererror h3 {
   display: none;
 }
 parsererror::before {
-  content: 'SVG preview failed';
+  content: 'Preview failed';
   font-weight: bold;
   display: block;
   margin-bottom: 0.5em;
+  margin-top: 0;
+  font-size: inherit;
 }
 parsererror + svg {
   display: none;
