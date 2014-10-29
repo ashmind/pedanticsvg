@@ -64,7 +64,8 @@ define(['sax', 'app/parsing/svg-ast', 'app/parsing/parse-path'], function(sax, a
 
         var pushChild = function(child) {
             var parent = topOf(stack);
-            child.index = parent.children.length;
+            if (typeof child !== 'string')
+                child.index = parent.children.length;
             parent.children.push(child);
         };
         parser.ontext = function(text) {
