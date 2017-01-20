@@ -1,4 +1,8 @@
-define(['jquery', './linker.js', 'jquery-ui'], function($, linker) { 'use strict'; return function($preview) {
+import $ from 'jquery';
+import linker from './linker.js';
+import 'jquery-ui';
+    
+export default function($preview) {
     var SVG_MEDIA_TYPE = 'image/svg+xml';
 
     var $template = $preview.find('template');
@@ -196,4 +200,4 @@ define(['jquery', './linker.js', 'jquery-ui'], function($, linker) { 'use strict
         render: render,
         getRootElement: getRootElement
     };
-};});
+}
