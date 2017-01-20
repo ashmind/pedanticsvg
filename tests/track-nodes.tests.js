@@ -1,6 +1,6 @@
 /* globals describe:false, it:false, expect:false */
 
-describe('app/codemirror/track-nodes', ['codemirror'], function(_, CodeMirrorFake) {
+describe('codemirror/track-nodes', ['codemirror'], function(_, CodeMirrorFake) {
     'use strict';
 
     [{

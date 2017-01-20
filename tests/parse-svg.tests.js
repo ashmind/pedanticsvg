@@ -1,6 +1,6 @@
 /* globals describe:false, it:false, expect:false */
 
-describe('app/parsing/parse-svg', function(parse) {
+describe('parsing/parse-svg', function(parse) {
     'use strict';
 
     it('can parse a simple SVG', function() {

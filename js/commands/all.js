@@ -1,4 +1,4 @@
-define(['FileSaver', 'app/settings'], function(saveAs, settings) {
+define(['../../external/FileSaver.js', '/js/settings.js'], function(saveAs, settings) {
     'use strict';
 
     var tracing = settings('preview.tracing', true);

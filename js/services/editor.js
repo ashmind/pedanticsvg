@@ -1,9 +1,9 @@
 define([
     'jquery',
-    'app/utils/setup-events',
-    'app/services/codemirror-setup',
-    'app/parsing/parse-svg',
-    'app/services/refactoring/ui-builder'
+    '../utils/setup-events.js',
+    './codemirror-setup.js',
+    '../parsing/parse-svg.js',
+    './refactoring/ui-builder.js'
 ], function($, setupEvents, setupCodeMirror, parse, refactorUI) { 'use strict'; return function($editor) {
     var code;
     var ast;

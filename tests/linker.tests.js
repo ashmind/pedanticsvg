@@ -1,6 +1,6 @@
 /* globals describe:false, it:false, expect:false */
 
-describe('app/preview/linker', ['app/parsing/parse-svg'], function(linker, parse) {
+describe('preview/linker', ['parsing/parse-svg'], function(linker, parse) {
     'use strict';
 
     it('produces correct annotations', function() {

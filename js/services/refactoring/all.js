@@ -1,4 +1,4 @@
-define(['app/services/refactoring/path'], function() {
+define(['./path.js'], function() {
     'use strict';
     var all = Array.prototype.concat.apply([], arguments);
 

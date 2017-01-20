@@ -3,7 +3,7 @@
     var config = {
         paths: {
             app:                    '../js',
-            sax:                    '../external/sax-customized',
+            sax:                    '././external/sax-customized',
             codemirror:             'utils/codemirror-fake',
             jquery:                 'external/jquery-2.0.3',
             jasmine:                'external/jasmine/jasmine',

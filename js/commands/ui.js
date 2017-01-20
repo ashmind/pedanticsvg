@@ -1,4 +1,4 @@
-define(['app/commands/all'], function(commands) {
+define(['./all.js'], function(commands) {
     'use strict';
 
     return function (locations, editor, preview) {

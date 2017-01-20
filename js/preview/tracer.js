@@ -1,4 +1,4 @@
-define(['app/settings', 'app/preview/linker', 'app/utils/jquery.svg'], function(settings, linker) { 'use strict'; return function(editor, preview) {
+define(['/js/settings.js', './linker.js', '/js/utils/jquery.svg.js'], function(settings, linker) { 'use strict'; return function(editor, preview) {
     // TODO: move to CSS
     var highlightColor = '#daa520';
     var enabled = settings('preview.tracing', true);

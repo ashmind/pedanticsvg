@@ -1,4 +1,4 @@
-define(['sax', 'app/parsing/svg-ast', 'app/parsing/parse-path'], function(sax, ast, parsePath) {
+define(['../../external/sax-customized.js', './svg-ast.js', './parse-path.js'], function(sax, ast, parsePath) {
     'use strict';
 
     var parser = sax.parser(true, {

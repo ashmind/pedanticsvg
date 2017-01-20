@@ -4,7 +4,22 @@
     "path": {
         "**.js": {
             "spaceUnits": 4,
-            "brackets-git.gitPath": "git"
+            "brackets-git.gitPath": "git",
+            "fileFilters": [
+                {
+                    "name": "node_modules",
+                    "patterns": [
+                        "node_modules"
+                    ]
+                },
+                {
+                    "name": "node_modules & wwwroot",
+                    "patterns": [
+                        "node_modules",
+                        "wwwroot"
+                    ]
+                }
+            ]
         }
     }
 }

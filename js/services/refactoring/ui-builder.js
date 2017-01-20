@@ -1,4 +1,4 @@
-define(['jquery', 'app/services/refactoring/all'], function($, allRefactorings) {
+define(['jquery', './all.js'], function($, allRefactorings) {
     'use strict';
 
     var $body = $('body');

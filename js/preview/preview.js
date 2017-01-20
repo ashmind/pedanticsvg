@@ -1,4 +1,4 @@
-define(['jquery', 'app/preview/linker', 'jquery-ui'], function($, linker) { 'use strict'; return function($preview) {
+define(['jquery', './linker.js', 'jquery-ui'], function($, linker) { 'use strict'; return function($preview) {
     var SVG_MEDIA_TYPE = 'image/svg+xml';
 
     var $template = $preview.find('template');

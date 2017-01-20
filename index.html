@@ -133,9 +133,38 @@
       Includes icons by <a href="http://www.simpleicon.com" title="SimpleIcon">SimpleIcon</a> from <a href="http://www.flaticon.com">Flaticon</a>.
     </footer>
 
-    <script src="external/template-polyfill.js"></script>
+    <!--script src="external/template-polyfill.js"></script>
     <script src="external/promise.min.js"></script>
     <script src="external/url.min.js"></script>
-    <script data-main="js/main" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.11/require.js"></script>
+    <script data-main="js/main" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.11/require.js"></script-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.19.41/system.js"></script>
+    <script>
+      var codeMirrorBase = 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/4.2.0';
+      var config = {
+        baseURL: './',
+        packages: {
+          codemirror: {
+            main: 'codemirror.js',
+            map: {'./lib/codemirror':  './codemirror.js',
+                 './addon/fold/xml-fold.js': './addon/fold/xml-fold.js'}
+          }
+        },
+        map: {
+          'plugin-babel': '/external/plugin-babel.js',
+          'systemjs-babel-build': 'external/systemjs-babel-browser.js',
+          'jquery': 'https://code.jquery.com/jquery-2.0.3.min.js',
+          'jquery-ui': 'https://code.jquery.com/ui/1.11.1/jquery-ui.min.js',
+          'codemirror': codeMirrorBase,
+          'string_decoder': '',
+          'stream': ''
+        },
+        paths: {},
+        transpiler: 'plugin-babel'
+      };
+      console.log(config);
+      SystemJS.config(config);
+      // loads /js/main.js
+      SystemJS.import('/js/main.js');
+    </script>
   </body>
 </html>

@@ -1,6 +1,6 @@
 /* globals describe:false, it:false, expect:false */
 
-describe('app/parsing/parse-path', function(parse) {
+describe('parsing/parse-path', function(parse) {
     'use strict';
 
     [{
