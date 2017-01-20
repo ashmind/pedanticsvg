@@ -1,10 +1,10 @@
-define([
-    'jquery',
-    '../utils/setup-events.js',
-    './codemirror-setup.js',
-    '../parsing/parse-svg.js',
-    './refactoring/ui-builder.js'
-], function($, setupEvents, setupCodeMirror, parse, refactorUI) { 'use strict'; return function($editor) {
+import $ from 'jquery';
+import setupEvents from '../utils/setup-events.js';
+import setupCodeMirror from './codemirror-setup.js';
+import parse from '../parsing/parse-svg.js';
+import refactorUI from './refactoring/ui-builder.js';
+
+export default function($editor) {
     var code;
     var ast;
     var errors;
@@ -215,4 +215,4 @@ define([
     function toCMPosition(position) {
         return { line: position.line, ch: position.column };
     }
-};});
+}
