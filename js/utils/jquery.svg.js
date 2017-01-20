@@ -1,5 +1,4 @@
-define(['jquery'], function($) {
-    'use strict';
+import $ from 'jquery';
 
     $.extend($.fn, {
         svgAddClass: function(className) {
@@ -16,4 +15,3 @@ define(['jquery'], function($) {
             return this;
         }
     });
-});
