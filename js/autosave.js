@@ -1,4 +1,4 @@
-define(function($) { 'use strict'; return function(editor) {
+export default function(editor) {
     var codeKey = 'psvg.code';
     (function load() {
         var code = localStorage[codeKey];
@@ -9,4 +9,4 @@ define(function($) { 'use strict'; return function(editor) {
     editor.on('codechange', function save(code) {
         localStorage[codeKey] = code;
     });
-};});
+}
