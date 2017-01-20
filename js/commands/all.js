@@ -1,31 +1,31 @@
-define(['FileSaver', '/js/settings.js'], function(saveAs, settings) {
-    'use strict';
+import saveAs from 'FileSaver';
+import settings from 'settings.js';
 
-    var tracing = settings('preview.tracing', true);
-    return [
-        {
-            name:    'download',
-            title:   'Download SVG',
-            action:  download,
-            section: 'code'
-        },
-        {
-            name:    'tracing',
-            title:   'Enable highlighting',
-            section: 'preview',
-            action:  toggleTracing,
-            state:   tracing.value,
-            type:    'toggle'
-        }
-    ];
+const tracing = settings('preview.tracing', true);
 
-    function download(editor) {
-        var blob = new Blob([editor.code], { type: 'image/svg+xml' });
-        saveAs(blob, 'pedantic.svg');
+function download(editor) {
+    const blob = new Blob([editor.code], { type: 'image/svg+xml' });
+    saveAs(blob, 'pedantic.svg');
+}
+
+function toggleTracing() {
+    tracing.value = !tracing.value;
+    return tracing.value;
+}
+
+export default [
+    {
+        name:    'download',
+        title:   'Download SVG',
+        action:  download,
+        section: 'code'
+    },
+    {
+        name:    'tracing',
+        title:   'Enable highlighting',
+        section: 'preview',
+        action:  toggleTracing,
+        state:   tracing.value,
+        type:    'toggle'
     }
-
-    function toggleTracing() {
-        tracing.value = !tracing.value;
-        return tracing.value;
-    }
-});
+];
