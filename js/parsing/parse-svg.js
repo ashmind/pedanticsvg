@@ -1,5 +1,6 @@
-define(['sax-customized', './svg-ast.js', './parse-path.js'], function(sax, ast, parsePath) {
-    'use strict';
+import sax from 'sax-customized';
+import ast from './svg-ast.js';
+import parsePath from './parse-path.js';
 
     var parser = sax.parser(true, {
         position: true,
@@ -193,5 +194,4 @@ define(['sax-customized', './svg-ast.js', './parse-path.js'], function(sax, ast,
         return 'after';
     }
 
-    return parse;
-});
+    export default parse;
