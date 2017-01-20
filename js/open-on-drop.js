@@ -1,6 +1,4 @@
-define(function() {
-    'use strict';
-    return function($target) {
+export default function($target) {
         /*
         if (!window.FileReader)
             return;
@@ -32,4 +30,3 @@ define(function() {
         };
         reader.readAsText(file);
     }
-});

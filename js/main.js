@@ -8,8 +8,6 @@ import autosave from './autosave.js';
 import settings from './settings.js';
 import 'jquery-ui';
 
-'use strict';
-
 var editor = editorFactory($('#code'));
 var preview = previewFactory($('.preview .content'));
 openOnDrop($('body'), editor);
