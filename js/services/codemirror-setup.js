@@ -1,19 +1,16 @@
-define([
-    'codemirror',
-    '/js/codemirror/svg-schema.js',
-    'codemirror/mode/xml/xml',
-    '/js/codemirror/svg.js',
-    '/js/codemirror/track-nodes.js',
-    '/js/codemirror/show-hint-customized.js',
-    '/js/codemirror/xml-hint-customized.js',
-    '/js/codemirror/xml-hint-extra.js',
-    'codemirror/addon/edit/closetag',
-    'codemirror/addon/edit/closebrackets',
-    'codemirror/addon/lint/lint',
-], function(CodeMirror, svgSchema) {
-    'use strict';
+import CodeMirror from 'codemirror';
+import svgSchema from '/js/codemirror/svg-schema.js';
+import 'codemirror/mode/xml/xml';
+import '/js/codemirror/svg.js';
+import '/js/codemirror/track-nodes.js';
+import '/js/codemirror/show-hint-customized.js';
+import '/js/codemirror/xml-hint-customized.js';
+import '/js/codemirror/xml-hint-extra.js';
+import 'codemirror/addon/edit/closetag';
+import 'codemirror/addon/edit/closebrackets';
+import 'codemirror/addon/lint/lint';
 
-    return function(textarea) {
+export default function(textarea) {
         return CodeMirror.fromTextArea(textarea, {
             mode:        'image/svg+xml',
             lineNumbers: true,
@@ -36,5 +33,4 @@ define([
             xmlHintExtra:   true,
             gutters:        ['CodeMirror-linenumbers', 'CodeMirror-lint-markers']
         });
-    };
-});
+    }
