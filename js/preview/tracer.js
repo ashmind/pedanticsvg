@@ -1,4 +1,8 @@
-define(['/js/settings.js', './linker.js', '/js/utils/jquery.svg.js'], function(settings, linker) { 'use strict'; return function(editor, preview) {
+import settings from '/js/settings.js';
+import linker from './linker.js';
+import '/js/utils/jquery.svg.js';
+
+export default function(editor, preview) {
     // TODO: move to CSS
     var highlightColor = '#daa520';
     var enabled = settings('preview.tracing', true);
@@ -189,4 +193,4 @@ define(['/js/settings.js', './linker.js', '/js/utils/jquery.svg.js'], function(s
 
         return css;
     }
-};});
+}
