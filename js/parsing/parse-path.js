@@ -1,5 +1,6 @@
-define(['./svg-ast.js', '/js/utils/regexp-iterator.js', '/js/utils/position.js'], function(ast, RegExpIterator, Position) {
-    'use strict';
+   import ast from './svg-ast.js';
+   import RegExpIterator from '/js/utils/regexp-iterator.js';
+   import Position from '/js/utils/position.js';
 
     // This all is pretty terrible and should probably be rewritten
     // using a proper parser.
@@ -19,7 +20,7 @@ define(['./svg-ast.js', '/js/utils/regexp-iterator.js', '/js/utils/position.js']
         z: []
     };
 
-    return function (path, outer) {
+    export default function (path, outer) {
         outer = outer || {};
         var result = {
             segments: [],
@@ -139,4 +140,3 @@ define(['./svg-ast.js', '/js/utils/regexp-iterator.js', '/js/utils/position.js']
             });
         }
     };
-});
