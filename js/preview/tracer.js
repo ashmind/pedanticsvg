@@ -1,11 +1,15 @@
-define(['app/settings', 'app/preview/linker', 'app/utils/jquery.svg'], function(settings, linker) { 'use strict'; return function(editor, preview) {
-    // TODO: move to CSS
-    var highlightColor = '#daa520';
-    var enabled = settings('preview.tracing', true);
-    var traces = {};
-    var lastSelectionChange;
+import settings from '/js/settings.js';
+import linker from './linker.js';
+import '/js/utils/jquery.svg.js';
 
-    var tracers = {
+export default function(editor, preview) {
+    // TODO: move to CSS
+    const highlightColor = '#daa520';
+    const enabled = settings('preview.tracing', true);
+    let traces = {};
+    let lastSelectionChange;
+
+    const tracers = {
         tag: {
             trace: traceElement,
             untrace: untraceElement
@@ -29,8 +33,8 @@ define(['app/settings', 'app/preview/linker', 'app/utils/jquery.svg'], function(
         if (!lastSelectionChange)
             return;
 
-        var add = [];
-        var remove = [];
+        let add = [];
+        let remove = [];
         if (newValue) {
             add = lastSelectionChange.added;
         }
@@ -54,10 +58,10 @@ define(['app/settings', 'app/preview/linker', 'app/utils/jquery.svg'], function(
     function updateTrace($previewRoot, add, remove) {
         /* jshint shadow:true */
 
-        for (var i = 0; i < remove.length; i++) {
-            var id = remove[i].id;
-            var tracer = tracers[remove[i].astNode.type];
-            var trace = traces[id];
+        for (const item of remove) {
+            const id = item.id;
+            const tracer = tracers[item.astNode.type];
+            const trace = traces[id];
             if (!tracer || !trace)
                 continue;
 
@@ -65,23 +69,23 @@ define(['app/settings', 'app/preview/linker', 'app/utils/jquery.svg'], function(
             delete traces[id];
         }
 
-        for (var i = 0; i < add.length; i++) {
-            var astNode = add[i].astNode;
-            var tracer = tracers[astNode.type];
+        for (const item of add) {
+            const astNode = item.astNode;
+            const tracer = tracers[astNode.type];
             if (!tracer)
                 continue;
 
-            traces[add[i].id] = tracer.trace($previewRoot, astNode);
+            traces[item.id] = tracer.trace($previewRoot, astNode);
         }
     }
 
     function traceElement($previewRoot, tag) {
-        var $element = linker.findByAstNode($previewRoot, tag);
+        const $element = linker.findByAstNode($previewRoot, tag);
         if ($element.length === 0)
             return;
 
-        var traceCss = getTraceCss($element);
-        var savedCss = {
+        const traceCss = getTraceCss($element);
+        const savedCss = {
             fill: $element[0].style.fill,
             stroke: $element[0].style.stroke
         };
@@ -98,15 +102,15 @@ define(['app/settings', 'app/preview/linker', 'app/utils/jquery.svg'], function(
     function tracePathSegment($previewRoot, segment) {
         //console.log('trace ', segment.stringify());
 
-        var parent = segment.parent;
+        const parent = segment.parent;
 
-        var $path = linker.findByAstNode($previewRoot, parent);
+        const $path = linker.findByAstNode($previewRoot, parent);
         if ($path.length === 0)
             return;
 
-        var segmentIndexInTrace;
-        var commonParentTraceKey = parent.id + '_segments';
-        var trace = traces[commonParentTraceKey];
+        let segmentIndexInTrace;
+        const commonParentTraceKey = parent.id + '_segments';
+        let trace = traces[commonParentTraceKey];
         if (!trace) {
             trace = {
                 extraKey: commonParentTraceKey,
@@ -120,7 +124,7 @@ define(['app/settings', 'app/preview/linker', 'app/utils/jquery.svg'], function(
         }
         else {
             // insert segment in in a location based on its order
-            var segments = trace.segments;
+            const segments = trace.segments;
             if (segments[0].index > segment.index) {
                 segments.unshift(segment);
             }
@@ -128,7 +132,7 @@ define(['app/settings', 'app/preview/linker', 'app/utils/jquery.svg'], function(
                 segments.push(segment);
             }
             else {
-                for (var i = 0; i < segments.length; i++) {
+                for (let i = 0; i < segments.length; i++) {
                     if (segments[i].index > segment.index) {
                         segments.splice(i, 0, segment);
                         break;
@@ -142,12 +146,12 @@ define(['app/settings', 'app/preview/linker', 'app/utils/jquery.svg'], function(
     }
 
     function untracePathSegment(traceAndSegment) {
-        var trace = traceAndSegment.trace;
-        var segment = traceAndSegment.segment;
-        var segments = trace.segments;
+        const trace = traceAndSegment.trace;
+        const segment = traceAndSegment.segment;
+        const segments = trace.segments;
 
         //console.log('untrace ', segment.stringify());
-        for (var i = 0; i < segments.length; i++) {
+        for (let i = 0; i < segments.length; i++) {
             if (segments[i] === segment) {
                 segments.splice(i, 1);
                 break;
@@ -164,18 +168,18 @@ define(['app/settings', 'app/preview/linker', 'app/utils/jquery.svg'], function(
     }
 
     function retracePathSegment(trace) {
-        var start = trace.segments[0].startPoint();
-        var d = 'M ' + start.x + ' ' + start.y;
-        for (var i = 0; i < trace.segments.length; i++) {
-            d += ' ' + trace.segments[i].toAbsolute().toSVG();
+        const start = trace.segments[0].startPoint();
+        let d = 'M ' + start.x + ' ' + start.y;
+        for (const item of trace.segments) {
+            d += ' ' + item.toAbsolute().toSVG();
         }
 
         trace.$path.attr('d', d);
     }
 
     function getTraceCss($element) {
-        var css = {};
-        var currentStyle = $element[0].ownerDocument.defaultView.getComputedStyle($element[0]);
+        let css = {};
+        let currentStyle = $element[0].ownerDocument.defaultView.getComputedStyle($element[0]);
         if (currentStyle.fill !== 'none')
             css.fill = highlightColor;
 
@@ -189,4 +193,4 @@ define(['app/settings', 'app/preview/linker', 'app/utils/jquery.svg'], function(
 
         return css;
     }
-};});
+}

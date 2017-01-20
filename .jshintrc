@@ -7,6 +7,7 @@
     "require": false,
     "Promise": false
   },
+  "esnext":    true,
   "camelcase": true,
   "eqeqeq":    true,
   "indent":    2,
@@ -15,7 +16,6 @@
   "quotmark":  true,
   "undef":     true,
   "unused":    true,
-  "strict":    true,
   "trailing":  true,
   "laxbreak":  true
 }

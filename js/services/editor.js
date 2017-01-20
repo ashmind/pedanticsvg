@@ -1,17 +1,17 @@
-define([
-    'jquery',
-    'app/utils/setup-events',
-    'app/services/codemirror-setup',
-    'app/parsing/parse-svg',
-    'app/services/refactoring/ui-builder'
-], function($, setupEvents, setupCodeMirror, parse, refactorUI) { 'use strict'; return function($editor) {
-    var code;
-    var ast;
-    var errors;
-    var getNodesInRanges;
-    var firstParse = true;
+import $ from 'jquery';
+import setupEvents from '../utils/setup-events.js';
+import setupCodeMirror from './codemirror-setup.js';
+import parse from '../parsing/parse-svg.js';
+import refactorUI from './refactoring/ui-builder.js';
 
-    var service = setupEvents({}, [
+export default function($editor) {
+    let code;
+    let ast;
+    let errors;
+    let getNodesInRanges;
+    let firstParse = true;
+
+    let service = setupEvents({}, [
         'codechange',
         'astchange',
         'errorchange'
@@ -25,7 +25,7 @@ define([
             e.handler.call(undefined, ast);
     });
 
-    var cm = setupCodeMirror($editor[0]);
+    let cm = setupCodeMirror($editor[0]);
     cm.setOption('trackNodesInSelection', {
         getNodes: getNodesInSelection
     });
@@ -74,7 +74,7 @@ define([
                 return;
         }
 
-        var parsed = parse(code);
+        const parsed = parse(code);
         getNodesInRanges = parsed.getNodesInRanges;
         reportParseErrors(parsed.errors, updateLinting);
 
@@ -89,7 +89,7 @@ define([
         if (!updateLinting)
             return;
 
-        var cmErrors = errors.map(function(e) {
+        const cmErrors = errors.map(function(e) {
             return {
                 message: e.message,
                 from: toCMPosition(e),
@@ -106,17 +106,16 @@ define([
         if (!ast)
             return [];
 
-        var ranges = [];
-        for (var i = 0; i < selections.length; i++) {
+        let ranges = [];
+        for (const item of selections) {
             ranges.push({
-                start: fromCMPosition(selections[i].from()),
-                end: fromCMPosition(selections[i].to())
+                start: fromCMPosition(item.from()),
+                end: fromCMPosition(item.to())
             });
         }
-        var astNodes = getNodesInRanges(ranges);
-        var mappedNodes = [];
-        for (var i = 0; i < astNodes.length; i++) {
-            var astNode = astNodes[i];
+        const astNodes = getNodesInRanges(ranges);
+        let mappedNodes = [];
+        for (const astNode of astNodes) {
             mappedNodes.push({
                 id: astNode.id,
                 start: toCMPosition(astNode.start),
@@ -128,16 +127,16 @@ define([
     }
 
     function setupRefactorings() {
-        var activePoints = [];
+        let activePoints = [];
         cm.on('nodesInSelectionChanged', function(cm, e) {
             /* jshint shadow:true */
-            var newGroups = {};
-            var nodes = e.nodes;
+            let newGroups = {};
+            const nodes = e.nodes;
 
-            var newGroup;
-            var newGroupEndIndex;
-            for (var i = 0; i < nodes.length; i++) {
-                var astNode = nodes[i].astNode;
+            let newGroup;
+            let newGroupEndIndex;
+            for (const node of nodes) { 
+                const astNode = node.astNode;
                 if (newGroup && astNode.index === newGroupEndIndex + 1) {
                     newGroup.push(astNode);
                 }
@@ -152,10 +151,9 @@ define([
             if (newGroup)
                 newGroups[newGroup[0].id] = newGroup;
 
-            for (var i = 0; i < activePoints.length; i++) {
-                var point = activePoints[i];
-                var keep = false;
-                var group = newGroups[point.startId];
+            for (const point of activePoints) {
+                let keep = false;
+                const group = newGroups[point.startId];
                 if (group) {
                     keep = refactorUI.updateWidget(point.$widget, group);
                     delete newGroups[point.startId];
@@ -168,9 +166,9 @@ define([
                 }
             }
 
-            for (var id in newGroups) {
-                var group = newGroups[id];
-                var $widget = refactorUI.buildWidget(group, applyRefactoringChanges);
+            for (let id in newGroups) {
+                const group = newGroups[id];
+                const $widget = refactorUI.buildWidget(group, applyRefactoringChanges);
                 if (!$widget)
                     continue;
 
@@ -189,16 +187,14 @@ define([
         cm.operation(function() {
             /* jshint shadow:true */
 
-            for (var i = 0; i < changes.length; i++) {
-                var change = changes[i];
+            for (const change of changes) {
                 change.startMarker = cm.setBookmark(toCMPosition(change.start));
                 change.endMarker = cm.setBookmark(toCMPosition(change.end));
             }
 
-            for (var i = 0; i < changes.length; i++) {
-                var change = changes[i];
-                var from = change.startMarker.find();
-                var to = change.endMarker.find();
+            for (const change of changes) {
+                const from = change.startMarker.find();
+                const to = change.endMarker.find();
                 cm.replaceRange(change.text, from, to);
 
                 change.startMarker.clear();
@@ -215,4 +211,4 @@ define([
     function toCMPosition(position) {
         return { line: position.line, ch: position.column };
     }
-};});
+}

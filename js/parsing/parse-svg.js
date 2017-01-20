@@ -1,24 +1,25 @@
-define(['sax', 'app/parsing/svg-ast', 'app/parsing/parse-path'], function(sax, ast, parsePath) {
-    'use strict';
+import sax from 'sax-customized';
+import ast from './svg-ast.js';
+import parsePath from './parse-path.js';
 
-    var parser = sax.parser(true, {
+    const parser = sax.parser(true, {
         position: true,
         xmlns: true
     });
 
     function parse(code) {
-        var root = ast.root();
-        var flat = [];
-        var stack = [root];
-        var errors = [];
+        const root = ast.root();
+        let flat = [];
+        let stack = [root];
+        let errors = [];
 
-        var tagExtra = [];
-        var onpath = function(a) {
-            var valueStart = getPosition(a, 'valueStart');
+        let tagExtra = [];
+        const onpath = function(a) {
+            const valueStart = getPosition(a, 'valueStart');
             tagExtra.push(function(tag) {
-                var parsed = parsePath(a.value, { position: valueStart, parent: tag });
+                const parsed = parsePath(a.value, { position: valueStart, parent: tag });
                 errors.push.apply(errors, parsed.errors);
-                var segments = parsed.segments;
+                const segments = parsed.segments;
                 tag.segments = segments;
                 flat.push.apply(flat, segments);
             });
@@ -29,11 +30,11 @@ define(['sax', 'app/parsing/svg-ast', 'app/parsing/parse-path'], function(sax, a
         };
 
         parser.onopentag = function(node) {
-            var parent = topOf(stack);
+            const parent = topOf(stack);
 
-            var attributes = [];
-            for (var name in node.attributes) {
-                var attribute = node.attributes[name];
+            let attributes = [];
+            for (let name in node.attributes) {
+                const attribute = node.attributes[name];
                 attributes.push({
                     name: name,
                     value: attribute.value,
@@ -41,7 +42,7 @@ define(['sax', 'app/parsing/svg-ast', 'app/parsing/parse-path'], function(sax, a
                 });
             }
 
-            var tag = ast.tag(node.name, attributes);
+            const tag = ast.tag(node.name, attributes);
             tag.parent = parent;
             tag.start = getPosition(parser, 'startTag');
             tag.nameEnd = getPosition(node, 'nameEnd');
@@ -51,8 +52,8 @@ define(['sax', 'app/parsing/svg-ast', 'app/parsing/parse-path'], function(sax, a
             flat.push(tag);
             stack.push(tag);
 
-            for (var i = 0; i < tagExtra.length; i++) {
-                tagExtra[i](tag);
+            for (const item of tagExtra) {
+                item(tag);
             }
             tagExtra = [];
         };
@@ -62,8 +63,8 @@ define(['sax', 'app/parsing/svg-ast', 'app/parsing/parse-path'], function(sax, a
             stack.pop();
         };
 
-        var pushChild = function(child) {
-            var parent = topOf(stack);
+        const pushChild = function(child) {
+            const parent = topOf(stack);
             if (typeof child !== 'string')
                 child.index = parent.children.length;
             parent.children.push(child);
@@ -128,19 +129,18 @@ define(['sax', 'app/parsing/svg-ast', 'app/parsing/parse-path'], function(sax, a
         if (ranges.length === 0)
             return [];
 
-        var rangeIndex = 0;
-        var range = ranges[rangeIndex];
-        var inRange = false;
+        let rangeIndex = 0;
+        let range = ranges[rangeIndex];
+        let inRange = false;
 
-        var nodes = [];
-        var firstInRangeCandidate;
-        for (var i = 0; i < flat.length; i++) {
-            var node = flat[i];
-
+        let nodes = [];
+        let firstInRangeCandidate;
+        for (let i = 0; i < flat.length; i++) {
+            const node = flat[i];
             if (!inRange) {
-                var startToStart = compare(node.start, range.start);
+                const startToStart = compare(node.start, range.start);
                 if (startToStart === 'before') {
-                    var endToStart = compare(node.end, range.start);
+                    const endToStart = compare(node.end, range.start);
                     if (endToStart === 'before')
                         continue;
 
@@ -155,7 +155,7 @@ define(['sax', 'app/parsing/svg-ast', 'app/parsing/parse-path'], function(sax, a
                 firstInRangeCandidate = null;
             }
 
-            var startToEnd = compare(node.start, range.end);
+            const startToEnd = compare(node.start, range.end);
             if (startToEnd !== 'after') {
                 // node.start <= range.end
                 nodes.push(node);
@@ -193,5 +193,4 @@ define(['sax', 'app/parsing/svg-ast', 'app/parsing/parse-path'], function(sax, a
         return 'after';
     }
 
-    return parse;
-});
+    export default parse;
