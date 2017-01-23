@@ -1,7 +1,7 @@
 import commands from './all.js';
 
 function appendCommand($location, command, invoke) {
-    var $element;
+    let $element;
     if (command.type !== 'toggle') {
         $element = $('<button>');
         $element.click(function() {
@@ -14,7 +14,7 @@ function appendCommand($location, command, invoke) {
 
         $element.change(function(e) {
             e.preventDefault();
-            var newState = invoke(command);
+            let newState = invoke(command);
             applyToggleState($element, command, newState);
         });
     }
@@ -31,13 +31,13 @@ function applyToggleState($element, command, newState) {
 }
 
 export default function (locations, editor, preview) {
-    var invoke = function(command) {
+    let invoke = function(command) {
         return command.action(editor, preview);
     };
 
-    for (var i = 0; i < commands.length; i++) {
-        var command = commands[i];
-        var $location = locations[command.section];
+    for (let i = 0; i < commands.length; i++) {
+        const command = commands[i];
+        let $location = locations[command.section];
         appendCommand($location, command, invoke);
     }
 }
