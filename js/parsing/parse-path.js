@@ -5,9 +5,9 @@
     // This all is pretty terrible and should probably be rewritten
     // using a proper parser.
 
-    var segmentRegexp = /([mlhvcsqtaz])((?:[\s,]*[\d\.\-]+)*)|(\s+)/i;
-    var coordRegexp = /\-?(?:\d*\.)?\d+|([\s,]+)/i;
-    var coordKeys = {
+    const segmentRegexp = /([mlhvcsqtaz])((?:[\s,]*[\d\.\-]+)*)|(\s+)/i;
+    const coordRegexp = /\-?(?:\d*\.)?\d+|([\s,]+)/i;
+    const coordKeys = {
         m: ['x', 'y'],
         l: ['x', 'y'],
         h: ['x'],
@@ -22,28 +22,28 @@
 
     export default function (path, outer) {
         outer = outer || {};
-        var result = {
+        let result = {
             segments: [],
             errors: []
         };
 
-        var parent = outer.parent || { segments: result.segments };
+        const parent = outer.parent || { segments: result.segments };
 
         parse();
         return result;
 
         function parse() {
             /* jshint newcap:false */
-            var position = Position(
+            const position = Position(
                 outer.position ? outer.position.line : 0,
                 outer.position ? outer.position.column : 0
             );
-            var iterator = RegExpIterator(path, segmentRegexp);
-            for (var item = iterator.next(); !item.done; item = iterator.next()) {
-                var start = position.clone();
+            const iterator = RegExpIterator(path, segmentRegexp);
+            for (let item = iterator.next(); !item.done; item = iterator.next()) {
+                const start = position.clone();
                 position.advanceByString(item.value.string);
 
-                var match = item.value.match;
+                const match = item.value.match;
                 if (!match) {
                     reportError('Unexpected: \'' + item.value.string + '\'.', start);
                     continue;
@@ -52,19 +52,19 @@
                 if (match[3]) // whitespace, only matches if nothing else did
                     continue;
 
-                var command = match[1];
-                var coords = match[2];
+                const command = match[1];
+                const coords = match[2];
                 parseCoords(command, coords, start);
             }
         }
 
         function parseCoords(command, allCoordsString, position) {
             /* jshint newcap:false */
-            var firstCoords = true;
-            var coords = { _count: 0 };
-            var separators = [];
-            var keys = coordKeys[command.toLowerCase()];
-            var start = position.toObject();
+            let firstCoords = true;
+            let coords = { _count: 0 };
+            let separators = [];
+            const keys = coordKeys[command.toLowerCase()];
+            let start = position.toObject();
             if (keys === undefined) {
                 reportError('Unknown command \'' + command + '\'.', start);
                 return;
@@ -72,9 +72,9 @@
 
             position.advanceByString(command);
 
-            var iterator = RegExpIterator(allCoordsString, coordRegexp);
-            for (var item = iterator.next(); !item.done; item = iterator.next()) {
-                var string = item.value.string;
+            const iterator = RegExpIterator(allCoordsString, coordRegexp);
+            for (let item = iterator.next(); !item.done; item = iterator.next()) {
+                const string = item.value.string;
                 position.advanceByString(string);
                 if (!item.value.match) {
                     reportError('Unexpected: \'' + string + '\'.', start);
@@ -83,7 +83,7 @@
                     continue;
                 }
 
-                var separator = item.value.match[1];
+                const separator = item.value.match[1];
                 if (separator) {
                     if (coords._count === 0 && !firstCoords) {
                         // ignore separator between groups for position
@@ -102,7 +102,7 @@
                 if (coords._count < keys.length)
                     continue;
 
-                var end = position.toObject();
+                const end = position.toObject();
                 delete coords._count;
                 addSegment(command, coords, separators, start, end, firstCoords);
                 separators = [];
@@ -121,8 +121,8 @@
         function addSegment(command, coords, separators, start, end, first) {
             /* jshint newcap:false */
 
-            var index = result.segments.length;
-            var segment = ast.pathSegment(command, coords, separators);
+            const index = result.segments.length;
+            const segment = ast.pathSegment(command, coords, separators);
             segment.start = start;
             segment.end = end;
             segment.parent = parent;
@@ -139,4 +139,4 @@
                 column: position.column
             });
         }
-    };
+    }
