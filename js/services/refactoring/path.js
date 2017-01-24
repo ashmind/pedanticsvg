@@ -1,4 +1,4 @@
-var refactorings = [
+const refactorings = [
     pathToRelativeOrAbsolute('relative'),
     pathToRelativeOrAbsolute('absolute'),
     segmentToRelativeOrAbsolute('absolute'),
@@ -8,14 +8,14 @@ var refactorings = [
 
 
 function pathToRelativeOrAbsolute(type) {
-    var convert = (type === 'absolute') ? 'toAbsolute' : 'toRelative';
-    var convertibleIsAbsolute = (type === 'relative');
+    const convert = (type === 'absolute') ? 'toAbsolute' : 'toRelative';
+    const convertibleIsAbsolute = (type === 'relative');
 
     return {
         display: 'Convert <path> to ' + type,
         refactor: function(paths) {
-            var changes = [];
-            for (var i = 0; i < paths.length; i++) {
+            let changes = [];
+            for (let i = 0; i < paths.length; i++) {
                 changes.push.apply(changes, refactorSegmentsToRelativeOrAbsolute(paths[i].segments, convert));
             }
             return changes;
@@ -25,7 +25,7 @@ function pathToRelativeOrAbsolute(type) {
             if (astNode.name !== 'path' || !astNode.segments || astNode.segments.length === 0)
                 return false;
 
-            for (var i = 1; i < astNode.segments.length; i++) {
+            for (let i = 1; i < astNode.segments.length; i++) {
                 if (astNode.segments[i].isAbsolute === convertibleIsAbsolute)
                     return true;
             }
@@ -36,8 +36,8 @@ function pathToRelativeOrAbsolute(type) {
 }
 
 function segmentToRelativeOrAbsolute(type) {
-    var convert = (type === 'absolute') ? 'toAbsolute' : 'toRelative';
-    var convertibleIsAbsolute = (type === 'relative');
+    const convert = (type === 'absolute') ? 'toAbsolute' : 'toRelative';
+    const convertibleIsAbsolute = (type === 'relative');
 
     return {
         display: 'Convert to ' + type,
@@ -54,20 +54,20 @@ function segmentToRelativeOrAbsolute(type) {
 }
 
 function refactorSegmentsToRelativeOrAbsolute(segments, convert) {
-    var first = segments[0];
-    var firstSVG = (isFirstMove(first) ? first : first[convert]()).toSVG();
-    var changes = [rewrite(first, firstSVG)];
+    const first = segments[0];
+    const firstSVG = (isFirstMove(first) ? first : first[convert]()).toSVG();
+    let changes = [rewrite(first, firstSVG)];
 
-    for (var i = 1; i < segments.length; i++) {
-        var segment = segments[i];
+    for (let i = 1; i < segments.length; i++) {
+        const segment = segments[i];
         changes.push(rewrite(segment, segment[convert]().toSVG()));
     }
 
-    var last = segments[segments.length - 1];
+    const last = segments[segments.length - 1];
 
     // need to check that following segment isn't dependent
     // on current segment's command
-    var afterLast = last.parent.segments[last.index + 1];
+    const afterLast = last.parent.segments[last.index + 1];
     if (afterLast && afterLast.implicitCommand) {
         changes.push(rewrite(afterLast, afterLast.toSVG() /* this always adds command at the moment */));
     }
