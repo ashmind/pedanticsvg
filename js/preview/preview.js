@@ -3,27 +3,27 @@ import linker from './linker.js';
 import 'jquery-ui';
     
 export default function($preview) {
-    var SVG_MEDIA_TYPE = 'image/svg+xml';
+    const SVG_MEDIA_TYPE = 'image/svg+xml';
 
-    var $template = $preview.find('template');
-    var $templateTarget = $template.parent();
+    const $template = $preview.find('template');
+    const $templateTarget = $template.parent();
     $(document.importNode($template[0].content, true))
         .appendTo($templateTarget);
 
-    var $wrapper = $templateTarget.find('.wrapper');
-    var $sizeText = $templateTarget.find('.size :first-child');
-    var $sizeMode = $templateTarget.find('.size .mode');
-    var $iframe = $templateTarget.find('iframe');
-    var $iframeFix = $('<div>').addClass('iframe-fix').appendTo($wrapper);
+    const $wrapper = $templateTarget.find('.wrapper');
+    const $sizeText = $templateTarget.find('.size :first-child');
+    const $sizeMode = $templateTarget.find('.size .mode');
+    let $iframe = $templateTarget.find('iframe');
+    const $iframeFix = $('<div>').addClass('iframe-fix').appendTo($wrapper);
 
-    var lastUnreleasedUrl;
+    let lastUnreleasedUrl;
 
-    var loadControl;
-    var loadPromise;
+    let loadControl;
+    let loadPromise;
 
-    var manualSizeSet = false;
+    let manualSizeSet = false;
 
-    var setupPromise = featureDetect().then(
+    let setupPromise = featureDetect().then(
         function() {
             setup();
         },
@@ -35,7 +35,7 @@ export default function($preview) {
     function featureDetect() {
         return new Promise(function(resolve, reject) {
             $iframe[0].onload = function() {
-                var contentType = $iframe[0].contentDocument.contentType || $iframe[0].contentDocument.mimeType;
+                const contentType = $iframe[0].contentDocument.contentType || $iframe[0].contentDocument.mimeType;
                 if (contentType !== SVG_MEDIA_TYPE) {
                     if (URL.revokeObjectURL)
                         URL.revokeObjectURL(lastUnreleasedUrl);
@@ -72,10 +72,10 @@ export default function($preview) {
                 autosize();
             }
 
-            var $root = getRootElementImmediate();
+            const $root = getRootElementImmediate();
             if ($root.find('parsererror')) { // something failed?
-                var stylesheetURL = new URL('css/preview-errors.css', document.baseURI);
-                var $link = $('<link rel="stylesheet" href="' + stylesheetURL + '">');
+                const stylesheetURL = new URL('css/preview-errors.css', document.baseURI);
+                const $link = $('<link rel="stylesheet" href="' + stylesheetURL + '">');
                 $link[0].onload = function() { done(); };
                 $root.find('head,body').andSelf().eq(0).prepend($link);
                 return;
@@ -108,8 +108,8 @@ export default function($preview) {
     }
 
     function renderRaw(svg) {
-        var blob = new Blob([svg], {type: SVG_MEDIA_TYPE});
-        var url = URL.createObjectURL(blob);
+        const blob = new Blob([svg], {type: SVG_MEDIA_TYPE});
+        const url = URL.createObjectURL(blob);
         $iframe.addClass('loading');
         $iframe[0].src = url;
 
@@ -148,13 +148,13 @@ export default function($preview) {
         if (manualSizeSet)
             return;
 
-        var previewSize = getSize($preview);
-        var auto;
+        let previewSize = getSize($preview);
+        let auto;
         if ($iframe) {
             $wrapper.width(previewSize.width).height(previewSize.height);
             $iframe.width(previewSize.width).height(previewSize.height);
 
-            var $svg = getRootElementImmediate();
+            const $svg = getRootElementImmediate();
 
             auto = getSize($svg);
             if ($wrapper.width() > auto.width)
@@ -178,8 +178,8 @@ export default function($preview) {
     }
 
     function manualResize() {
-        var wrapperWidth = $wrapper.width();
-        var wrapperHeight = $wrapper.height();
+        const wrapperWidth = $wrapper.width();
+        const wrapperHeight = $wrapper.height();
         $iframe.width(wrapperWidth)
                .height(wrapperHeight);
 
