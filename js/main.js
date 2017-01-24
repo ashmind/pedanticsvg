@@ -8,8 +8,8 @@ import autosave from './autosave.js';
 import settings from './settings.js';
 import 'jquery-ui';
 
-var editor = editorFactory($('#code'));
-var preview = previewFactory($('.preview .content'));
+let editor = editorFactory($('#code'));
+let preview = previewFactory($('.preview .content'));
 openOnDrop($('body'), editor);
 autosave(editor);
 trace(editor, preview);
@@ -27,15 +27,15 @@ buildCommands({
 }, editor, preview);
 
 (function setupResize() {
-    var $code = $('section.code');
-    var width = settings('code.section.width');
+    let $code = $('section.code');
+    let width = settings('code.section.width');
     if (width.value)
         $code.css('width', width.value);
 
     $code.resizable({
         handles: 'e',
         stop: function(_, uie) {
-            var percent = 100 * (uie.size.width / $(document).width());
+            let percent = 100 * (uie.size.width / $(document).width());
             percent = (Math.round(percent * 100) / 100) + '%';
             uie.element.css('width', percent);
             width.value = percent;
