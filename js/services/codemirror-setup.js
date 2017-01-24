@@ -16,7 +16,7 @@ export default function(textarea) {
             lineNumbers: true,
             extraKeys: {
                 Tab: function indentWithSpaces(cm) {
-                    var indent = new Array(cm.getOption('indentUnit') + 1).join(' ');
+                    let indent = new Array(cm.getOption('indentUnit') + 1).join(' ');
                     if (cm.somethingSelected()) {
                         cm.indentSelection('add');
                     } else {
