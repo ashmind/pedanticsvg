@@ -1,22 +1,22 @@
 import $ from 'jquery';
 import allRefactorings from './all.js';
 
-var $body = $('body');
-var active;
+const $body = $('body');
+let active;
 
-var $menu = $('<ol class="refactor-menu" hidden>')
+const $menu = $('<ol class="refactor-menu" hidden>')
     .appendTo($body);
 
-var commands = [];
-for (var i = 0; i < allRefactorings.length; i++) {
-    var $command = $('<li class="refactor-command">')
+let commands = [];
+for (let i = 0; i < allRefactorings.length; i++) {
+    const $command = $('<li class="refactor-command">')
         .data('refactoring', allRefactorings[i])
         .text(allRefactorings[i].display)
         .appendTo($menu);
     commands.push($command);
 }
 
-var hideMenuIfActive = function() {
+let hideMenuIfActive = function() {
     if (!active)
         return;
 
@@ -38,15 +38,15 @@ $(document).on('click', '.refactor-button', function() {
 
     hideMenuIfActive();
 
-    var $button = $(this);
-    var context = $button.data('context');
-    var relevant = $button.data('relevant');
-    for (var i = 0; i < relevant.length; i++) {
+    const $button = $(this);
+    const context = $button.data('context');
+    const relevant = $button.data('relevant');
+    for (let i = 0; i < relevant.length; i++) {
         commands[i].toggle(relevant[i]);
     }
     $button.addClass('active');
 
-    var buttonOffset = $button.offset();
+    const buttonOffset = $button.offset();
     $menu.css({
         left: buttonOffset.left,
         top: buttonOffset.top + $button.height()
@@ -59,23 +59,23 @@ $(document).on('click', '.refactor-button', function() {
 });
 
 $(document).on('click', '.refactor-command', function() {
-    var $command = $(this);
-    var refactoring = $command.data('refactoring');
-    var context = active.context;
+    const $command = $(this);
+    const refactoring = $command.data('refactoring');
+    let context = active.context;
 
-    var changes = refactoring.refactor(context.astNodes);
+    const changes = refactoring.refactor(context.astNodes);
 
     hideMenuIfActive();
     context.applyChanges(changes);
 });
 
-var buildRelevantMap = function(astNodes) {
-    var any = false;
-    var map = new Array(commands.length);
-    for (var i = 0; i < commands.length; i++) {
-        var relevantToAll = true;
-        for (var j = 0; j < astNodes.length; j++) {
-            var relevant = allRefactorings[i].relevant(astNodes[j]);
+let buildRelevantMap = function(astNodes) {
+    let any = false;
+    let map = new Array(commands.length);
+    for (let i = 0; i < commands.length; i++) {
+        let relevantToAll = true;
+        for (let j = 0; j < astNodes.length; j++) {
+            const relevant = allRefactorings[i].relevant(astNodes[j]);
             if (!relevant) {
                 relevantToAll = false;
                 break;
@@ -92,8 +92,8 @@ var buildRelevantMap = function(astNodes) {
     return map;
 };
 
-var buildButton = function(astNodes, applyChanges) {
-    var relevant = buildRelevantMap(astNodes);
+let buildButton = function(astNodes, applyChanges) {
+    const relevant = buildRelevantMap(astNodes);
     if (!relevant)
         return;
 
@@ -102,12 +102,12 @@ var buildButton = function(astNodes, applyChanges) {
         .data('relevant', relevant);
 };
 
-var updateButton = function($button, astNodes) {
-    var relevant = buildRelevantMap(astNodes);
+let updateButton = function($button, astNodes) {
+    const relevant = buildRelevantMap(astNodes);
     if (!relevant)
         return false;
 
-    var context = $button.data('context');
+    let context = $button.data('context');
     context.astNodes = astNodes;
     $button.data('relevant', relevant);
     return true;
