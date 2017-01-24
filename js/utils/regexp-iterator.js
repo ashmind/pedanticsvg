@@ -1,6 +1,6 @@
 export default function(string, regexp) {
-    var index = 0;
-    var nextResult;
+    let index = 0;
+    let nextResult;
 
     regexp = new RegExp('^(?:' + regexp.source + ')', regexp.ignoreCase ? 'i' : '');
     return {
@@ -8,7 +8,7 @@ export default function(string, regexp) {
             if (index >= string.length)
                 return { done: true };
 
-            var result;
+            let result;
             if (nextResult) {
                 result = nextResult;
                 nextResult = null;
@@ -25,8 +25,8 @@ export default function(string, regexp) {
 }
 
 function next(string, index, regexp) {
-    var errorStart = 0;
-    var match = regexp.exec(string.substring(index));
+    let errorStart = 0;
+    let match = regexp.exec(string.substring(index));
     if (!match) {
         errorStart = index;
         while (!match && index < string.length) {
@@ -34,7 +34,7 @@ function next(string, index, regexp) {
             match = regexp.exec(string.substring(index));
         }
 
-        var result = {
+        let result = {
             string: string.substring(errorStart, index)
         };
         if (match) {
