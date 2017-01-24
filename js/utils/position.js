@@ -14,7 +14,7 @@ function Position(line, column) {
         },
 
         advanceByString : function(string) {
-            var lines = string.split('\n');
+            const lines = string.split('\n');
             this.advance(lines.length - 1, lines[lines.length - 1].length);
         },
 
