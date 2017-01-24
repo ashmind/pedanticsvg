@@ -1,5 +1,5 @@
 function annotate(code, ast) {
-    var refs = { code: code, shift: 0 };
+    const refs = { code: code, shift: 0 };
     annotateRecursive(ast, refs, true);
     return refs.code;
 }
@@ -9,13 +9,13 @@ function annotateRecursive(astNode, refs, top) {
         return;
 
     if (astNode.type === 'tag') {
-        var attributeCount = astNode.attributes.length;
-        var position = attributeCount > 0
+        const attributeCount = astNode.attributes.length;
+        const position = attributeCount > 0
                      ? astNode.attributes[attributeCount-1].end
                      : astNode.nameEnd;
 
-        var offset = position.offset + refs.shift;
-        var newAttributes = '';
+        const offset = position.offset + refs.shift;
+        let newAttributes = '';
         if (top)
             newAttributes += ' xmlns:psvg="http://ashmind.github.io/pedanticsvg"';
         newAttributes += ' psvg:id="' + astNode.id + '"';
@@ -26,9 +26,9 @@ function annotateRecursive(astNode, refs, top) {
         refs.shift += newAttributes.length;
     }
 
-    var keepTop = astNode.type === 'root';
-    var children = astNode.children;
-    for (var i = 0; i < children.length; i++) {
+    const keepTop = astNode.type === 'root';
+    const children = astNode.children;
+    for (let i = 0; i < children.length; i++) {
         annotateRecursive(children[i], refs, top && keepTop);
     }
 }
