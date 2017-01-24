@@ -14,7 +14,7 @@ function appendCommand($location, command, invoke) {
 
         $element.change(function(e) {
             e.preventDefault();
-            let newState = invoke(command);
+            const newState = invoke(command);
             applyToggleState($element, command, newState);
         });
     }
@@ -37,7 +37,7 @@ export default function (locations, editor, preview) {
 
     for (let i = 0; i < commands.length; i++) {
         const command = commands[i];
-        let $location = locations[command.section];
+        const $location = locations[command.section];
         appendCommand($location, command, invoke);
     }
 }
