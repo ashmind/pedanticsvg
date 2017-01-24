@@ -4,12 +4,12 @@ import '/js/utils/jquery.svg.js';
 
 export default function(editor, preview) {
     // TODO: move to CSS
-    var highlightColor = '#daa520';
-    var enabled = settings('preview.tracing', true);
-    var traces = {};
-    var lastSelectionChange;
+    const highlightColor = '#daa520';
+    const enabled = settings('preview.tracing', true);
+    let traces = {};
+    let lastSelectionChange;
 
-    var tracers = {
+    const tracers = {
         tag: {
             trace: traceElement,
             untrace: untraceElement
@@ -33,8 +33,8 @@ export default function(editor, preview) {
         if (!lastSelectionChange)
             return;
 
-        var add = [];
-        var remove = [];
+        let add = [];
+        let remove = [];
         if (newValue) {
             add = lastSelectionChange.added;
         }
@@ -58,10 +58,10 @@ export default function(editor, preview) {
     function updateTrace($previewRoot, add, remove) {
         /* jshint shadow:true */
 
-        for (var i = 0; i < remove.length; i++) {
-            var id = remove[i].id;
-            var tracer = tracers[remove[i].astNode.type];
-            var trace = traces[id];
+        for (let i = 0; i < remove.length; i++) {
+            const id = remove[i].id;
+            const tracer = tracers[remove[i].astNode.type];
+            const trace = traces[id];
             if (!tracer || !trace)
                 continue;
 
@@ -69,9 +69,9 @@ export default function(editor, preview) {
             delete traces[id];
         }
 
-        for (var i = 0; i < add.length; i++) {
-            var astNode = add[i].astNode;
-            var tracer = tracers[astNode.type];
+        for (let i = 0; i < add.length; i++) {
+            const astNode = add[i].astNode;
+            const tracer = tracers[astNode.type];
             if (!tracer)
                 continue;
 
@@ -80,12 +80,12 @@ export default function(editor, preview) {
     }
 
     function traceElement($previewRoot, tag) {
-        var $element = linker.findByAstNode($previewRoot, tag);
+        const $element = linker.findByAstNode($previewRoot, tag);
         if ($element.length === 0)
             return;
 
-        var traceCss = getTraceCss($element);
-        var savedCss = {
+        const traceCss = getTraceCss($element);
+        const savedCss = {
             fill: $element[0].style.fill,
             stroke: $element[0].style.stroke
         };
@@ -102,15 +102,15 @@ export default function(editor, preview) {
     function tracePathSegment($previewRoot, segment) {
         //console.log('trace ', segment.stringify());
 
-        var parent = segment.parent;
+        const parent = segment.parent;
 
-        var $path = linker.findByAstNode($previewRoot, parent);
+        const $path = linker.findByAstNode($previewRoot, parent);
         if ($path.length === 0)
             return;
 
-        var segmentIndexInTrace;
-        var commonParentTraceKey = parent.id + '_segments';
-        var trace = traces[commonParentTraceKey];
+        let segmentIndexInTrace;
+        const commonParentTraceKey = parent.id + '_segments';
+        let trace = traces[commonParentTraceKey];
         if (!trace) {
             trace = {
                 extraKey: commonParentTraceKey,
@@ -124,7 +124,7 @@ export default function(editor, preview) {
         }
         else {
             // insert segment in in a location based on its order
-            var segments = trace.segments;
+            const segments = trace.segments;
             if (segments[0].index > segment.index) {
                 segments.unshift(segment);
             }
@@ -132,7 +132,7 @@ export default function(editor, preview) {
                 segments.push(segment);
             }
             else {
-                for (var i = 0; i < segments.length; i++) {
+                for (let i = 0; i < segments.length; i++) {
                     if (segments[i].index > segment.index) {
                         segments.splice(i, 0, segment);
                         break;
@@ -146,12 +146,12 @@ export default function(editor, preview) {
     }
 
     function untracePathSegment(traceAndSegment) {
-        var trace = traceAndSegment.trace;
-        var segment = traceAndSegment.segment;
-        var segments = trace.segments;
+        const trace = traceAndSegment.trace;
+        const segment = traceAndSegment.segment;
+        const segments = trace.segments;
 
         //console.log('untrace ', segment.stringify());
-        for (var i = 0; i < segments.length; i++) {
+        for (let i = 0; i < segments.length; i++) {
             if (segments[i] === segment) {
                 segments.splice(i, 1);
                 break;
@@ -168,9 +168,9 @@ export default function(editor, preview) {
     }
 
     function retracePathSegment(trace) {
-        var start = trace.segments[0].startPoint();
-        var d = 'M ' + start.x + ' ' + start.y;
-        for (var i = 0; i < trace.segments.length; i++) {
+        const start = trace.segments[0].startPoint();
+        let d = 'M ' + start.x + ' ' + start.y;
+        for (let i = 0; i < trace.segments.length; i++) {
             d += ' ' + trace.segments[i].toAbsolute().toSVG();
         }
 
@@ -178,8 +178,8 @@ export default function(editor, preview) {
     }
 
     function getTraceCss($element) {
-        var css = {};
-        var currentStyle = $element[0].ownerDocument.defaultView.getComputedStyle($element[0]);
+        let css = {};
+        let currentStyle = $element[0].ownerDocument.defaultView.getComputedStyle($element[0]);
         if (currentStyle.fill !== 'none')
             css.fill = highlightColor;
 
