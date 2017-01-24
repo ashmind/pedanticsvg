@@ -1,16 +1,16 @@
 /* jshint newcap:false, quotmark:false */
 
 export default function(object, names) {
-    var allHandlers = {};
+    let allHandlers = {};
 
-    var subscribe = [];
+    let subscribe = [];
     allHandlers.subscribe = subscribe;
-    for (var i = 0; i < names.length; i++) {
+    for (let i = 0; i < names.length; i++) {
         allHandlers[names[i]] = [];
     }
 
     object.on = function(name, handler) {
-        var handlers = allHandlers[name];
+        let handlers = allHandlers[name];
         if (!handlers)
             throw NoEvent(name);
 
@@ -19,11 +19,11 @@ export default function(object, names) {
     };
 
     object.off = function(name, handler) {
-        var handlers = allHandlers[name];
+        let handlers = allHandlers[name];
         if (!handlers)
             throw NoEvent(name);
 
-        for (var i = 0; i < handlers.length; i++) {
+        for (let i = 0; i < handlers.length; i++) {
             if (handlers[i] === handler) {
                 handlers.splice(i, 1);
                 i -= 1;
@@ -32,7 +32,7 @@ export default function(object, names) {
     };
 
     object.trigger = function(name, event) {
-        var handlers = allHandlers[name];
+        const handlers = allHandlers[name];
         if (!handlers)
             throw NoEvent(name);
 
@@ -43,7 +43,7 @@ export default function(object, names) {
 }
 
 function callAll(handlers, event) {
-    for (var i = 0; i < handlers.length; i++) {
+    for (let i = 0; i < handlers.length; i++) {
         handlers[i].call(undefined, event);
     }
 }
