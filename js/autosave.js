@@ -1,7 +1,7 @@
 export default function(editor) {
-    var codeKey = 'psvg.code';
+    const codeKey = 'psvg.code';
     (function load() {
-        var code = localStorage[codeKey];
+        const code = localStorage[codeKey];
         if (code)
             editor.code = code;
     })();
