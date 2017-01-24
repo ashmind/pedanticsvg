@@ -1,8 +1,8 @@
-var settingsKey = 'psvg.settings';
-var values;
+const settingsKey = 'psvg.settings';
+let values;
 
 (function load() {
-    var settingsString = localStorage[settingsKey];
+    const settingsString = localStorage[settingsKey];
     if (!settingsString)
         return;
 
@@ -16,10 +16,10 @@ var values;
 })();
 
 values = (typeof values === 'object') ? values : {};
-var settings = {};
+let settings = {};
 
 function createSetting(key, _default) {
-    var watchers = [];
+    let watchers = [];
     if (values[key] === undefined)
         values[key] = _default;
 
@@ -35,7 +35,7 @@ function createSetting(key, _default) {
                 return;
 
             values[key] = newValue;
-            for (var i = 0; i < watchers.length; i++) {
+            for (let i = 0; i < watchers.length; i++) {
                 watchers[i](newValue);
             }
             localStorage[settingsKey] = JSON.stringify(values);
@@ -46,7 +46,7 @@ function createSetting(key, _default) {
     };
 }
 export default function(key, _default) {
-    var setting = settings[key];
+    let setting = settings[key];
     if (!setting) {
         setting = createSetting(key, _default);
         settings[key] = setting;

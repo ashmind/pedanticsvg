@@ -3,7 +3,7 @@ export default function($target) {
     if (!window.FileReader)
         return;
 
-    var dragOverClass = 'drag-over';
+    const dragOverClass = 'drag-over';
 
     $(document).on('dragover', function(e) {
         $target.addClass(dragOverClass);
@@ -24,7 +24,7 @@ export default function($target) {
 }
 
 function handleDrop(file) {
-    var reader = new FileReader();
+    const reader = new FileReader();
     reader.onload = function(e) {
         console.log(e.target);
     };
