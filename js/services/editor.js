@@ -5,13 +5,13 @@ import parse from '../parsing/parse-svg.js';
 import refactorUI from './refactoring/ui-builder.js';
 
 export default function($editor) {
-    var code;
-    var ast;
-    var errors;
-    var getNodesInRanges;
-    var firstParse = true;
+    let code;
+    let ast;
+    let errors;
+    let getNodesInRanges;
+    let firstParse = true;
 
-    var service = setupEvents({}, [
+    let service = setupEvents({}, [
         'codechange',
         'astchange',
         'errorchange'
@@ -25,7 +25,7 @@ export default function($editor) {
             e.handler.call(undefined, ast);
     });
 
-    var cm = setupCodeMirror($editor[0]);
+    let cm = setupCodeMirror($editor[0]);
     cm.setOption('trackNodesInSelection', {
         getNodes: getNodesInSelection
     });
@@ -74,7 +74,7 @@ export default function($editor) {
                 return;
         }
 
-        var parsed = parse(code);
+        const parsed = parse(code);
         getNodesInRanges = parsed.getNodesInRanges;
         reportParseErrors(parsed.errors, updateLinting);
 
@@ -89,7 +89,7 @@ export default function($editor) {
         if (!updateLinting)
             return;
 
-        var cmErrors = errors.map(function(e) {
+        const cmErrors = errors.map(function(e) {
             return {
                 message: e.message,
                 from: toCMPosition(e),
@@ -106,17 +106,17 @@ export default function($editor) {
         if (!ast)
             return [];
 
-        var ranges = [];
-        for (var i = 0; i < selections.length; i++) {
+        let ranges = [];
+        for (let i = 0; i < selections.length; i++) {
             ranges.push({
                 start: fromCMPosition(selections[i].from()),
                 end: fromCMPosition(selections[i].to())
             });
         }
-        var astNodes = getNodesInRanges(ranges);
-        var mappedNodes = [];
-        for (var i = 0; i < astNodes.length; i++) {
-            var astNode = astNodes[i];
+        const astNodes = getNodesInRanges(ranges);
+        let mappedNodes = [];
+        for (let i = 0; i < astNodes.length; i++) {
+            const astNode = astNodes[i];
             mappedNodes.push({
                 id: astNode.id,
                 start: toCMPosition(astNode.start),
@@ -128,16 +128,16 @@ export default function($editor) {
     }
 
     function setupRefactorings() {
-        var activePoints = [];
+        let activePoints = [];
         cm.on('nodesInSelectionChanged', function(cm, e) {
             /* jshint shadow:true */
-            var newGroups = {};
-            var nodes = e.nodes;
+            let newGroups = {};
+            const nodes = e.nodes;
 
-            var newGroup;
-            var newGroupEndIndex;
-            for (var i = 0; i < nodes.length; i++) {
-                var astNode = nodes[i].astNode;
+            let newGroup;
+            let newGroupEndIndex;
+            for (let i = 0; i < nodes.length; i++) {
+                const astNode = nodes[i].astNode;
                 if (newGroup && astNode.index === newGroupEndIndex + 1) {
                     newGroup.push(astNode);
                 }
@@ -152,10 +152,10 @@ export default function($editor) {
             if (newGroup)
                 newGroups[newGroup[0].id] = newGroup;
 
-            for (var i = 0; i < activePoints.length; i++) {
-                var point = activePoints[i];
-                var keep = false;
-                var group = newGroups[point.startId];
+            for (let i = 0; i < activePoints.length; i++) {
+                const point = activePoints[i];
+                let keep = false;
+                const group = newGroups[point.startId];
                 if (group) {
                     keep = refactorUI.updateWidget(point.$widget, group);
                     delete newGroups[point.startId];
@@ -168,9 +168,9 @@ export default function($editor) {
                 }
             }
 
-            for (var id in newGroups) {
-                var group = newGroups[id];
-                var $widget = refactorUI.buildWidget(group, applyRefactoringChanges);
+            for (let id in newGroups) {
+                const group = newGroups[id];
+                const $widget = refactorUI.buildWidget(group, applyRefactoringChanges);
                 if (!$widget)
                     continue;
 
@@ -189,16 +189,16 @@ export default function($editor) {
         cm.operation(function() {
             /* jshint shadow:true */
 
-            for (var i = 0; i < changes.length; i++) {
-                var change = changes[i];
+            for (let i = 0; i < changes.length; i++) {
+                let change = changes[i];
                 change.startMarker = cm.setBookmark(toCMPosition(change.start));
                 change.endMarker = cm.setBookmark(toCMPosition(change.end));
             }
 
-            for (var i = 0; i < changes.length; i++) {
-                var change = changes[i];
-                var from = change.startMarker.find();
-                var to = change.endMarker.find();
+            for (let i = 0; i < changes.length; i++) {
+                let change = changes[i];
+                const from = change.startMarker.find();
+                const to = change.endMarker.find();
                 cm.replaceRange(change.text, from, to);
 
                 change.startMarker.clear();
