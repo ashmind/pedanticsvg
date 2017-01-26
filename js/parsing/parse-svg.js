@@ -14,7 +14,7 @@ import parsePath from './parse-path.js';
         let errors = [];
 
         let tagExtra = [];
-        let onpath = function(a) {
+        const onpath = function(a) {
             const valueStart = getPosition(a, 'valueStart');
             tagExtra.push(function(tag) {
                 const parsed = parsePath(a.value, { position: valueStart, parent: tag });
@@ -63,7 +63,7 @@ import parsePath from './parse-path.js';
             stack.pop();
         };
 
-        let pushChild = function(child) {
+        const pushChild = function(child) {
             const parent = topOf(stack);
             if (typeof child !== 'string')
                 child.index = parent.children.length;

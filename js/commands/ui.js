@@ -31,7 +31,7 @@ function applyToggleState($element, command, newState) {
 }
 
 export default function (locations, editor, preview) {
-    let invoke = function(command) {
+    const invoke = function(command) {
         return command.action(editor, preview);
     };
 

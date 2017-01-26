@@ -16,7 +16,7 @@ for (let i = 0; i < allRefactorings.length; i++) {
     commands.push($command);
 }
 
-let hideMenuIfActive = function() {
+const hideMenuIfActive = function() {
     if (!active)
         return;
 
