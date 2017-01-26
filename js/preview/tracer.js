@@ -58,9 +58,9 @@ export default function(editor, preview) {
     function updateTrace($previewRoot, add, remove) {
         /* jshint shadow:true */
 
-        for (let i = 0; i < remove.length; i++) {
-            const id = remove[i].id;
-            const tracer = tracers[remove[i].astNode.type];
+        for (const item of remove) {
+            const id = item.id;
+            const tracer = tracers[item.astNode.type];
             const trace = traces[id];
             if (!tracer || !trace)
                 continue;
@@ -69,13 +69,13 @@ export default function(editor, preview) {
             delete traces[id];
         }
 
-        for (let i = 0; i < add.length; i++) {
-            const astNode = add[i].astNode;
+        for (const item of add) {
+            const astNode = item.astNode;
             const tracer = tracers[astNode.type];
             if (!tracer)
                 continue;
 
-            traces[add[i].id] = tracer.trace($previewRoot, astNode);
+            traces[item.id] = tracer.trace($previewRoot, astNode);
         }
     }
 

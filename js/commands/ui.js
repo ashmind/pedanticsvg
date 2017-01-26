@@ -35,9 +35,8 @@ export default function (locations, editor, preview) {
         return command.action(editor, preview);
     };
 
-    for (let i = 0; i < commands.length; i++) {
-        const command = commands[i];
-        const $location = locations[command.section];
+    for (let command of commands) {
+        let $location = locations[command.section];
         appendCommand($location, command, invoke);
     }
 }
