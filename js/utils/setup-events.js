@@ -5,8 +5,8 @@ export default function(object, names) {
 
     let subscribe = [];
     allHandlers.subscribe = subscribe;
-    for (let i = 0; i < names.length; i++) {
-        allHandlers[names[i]] = [];
+    for (const name of names) {
+        allHandlers[name] = [];
     }
 
     object.on = function(name, handler) {
@@ -43,8 +43,8 @@ export default function(object, names) {
 }
 
 function callAll(handlers, event) {
-    for (let i = 0; i < handlers.length; i++) {
-        handlers[i].call(undefined, event);
+    for (const handler of handlers) {
+        handler.call(undefined, event);
     }
 }
 

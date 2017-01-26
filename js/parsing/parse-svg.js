@@ -52,8 +52,8 @@ import parsePath from './parse-path.js';
             flat.push(tag);
             stack.push(tag);
 
-            for (let i = 0; i < tagExtra.length; i++) {
-                tagExtra[i](tag);
+            for (const item of tagExtra) {
+                item(tag);
             }
             tagExtra = [];
         };
@@ -135,9 +135,7 @@ import parsePath from './parse-path.js';
 
         let nodes = [];
         let firstInRangeCandidate;
-        for (let i = 0; i < flat.length; i++) {
-            let node = flat[i];
-
+        for (const node of flat) {
             if (!inRange) {
                 const startToStart = compare(node.start, range.start);
                 if (startToStart === 'before') {

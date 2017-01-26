@@ -177,8 +177,8 @@ function constructorToFunction(constructor) {
 
 function arrayToSVG(nodes) {
     let results = [];
-    for (let i = 0; i < nodes.length; i++) {
-        const svg = (typeof nodes[i] !== 'string') ? nodes[i].toSVG() : nodes[i];
+    for (const node of nodes) {
+        const svg = (typeof node !== 'string') ? node.toSVG() : node;
         results.push(svg);
     }
     return results.join('');
@@ -186,8 +186,7 @@ function arrayToSVG(nodes) {
 
 function makeAllPropertiesReadOnly(object) {
     const keys = Object.getOwnPropertyNames(object);
-    for (let i = 0; i < keys.length; i++) {
-        const key = keys[i];
+    for (const key of keys) {
         const descriptor = Object.getOwnPropertyDescriptor(object, key);
         if (!descriptor || descriptor.get)
             continue;

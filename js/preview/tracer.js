@@ -170,8 +170,8 @@ export default function(editor, preview) {
     function retracePathSegment(trace) {
         const start = trace.segments[0].startPoint();
         let d = 'M ' + start.x + ' ' + start.y;
-        for (let i = 0; i < trace.segments.length; i++) {
-            d += ' ' + trace.segments[i].toAbsolute().toSVG();
+        for (const item of trace.segments) {
+            d += ' ' + item.toAbsolute().toSVG();
         }
 
         trace.$path.attr('d', d);

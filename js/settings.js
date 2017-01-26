@@ -35,8 +35,8 @@ function createSetting(key, _default) {
                 return;
 
             values[key] = newValue;
-            for (let i = 0; i < watchers.length; i++) {
-                watchers[i](newValue);
+            for (let watcher of watchers) {
+                watcher(newValue);
             }
             localStorage[settingsKey] = JSON.stringify(values);
         },

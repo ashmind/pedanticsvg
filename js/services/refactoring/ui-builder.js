@@ -8,10 +8,10 @@ const $menu = $('<ol class="refactor-menu" hidden>')
     .appendTo($body);
 
 let commands = [];
-for (let i = 0; i < allRefactorings.length; i++) {
+for (const item of allRefactorings) {
     const $command = $('<li class="refactor-command">')
-        .data('refactoring', allRefactorings[i])
-        .text(allRefactorings[i].display)
+        .data('refactoring', item)
+        .text(item.display)
         .appendTo($menu);
     commands.push($command);
 }
@@ -74,8 +74,8 @@ let buildRelevantMap = function(astNodes) {
     let map = new Array(commands.length);
     for (let i = 0; i < commands.length; i++) {
         let relevantToAll = true;
-        for (let j = 0; j < astNodes.length; j++) {
-            const relevant = allRefactorings[i].relevant(astNodes[j]);
+        for (const item of astNodes) {
+            const relevant = allRefactorings[i].relevant(item);
             if (!relevant) {
                 relevantToAll = false;
                 break;

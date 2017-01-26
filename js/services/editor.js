@@ -107,16 +107,15 @@ export default function($editor) {
             return [];
 
         let ranges = [];
-        for (let i = 0; i < selections.length; i++) {
+        for (const item of selections) {
             ranges.push({
-                start: fromCMPosition(selections[i].from()),
-                end: fromCMPosition(selections[i].to())
+                start: fromCMPosition(item.from()),
+                end: fromCMPosition(item.to())
             });
         }
         const astNodes = getNodesInRanges(ranges);
         let mappedNodes = [];
-        for (let i = 0; i < astNodes.length; i++) {
-            const astNode = astNodes[i];
+        for (const astNode of astNodes) {
             mappedNodes.push({
                 id: astNode.id,
                 start: toCMPosition(astNode.start),
@@ -136,8 +135,8 @@ export default function($editor) {
 
             let newGroup;
             let newGroupEndIndex;
-            for (let i = 0; i < nodes.length; i++) {
-                const astNode = nodes[i].astNode;
+            for (const node of nodes) { 
+                const astNode = node.astNode;
                 if (newGroup && astNode.index === newGroupEndIndex + 1) {
                     newGroup.push(astNode);
                 }
@@ -152,8 +151,7 @@ export default function($editor) {
             if (newGroup)
                 newGroups[newGroup[0].id] = newGroup;
 
-            for (let i = 0; i < activePoints.length; i++) {
-                const point = activePoints[i];
+            for (const point of activePoints) {
                 let keep = false;
                 const group = newGroups[point.startId];
                 if (group) {
@@ -189,14 +187,12 @@ export default function($editor) {
         cm.operation(function() {
             /* jshint shadow:true */
 
-            for (let i = 0; i < changes.length; i++) {
-                let change = changes[i];
+            for (const change of changes) {
                 change.startMarker = cm.setBookmark(toCMPosition(change.start));
                 change.endMarker = cm.setBookmark(toCMPosition(change.end));
             }
 
-            for (let i = 0; i < changes.length; i++) {
-                let change = changes[i];
+            for (const change of changes) {
                 const from = change.startMarker.find();
                 const to = change.endMarker.find();
                 cm.replaceRange(change.text, from, to);

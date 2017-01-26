@@ -28,8 +28,8 @@ function annotateRecursive(astNode, refs, top) {
 
     const keepTop = astNode.type === 'root';
     const children = astNode.children;
-    for (let i = 0; i < children.length; i++) {
-        annotateRecursive(children[i], refs, top && keepTop);
+    for (const child of children) {
+        annotateRecursive(child, refs, top && keepTop);
     }
 }
 

@@ -15,8 +15,8 @@ function pathToRelativeOrAbsolute(type) {
         display: 'Convert <path> to ' + type,
         refactor: function(paths) {
             let changes = [];
-            for (let i = 0; i < paths.length; i++) {
-                changes.push.apply(changes, refactorSegmentsToRelativeOrAbsolute(paths[i].segments, convert));
+            for (const path of paths) {
+                changes.push.apply(changes, refactorSegmentsToRelativeOrAbsolute(path.segments, convert));
             }
             return changes;
         },

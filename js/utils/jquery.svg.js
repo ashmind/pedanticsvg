@@ -2,15 +2,15 @@ import $ from 'jquery';
 
     $.extend($.fn, {
         svgAddClass: function(className) {
-            for (let i = 0; i < this.length; i++) {
-                this[i].classList.add(className);
+            for (const item of this) {
+                item.classList.add(className);
             }
             return this;
         },
 
         svgRemoveClass: function(className) {
-            for (let i = 0; i < this.length; i++) {
-                this[i].classList.remove(className);
+            for (const item of this) {
+                item.classList.remove(className);
             }
             return this;
         }
