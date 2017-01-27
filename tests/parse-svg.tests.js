@@ -1,8 +1,7 @@
 /* globals describe:false, it:false, expect:false */
+import parse from '/js/parsing/parse-svg.js';
 
-describe('parsing/parse-svg', function(parse) {
-    'use strict';
-
+describe('parsing/parse-svg', function() {
     it('can parse a simple SVG', function() {
         var original = '<svg xmlns="http://www.w3.org/2000/svg" width="10px" height="10px" viewBox="0 0 10 10"><metadata>dog</metadata><g><path d="M2 2 l3 3z"/></g></svg>';
         var ast = parse(original).root;

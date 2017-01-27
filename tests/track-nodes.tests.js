@@ -1,8 +1,9 @@
 /* globals describe:false, it:false, expect:false */
 
-describe('codemirror/track-nodes', ['codemirror'], function(_, CodeMirrorFake) {
-    'use strict';
+import CodeMirrorFake from './utils/codemirror-fake.js';
+import '/js/codemirror/track-nodes.js';
 
+describe('codemirror/track-nodes', function() {
     [{
         initial:  [1,3],
         updated:  [1,2,5],

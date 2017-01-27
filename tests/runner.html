@@ -3,39 +3,28 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Jasmine Spec Runner v2.0.1</title>
-    <link rel="shortcut icon" type="image/png" href="external/jasmine/jasmine_favicon.png">
-    <link rel="stylesheet" type="text/css" href="external/jasmine/jasmine.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jasmine/2.4.1/jasmine.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/2.4.1/jasmine.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/2.4.1/jasmine-html.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/2.4.1/boot.js"></script>
 
-    <!-- include source files here... -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.19.41/system.js"></script>
-    
-        <script>
+    <script>
       SystemJS.config({
-        baseURL: '../../js',
+        baseURL: '/js',
         map: {
           'plugin-babel': '/external/plugin-babel.js',
           'systemjs-babel-build': '/external/systemjs-babel-browser.js',
           'FileSaver': '/external/FileSaver.js',
           'sax-customized': '/external/sax-customized.js',
           'jquery': 'https://code.jquery.com/jquery-2.0.3.min.js',
-          'jquery-ui': 'https://code.jquery.com/ui/1.11.1/jquery-ui.min.js',
-          'codemirror': 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/4.2.0',
+          'codemirror': './utils/codemirror-fake.js',
           'string_decoder': '',
           'stream': ''
         },
-        packages: {
-          codemirror: {
-            main: 'codemirror.js',
-            map: {
-              './lib/codemirror':  './codemirror.js',
-              './addon/fold/xml-fold.js': './addon/fold/xml-fold.js'
-            }
-          }
-        },
         transpiler: 'plugin-babel'
       });
-      // loads /js/main.js
-      SystemJS.import('../../js/main.js');
+      SystemJS.import('./tests.main.js');
     </script>
   </head>
   <body>

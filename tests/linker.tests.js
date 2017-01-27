@@ -1,8 +1,8 @@
 /* globals describe:false, it:false, expect:false */
+import parse from '/js/parsing/parse-svg.js';
+import linker from '/js/preview/linker.js';
 
-describe('preview/linker', ['parsing/parse-svg'], function(linker, parse) {
-    'use strict';
-
+describe('preview/linker', function() {
     it('produces correct annotations', function() {
         var code = '<svg><g><path d="M10 10L100 50" /></g></svg>';
         var ast = parse(code).root;

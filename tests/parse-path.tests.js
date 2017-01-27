@@ -1,8 +1,7 @@
 /* globals describe:false, it:false, expect:false */
+import parse from 'parsing/parse-path.js';
 
-describe('parsing/parse-path', function(parse) {
-    'use strict';
-
+describe('parsing/parse-path', function() {
     [{
         path:     'M 100 100 L 300 100 L 200 300 z',
         segments: [ 'M 100 100', 'L 300 100', 'L 200 300', 'z' ]

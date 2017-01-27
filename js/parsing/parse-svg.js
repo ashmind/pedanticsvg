@@ -135,7 +135,8 @@ import parsePath from './parse-path.js';
 
         let nodes = [];
         let firstInRangeCandidate;
-        for (const node of flat) {
+        for (let i = 0; i < flat.length; i++) {
+            const node = flat[i];
             if (!inRange) {
                 const startToStart = compare(node.start, range.start);
                 if (startToStart === 'before') {
