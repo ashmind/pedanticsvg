@@ -16,10 +16,10 @@ let values;
 })();
 
 values = (typeof values === 'object') ? values : {};
-let settings = {};
+const settings = {};
 
 function createSetting(key, _default) {
-    let watchers = [];
+    const watchers = [];
     if (values[key] === undefined)
         values[key] = _default;
 
@@ -35,7 +35,7 @@ function createSetting(key, _default) {
                 return;
 
             values[key] = newValue;
-            for (let watcher of watchers) {
+            for (const watcher of watchers) {
                 watcher(newValue);
             }
             localStorage[settingsKey] = JSON.stringify(values);

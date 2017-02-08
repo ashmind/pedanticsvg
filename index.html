@@ -139,17 +139,20 @@
       SystemJS.config({
         baseURL: './js',
         map: {
-          'plugin-babel': '/external/plugin-babel.js',
-          'systemjs-babel-build': '/external/systemjs-babel-browser.js',
-          'FileSaver': '/external/FileSaver.js',
-          'sax-customized': '/external/sax-customized.js',
+          'plugin-babel': './external/plugin-babel.js',
+          'systemjs-babel-build': './external/systemjs-babel-browser.js',
+          'FileSaver': './external/FileSaver.js',
+          'sax-customized': './external/sax-customized.js',
           'jquery': 'https://code.jquery.com/jquery-2.0.3.min.js',
           'jquery-ui': 'https://code.jquery.com/ui/1.11.1/jquery-ui.min.js',
-          'codemirror': 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/4.2.0',
-          'string_decoder': '',
-          'stream': ''
+          'codemirror': 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/4.2.0'
         },
         packages: {
+          './external': {
+            map: {
+              '../core-js/array/from': '../js/utils/array-from-stub.js'
+            }
+          },
           codemirror: {
             main: 'codemirror.js',
             map: {
@@ -160,8 +163,7 @@
         },
         transpiler: 'plugin-babel'
       });
-      // loads /js/main.js
-      SystemJS.import('/js/main.js');
+      SystemJS.import('main.js');
     </script>
   </body>
 </html>

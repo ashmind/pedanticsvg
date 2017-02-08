@@ -1,12 +1,12 @@
-import settings from '/js/settings.js';
+import settings from '../settings.js';
 import linker from './linker.js';
-import '/js/utils/jquery.svg.js';
+import '../utils/jquery.svg.js';
 
-export default function(editor, preview) {
+export default (editor, preview) => {
     // TODO: move to CSS
     const highlightColor = '#daa520';
     const enabled = settings('preview.tracing', true);
-    let traces = {};
+    const traces = {};
     let lastSelectionChange;
 
     const tracers = {
@@ -20,8 +20,8 @@ export default function(editor, preview) {
         }
     };
 
-    editor.codeMirror.on('nodesInSelectionChanged', function(cm, nodeChange) {
-        getPreviewRoot().then(function ($previewRoot) {
+    editor.codeMirror.on('nodesInSelectionChanged', (cm, nodeChange) => {
+        getPreviewRoot().then($previewRoot => {
             if (enabled.value)
                 updateTrace($previewRoot, nodeChange.added, nodeChange.removed);
 
@@ -29,7 +29,7 @@ export default function(editor, preview) {
         });
     });
 
-    enabled.watch(function(newValue) {
+    enabled.watch(newValue => {
         if (!lastSelectionChange)
             return;
 
@@ -43,21 +43,19 @@ export default function(editor, preview) {
             remove = lastSelectionChange.added;
         }
 
-        getPreviewRoot().then(function($previewRoot) {
-            updateTrace($previewRoot, add, remove);
-        });
+        getPreviewRoot().then(
+            $previewRoot => updateTrace($previewRoot, add, remove)
+        );
     });
 
     function getPreviewRoot() {
-        return preview.getRootElement().catch(function(e) {
+        return preview.getRootElement().catch(e => {
             if (window.console && window.console.error)
                 window.console.error(e);
         });
     }
 
     function updateTrace($previewRoot, add, remove) {
-        /* jshint shadow:true */
-
         for (const item of remove) {
             const id = item.id;
             const tracer = tracers[item.astNode.type];
@@ -82,7 +80,7 @@ export default function(editor, preview) {
     function traceElement($previewRoot, tag) {
         const $element = linker.findByAstNode($previewRoot, tag);
         if ($element.length === 0)
-            return;
+            return null;
 
         const traceCss = getTraceCss($element);
         const savedCss = {
@@ -106,17 +104,15 @@ export default function(editor, preview) {
 
         const $path = linker.findByAstNode($previewRoot, parent);
         if ($path.length === 0)
-            return;
+            return null;
 
-        let segmentIndexInTrace;
-        const commonParentTraceKey = parent.id + '_segments';
+        const commonParentTraceKey = `${parent.id}_segments`;
         let trace = traces[commonParentTraceKey];
         if (!trace) {
             trace = {
                 extraKey: commonParentTraceKey,
                 segments: [segment]
             };
-            segmentIndexInTrace = 0;
             traces[commonParentTraceKey] = trace;
             trace.$path = $path.clone()
                                .css(getTraceCss($path))
@@ -142,7 +138,7 @@ export default function(editor, preview) {
         }
 
         retracePathSegment(trace);
-        return { trace: trace, segment: segment };
+        return { trace, segment };
     }
 
     function untracePathSegment(traceAndSegment) {
@@ -169,17 +165,17 @@ export default function(editor, preview) {
 
     function retracePathSegment(trace) {
         const start = trace.segments[0].startPoint();
-        let d = 'M ' + start.x + ' ' + start.y;
+        let d = `M ${start.x} ${start.y}`;
         for (const item of trace.segments) {
-            d += ' ' + item.toAbsolute().toSVG();
+            d += ` ${item.toAbsolute().toSVG()}`;
         }
 
         trace.$path.attr('d', d);
     }
 
     function getTraceCss($element) {
-        let css = {};
-        let currentStyle = $element[0].ownerDocument.defaultView.getComputedStyle($element[0]);
+        const css = {};
+        const currentStyle = $element[0].ownerDocument.defaultView.getComputedStyle($element[0]);
         if (currentStyle.fill !== 'none')
             css.fill = highlightColor;
 
@@ -193,4 +189,4 @@ export default function(editor, preview) {
 
         return css;
     }
-}
+};

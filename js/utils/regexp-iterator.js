@@ -1,8 +1,9 @@
-export default function(string, regexp) {
+// TODO: rewrite to yield
+export default (string, regexp) => {
     let index = 0;
     let nextResult;
 
-    regexp = new RegExp('^(?:' + regexp.source + ')', regexp.ignoreCase ? 'i' : '');
+    regexp = new RegExp(`^(?:${regexp.source})`, regexp.ignoreCase ? 'i' : '');
     return {
         next: function() {
             if (index >= string.length)
@@ -22,7 +23,7 @@ export default function(string, regexp) {
             return { value: result, done: false };
         }
     };
-}
+};
 
 function next(string, index, regexp) {
     let errorStart = 0;
@@ -34,13 +35,13 @@ function next(string, index, regexp) {
             match = regexp.exec(string.substring(index));
         }
 
-        let result = {
+        const result = {
             string: string.substring(errorStart, index)
         };
         if (match) {
             result._next = {
                 string: match[0],
-                match: match
+                match
             };
         }
 
@@ -49,6 +50,6 @@ function next(string, index, regexp) {
 
     return {
         string: match[0],
-        match: match
+        match
     };
 }

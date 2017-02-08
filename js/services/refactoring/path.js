@@ -5,18 +5,16 @@ const refactorings = [
     segmentToRelativeOrAbsolute('relative')
 ];
 
-
-
 function pathToRelativeOrAbsolute(type) {
     const convert = (type === 'absolute') ? 'toAbsolute' : 'toRelative';
     const convertibleIsAbsolute = (type === 'relative');
 
     return {
-        display: 'Convert <path> to ' + type,
+        display: `Convert <path> to ${type}`,
         refactor: function(paths) {
-            let changes = [];
+            const changes = [];
             for (const path of paths) {
-                changes.push.apply(changes, refactorSegmentsToRelativeOrAbsolute(path.segments, convert));
+                changes.push(...refactorSegmentsToRelativeOrAbsolute(path.segments, convert));
             }
             return changes;
         },
@@ -40,7 +38,7 @@ function segmentToRelativeOrAbsolute(type) {
     const convertibleIsAbsolute = (type === 'relative');
 
     return {
-        display: 'Convert to ' + type,
+        display: `Convert to ${type}`,
         refactor: function(segments) {
             return refactorSegmentsToRelativeOrAbsolute(segments, convert);
         },
@@ -56,7 +54,7 @@ function segmentToRelativeOrAbsolute(type) {
 function refactorSegmentsToRelativeOrAbsolute(segments, convert) {
     const first = segments[0];
     const firstSVG = (isFirstMove(first) ? first : first[convert]()).toSVG();
-    let changes = [rewrite(first, firstSVG)];
+    const changes = [rewrite(first, firstSVG)];
 
     for (let i = 1; i < segments.length; i++) {
         const segment = segments[i];

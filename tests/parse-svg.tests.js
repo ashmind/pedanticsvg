@@ -1,5 +1,4 @@
-/* globals describe:false, it:false, expect:false */
-import parse from '/js/parsing/parse-svg.js';
+import parse from '../js/parsing/parse-svg.js';
 
 describe('parsing/parse-svg', () => {
     it('can parse a simple SVG', () => {
@@ -65,32 +64,30 @@ describe('parsing/parse-svg', () => {
     });
 
     function toTestSVG(astNode) {
-        /* jshint shadow:true */
-
         if (typeof(astNode) === 'string')
             return astNode;
 
         if (astNode.type === 'root') {
             let result = '';
-            for (let child of astNode.children) {
+            for (const child of astNode.children) {
                 result += toTestSVG(child);
             }
             return result;
         }
 
         if (astNode.type === 'tag') {
-            let result = '<' + astNode.name;
+            let result = `<${astNode.name}`;
             const attributes = astNode.attributes;
-            for (let i of attributes) {
-                result += ' ' + i.name + '="' + i.value + '"';
+            for (const i of attributes) {
+                result += ` ${i.name}="${i.value}"`;
             }
 
             if (astNode.children.length > 0) {
                 result += '>';
-                for (let i of astNode.children) {
+                for (const i of astNode.children) {
                     result += toTestSVG(i);
                 }
-                result += '</' + astNode.name + '>';
+                result += `</${astNode.name}>`;
             }
             else {
                 result += '/>';
@@ -98,7 +95,7 @@ describe('parsing/parse-svg', () => {
             return result;
         }
 
-        throw new Error('Unknown AST node: ' + astNode.type);
+        throw new Error(`Unknown AST node: ${astNode.type}`);
     }
 
     function testFindsNodesByRange(code, ranges, expected) {
@@ -109,6 +106,6 @@ describe('parsing/parse-svg', () => {
     }
 
     function at(line, column) {
-        return { line: line, column: column };
+        return { line, column };
     }
 });

@@ -1,5 +1,7 @@
 let id = 1;
 
+// TODO: Rewrite to classes 
+
 function SvgRoot() {
     this.type = 'root';
     this.children = [];
@@ -13,7 +15,7 @@ SvgRoot.prototype = {
 makeAllPropertiesReadOnly(SvgRoot.prototype);
 
 function SvgTag(name, attributes, children) {
-    this.id = id++;
+    this.id = id++; // eslint-disable-line no-plusplus
     this.type = 'tag';
     this.name = name;
     this.attributes = attributes || [];
@@ -28,7 +30,7 @@ SvgTag.prototype = {
 makeAllPropertiesReadOnly(SvgTag.prototype);
 
 function SvgPathSegment(command, coords, separators, _cache) {
-    this.id = id++;
+    this.id = id++; // eslint-disable-line no-plusplus
     this.type = 'path-segment';
     this.command = command;
     this.coords = coords;
@@ -43,7 +45,6 @@ SvgPathSegment.prototype = {
     },
 
     startPoint: function() {
-        /* jshint shadow:true */
         if (this._cache.startPoint)
             return this._cache.startPoint;
 
@@ -80,13 +81,12 @@ SvgPathSegment.prototype = {
         x = x || 0;
         y = y || 0;
 
-        const startPoint = Object.freeze({ x: x, y: y });
+        const startPoint = Object.freeze({ x, y });
         this._cache.startPoint = startPoint;
         return startPoint;
     },
 
     toRelative: function() {
-        /* jshint newcap:false */
         if (this._cache.relative)
             return this._cache.relative;
 
@@ -102,7 +102,6 @@ SvgPathSegment.prototype = {
     },
 
     toAbsolute: function() {
-        /* jshint newcap:false */
         if (this._cache.absolute)
             return this._cache.absolute;
 
@@ -120,8 +119,8 @@ SvgPathSegment.prototype = {
     _addOrSubtractFromStartPoint : function(change) {
         const start = this.startPoint();
         const coords = this.coords;
-        let newCoords = {};
-        for (let key in coords) {
+        const newCoords = {};
+        for (const key in coords) {
             if (!/^[xy]\d?$/.test(key)) {
                 newCoords[key] = coords[key];
                 continue;
@@ -137,7 +136,7 @@ SvgPathSegment.prototype = {
     toSVG: function() {
         let string = this.command;
         let separatorIndex = 0;
-        for (let key in this.coords) {
+        for (const key in this.coords) {
             const coord = this.coords[key];
             let separator = this.separators[separatorIndex];
             if (separator === '' && /^\d/.test(coord) && /\d$/.test(string))
@@ -153,9 +152,9 @@ makeAllPropertiesReadOnly(SvgPathSegment.prototype);
 
 function SvgOther(type, raw) {
     const object = {
-        id: id++,
-        type: type,
-        toSVG: function() { return raw; }
+        id: id++, // eslint-disable-line no-plusplus
+        type,
+        toSVG: () => raw
     };
     makeAllPropertiesReadOnly(object);
     return object;
@@ -164,7 +163,7 @@ function SvgOther(type, raw) {
 function constructorToFunction(constructor) {
     return function() {
         const instance = Object.create(constructor.prototype);
-        constructor.apply(instance, arguments);
+        constructor.apply(instance, arguments); // eslint-disable-line prefer-rest-params
         Object.defineProperty(instance, 'constructor', {
             writable: false,
             configurable: false,
@@ -176,7 +175,7 @@ function constructorToFunction(constructor) {
 }
 
 function arrayToSVG(nodes) {
-    let results = [];
+    const results = [];
     for (const node of nodes) {
         const svg = (typeof node !== 'string') ? node.toSVG() : node;
         results.push(svg);
@@ -197,8 +196,8 @@ function makeAllPropertiesReadOnly(object) {
 }
 
 export default {
-        root: constructorToFunction(SvgRoot),
-        tag: constructorToFunction(SvgTag),
-        pathSegment: constructorToFunction(SvgPathSegment),
-        other: SvgOther
+    root: constructorToFunction(SvgRoot),
+    tag: constructorToFunction(SvgTag),
+    pathSegment: constructorToFunction(SvgPathSegment),
+    other: SvgOther
 };

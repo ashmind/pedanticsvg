@@ -2,7 +2,7 @@ import $ from 'jquery';
 import linker from './linker.js';
 import 'jquery-ui';
     
-export default function($preview) {
+export default $preview => {
     const SVG_MEDIA_TYPE = 'image/svg+xml';
 
     const $template = $preview.find('template');
@@ -23,17 +23,13 @@ export default function($preview) {
 
     let manualSizeSet = false;
 
-    let setupPromise = featureDetect().then(
-        function() {
-            setup();
-        },
-        function() {
-            notSupported();
-        }
+    const setupPromise = featureDetect().then(
+        () => setup(),
+        () => notSupported()
     );
 
     function featureDetect() {
-        return new Promise(function(resolve, reject) {
+        return new Promise((resolve, reject) => {
             $iframe[0].onload = function() {
                 const contentType = $iframe[0].contentDocument.contentType || $iframe[0].contentDocument.mimeType;
                 if (contentType !== SVG_MEDIA_TYPE) {
@@ -75,8 +71,8 @@ export default function($preview) {
             const $root = getRootElementImmediate();
             if ($root.find('parsererror')) { // something failed?
                 const stylesheetURL = new URL('css/preview-errors.css', document.baseURI);
-                const $link = $('<link rel="stylesheet" href="' + stylesheetURL + '">');
-                $link[0].onload = function() { done(); };
+                const $link = $(`<link rel="stylesheet" href="${stylesheetURL}">`);
+                $link[0].onload = () => done();
                 $root.find('head,body').andSelf().eq(0).prepend($link);
                 return;
             }
@@ -84,22 +80,17 @@ export default function($preview) {
             done();
         };
 
-        $(document).mousedown(function() {
-            $iframeFix.show();
-        }).mouseup(function() {
-            $iframeFix.hide();
-        });
+        $(document)
+            .mousedown(() => $iframeFix.show())
+            .mouseup(() => $iframeFix.hide());
 
-        $(window).resize(function() {
-            autosize();
-        });
-
+        $(window).resize(() => autosize());
         $wrapper.resizable({ handles: 'all' })
                 .on('resize', manualResize);
     }
 
     function render(svg, ast) {
-        setupPromise.then(function() {
+        setupPromise.then(() => {
             setLoadPromise();
 
             svg = linker.annotate(svg, ast);
@@ -122,9 +113,7 @@ export default function($preview) {
         if (!loadPromise)
             setLoadPromise();
 
-        return loadPromise.then(function() {
-            return getRootElementImmediate();
-        });
+        return loadPromise.then(() => getRootElementImmediate());
     }
 
     function getRootElementImmediate() {
@@ -132,13 +121,13 @@ export default function($preview) {
     }
 
     function setLoadPromise() {
-        loadPromise = new Promise(function(resolve, reject) {
-            loadControl = { resolve: resolve, reject: reject };
+        loadPromise = new Promise((resolve, reject) => {
+            loadControl = { resolve, reject };
         });
     }
 
     $sizeMode.click(function() {
-        manualSizeSet = this.checked;
+        manualSizeSet = this.checked; // eslint-disable-line no-invalid-this
         $wrapper.toggleClass('manual-size', manualSizeSet);
         if (!manualSizeSet)
             autosize();
@@ -148,7 +137,7 @@ export default function($preview) {
         if (manualSizeSet)
             return;
 
-        let previewSize = getSize($preview);
+        const previewSize = getSize($preview);
         let auto;
         if ($iframe) {
             $wrapper.width(previewSize.width).height(previewSize.height);
@@ -193,11 +182,11 @@ export default function($preview) {
     }
 
     function showSize(width, height) {
-        $sizeText.text(width + ' × ' + height);
+        $sizeText.text(`${width} × ${height}`);
     }
 
     return {
-        render: render,
-        getRootElement: getRootElement
+        render,
+        getRootElement
     };
-}
+};

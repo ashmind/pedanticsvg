@@ -7,7 +7,7 @@ let active;
 const $menu = $('<ol class="refactor-menu" hidden>')
     .appendTo($body);
 
-let commands = [];
+const commands = [];
 for (const item of allRefactorings) {
     const $command = $('<li class="refactor-command">')
         .data('refactoring', item)
@@ -25,7 +25,7 @@ const hideMenuIfActive = function() {
     active = null;
 };
 
-$body.on('mousedown', function(e) {
+$body.on('mousedown', e => {
     if ($(e.target).is('.refactor-command, .refactor-button'))
         return;
 
@@ -33,6 +33,7 @@ $body.on('mousedown', function(e) {
 });
 
 $(document).on('click', '.refactor-button', function() {
+    /* eslint-disable no-invalid-this */
     if (active && active.$button[0] === this)
         return;
 
@@ -52,26 +53,26 @@ $(document).on('click', '.refactor-button', function() {
         top: buttonOffset.top + $button.height()
     }).removeAttr('hidden');
 
-    active = {
-        context: context,
-        $button: $button
-    };
+    active = { context, $button };
+    /* eslint-enable no-invalid-this */
 });
 
 $(document).on('click', '.refactor-command', function() {
+    /* eslint-disable no-invalid-this */
     const $command = $(this);
     const refactoring = $command.data('refactoring');
-    let context = active.context;
+    const context = active.context;
 
     const changes = refactoring.refactor(context.astNodes);
 
     hideMenuIfActive();
     context.applyChanges(changes);
+    /* eslint-enable no-invalid-this */
 });
 
-let buildRelevantMap = function(astNodes) {
+const buildRelevantMap = astNodes => {
     let any = false;
-    let map = new Array(commands.length);
+    const map = new Array(commands.length);
     for (let i = 0; i < commands.length; i++) {
         let relevantToAll = true;
         for (const item of astNodes) {
@@ -87,27 +88,27 @@ let buildRelevantMap = function(astNodes) {
     }
 
     if (!any)
-       return;
+       return null;
 
     return map;
 };
 
-let buildButton = function(astNodes, applyChanges) {
+const buildButton = function(astNodes, applyChanges) {
     const relevant = buildRelevantMap(astNodes);
     if (!relevant)
-        return;
+        return null;
 
     return $('<button class="refactor-button">')
-        .data('context', { astNodes: astNodes, applyChanges: applyChanges })
+        .data('context', { astNodes, applyChanges })
         .data('relevant', relevant);
 };
 
-let updateButton = function($button, astNodes) {
+const updateButton = function($button, astNodes) {
     const relevant = buildRelevantMap(astNodes);
     if (!relevant)
         return false;
 
-    let context = $button.data('context');
+    const context = $button.data('context');
     context.astNodes = astNodes;
     $button.data('relevant', relevant);
     return true;

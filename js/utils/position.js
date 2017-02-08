@@ -19,12 +19,10 @@ function Position(line, column) {
         },
 
         clone: function() {
-            /* jshint newcap:false */
             return Position(this.line, this.column);
         },
 
         toObject: function() {
-            /* jshint newcap:false */
             return { line: this.line, column: this.column };
         },
     };

@@ -1,7 +1,5 @@
-/* globals describe:false, it:false, expect:false */
-
 import CodeMirrorFake from './utils/codemirror-fake.js';
-import '/js/codemirror/track-nodes.js';
+import '../js/codemirror/track-nodes.js';
 
 describe('codemirror/track-nodes', () => {
     [{
@@ -13,7 +11,7 @@ describe('codemirror/track-nodes', () => {
         updated:  [1,2,3,4],
         expected: [1,2,3,4]
     }].forEach((test, index) => {
-        it('preserves node order on update ' + index, () => {
+        it(`preserves node order on update ${index}`, () => {
             const nodesRef = { nodes: test.initial.map(node) };
             const cm = fakeCodeMirror(nodesRef);
 
@@ -27,11 +25,10 @@ describe('codemirror/track-nodes', () => {
     });
 
     function node(id) {
-        return { id: id };
+        return { id };
     }
 
     function fakeCodeMirror(nodesRef) {
-        /* jshint newcap:false */
         const cm = CodeMirrorFake();
         cm.listSelections = () => [];
         cm.setOption('trackNodesInSelection', {

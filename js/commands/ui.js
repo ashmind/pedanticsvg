@@ -1,18 +1,17 @@
+import $ from 'jquery';
 import commands from './all.js';
 
 function appendCommand($location, command, invoke) {
     let $element;
     if (command.type !== 'toggle') {
         $element = $('<button>');
-        $element.click(function() {
-            invoke(command);
-        });
+        $element.click(() => invoke(command));
     }
     else {
         $element = $('<input type="checkbox">');
         applyToggleState($element, command, command.state);
 
-        $element.change(function(e) {
+        $element.change(e => {
             e.preventDefault();
             const newState = invoke(command);
             applyToggleState($element, command, newState);
@@ -20,7 +19,7 @@ function appendCommand($location, command, invoke) {
     }
 
     $element
-        .addClass('command command-' + command.name)
+        .addClass(`command command-${command.name}`)
         .attr('title', command.title)
         .appendTo($location);
 }
@@ -30,13 +29,10 @@ function applyToggleState($element, command, newState) {
     $element[0].checked = newState;
 }
 
-export default function (locations, editor, preview) {
-    const invoke = function(command) {
-        return command.action(editor, preview);
-    };
-
-    for (let command of commands) {
-        let $location = locations[command.section];
+export default (locations, editor, preview) => {
+    const invoke = command => command.action(editor, preview);
+    for (const command of commands) {
+        const $location = locations[command.section];
         appendCommand($location, command, invoke);
     }
-}
+};

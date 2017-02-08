@@ -1,4 +1,5 @@
-define(['jquery'], ($) => {
+/* globals define:false */
+define(['jquery'], $ => {
     'use strict';
 
     /*var stub = function() {};
@@ -11,14 +12,14 @@ define(['jquery'], ($) => {
         value: ''
     };*/
 
-    let optionCallbacks = {};
-    let extensions = {};
+    const optionCallbacks = {};
+    const extensions = {};
 
     const CodeMirrorFake = () => {
-        let handlers = {};
-        let options = {};
+        const handlers = {};
+        const options = {};
 
-        let cm = {};
+        const cm = {};
         cm.on = (name, handler) => {
             let handlerList = handlers[name];
             if (!handlerList) {
@@ -42,8 +43,8 @@ define(['jquery'], ($) => {
     };
 
     $.extend(CodeMirrorFake, {
-        defineOption:    (name, _, callback) => optionCallbacks[name] = callback,
-        defineExtension: (name, extension) => extensions[name] = extension,
+        defineOption:    (name, _, callback) => { optionCallbacks[name] = callback; },
+        defineExtension: (name, extension) => { extensions[name] = extension; },
         signal: () => {}
     });
 

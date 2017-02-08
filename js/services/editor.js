@@ -1,23 +1,22 @@
-import $ from 'jquery';
 import setupEvents from '../utils/setup-events.js';
 import setupCodeMirror from './codemirror-setup.js';
 import parse from '../parsing/parse-svg.js';
 import refactorUI from './refactoring/ui-builder.js';
 
-export default function($editor) {
+export default $editor => {
     let code;
     let ast;
     let errors;
     let getNodesInRanges;
     let firstParse = true;
 
-    let service = setupEvents({}, [
+    const service = setupEvents({}, [
         'codechange',
         'astchange',
         'errorchange'
     ]);
 
-    service.on('subscribe', function(e) {
+    service.on('subscribe', e => {
         // since service does not currently provide editable ast
         // as a property, this is the only way to get it to any new
         // subscribers
@@ -25,7 +24,7 @@ export default function($editor) {
             e.handler.call(undefined, ast);
     });
 
-    let cm = setupCodeMirror($editor[0]);
+    const cm = setupCodeMirror($editor[0]);
     cm.setOption('trackNodesInSelection', {
         getNodes: getNodesInSelection
     });
@@ -42,8 +41,8 @@ export default function($editor) {
     setupRefactorings();
 
     Object.defineProperty(service, 'code', {
-        get: function() { return code; },
-        set: function(value) {
+        get: () => code,
+        set: value => {
             if (value === code)
                 return;
 
@@ -85,28 +84,24 @@ export default function($editor) {
         service.trigger('astchange', ast);
     }
 
-    function reportParseErrors(errors, updateLinting) {
+    function reportParseErrors(errors, updateLinting) { // eslint-disable-line no-shadow
         if (!updateLinting)
             return;
 
-        const cmErrors = errors.map(function(e) {
-            return {
-                message: e.message,
-                from: toCMPosition(e),
-                to: toCMPosition(e)
-            };
-        });
+        const cmErrors = errors.map(e => ({
+            message: e.message,
+            from: toCMPosition(e),
+            to: toCMPosition(e)
+        }));
 
         updateLinting(cm, cmErrors);
     }
 
-    function getNodesInSelection(cm, selections) {
-        /* jshint shadow:true */
-
+    function getNodesInSelection(cm, selections) { // eslint-disable-line no-shadow
         if (!ast)
             return [];
 
-        let ranges = [];
+        const ranges = [];
         for (const item of selections) {
             ranges.push({
                 start: fromCMPosition(item.from()),
@@ -114,23 +109,22 @@ export default function($editor) {
             });
         }
         const astNodes = getNodesInRanges(ranges);
-        let mappedNodes = [];
+        const mappedNodes = [];
         for (const astNode of astNodes) {
             mappedNodes.push({
                 id: astNode.id,
                 start: toCMPosition(astNode.start),
                 end: toCMPosition(astNode.end),
-                astNode: astNode
+                astNode
             });
         }
         return mappedNodes;
     }
 
     function setupRefactorings() {
-        let activePoints = [];
-        cm.on('nodesInSelectionChanged', function(cm, e) {
-            /* jshint shadow:true */
-            let newGroups = {};
+        const activePoints = [];
+        cm.on('nodesInSelectionChanged', (cm, e) => { // eslint-disable-line no-shadow
+            const newGroups = {};
             const nodes = e.nodes;
 
             let newGroup;
@@ -151,7 +145,8 @@ export default function($editor) {
             if (newGroup)
                 newGroups[newGroup[0].id] = newGroup;
 
-            for (const point of activePoints) {
+            for (let i = 0; i < activePoints.length; i++) {
+                const point = activePoints[i];
                 let keep = false;
                 const group = newGroups[point.startId];
                 if (group) {
@@ -166,7 +161,7 @@ export default function($editor) {
                 }
             }
 
-            for (let id in newGroups) {
+            for (const id in newGroups) {
                 const group = newGroups[id];
                 const $widget = refactorUI.buildWidget(group, applyRefactoringChanges);
                 if (!$widget)
@@ -177,16 +172,14 @@ export default function($editor) {
                     mark: cm.setBookmark(toCMPosition(group[0].start), {
                         widget: $widget[0]
                     }),
-                    $widget: $widget
+                    $widget
                 });
             }
         });
     }
 
     function applyRefactoringChanges(changes) {
-        cm.operation(function() {
-            /* jshint shadow:true */
-
+        cm.operation(() => {
             for (const change of changes) {
                 change.startMarker = cm.setBookmark(toCMPosition(change.start));
                 change.endMarker = cm.setBookmark(toCMPosition(change.end));
@@ -211,4 +204,4 @@ export default function($editor) {
     function toCMPosition(position) {
         return { line: position.line, ch: position.column };
     }
-}
+};

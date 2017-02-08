@@ -1,5 +1,4 @@
-/* globals describe:false, it:false, expect:false */
-import parse from 'parsing/parse-path.js';
+import parse from '../js/parsing/parse-path.js';
 
 describe('parsing/parse-path', () => {
     [{
@@ -18,11 +17,9 @@ describe('parsing/parse-path', () => {
         path:     'M300,200 h-150 a150,150 0 1,0 150,-150 z',
         segments: [ 'M300,200', 'h-150', 'a150,150 0 1,0 150,-150', 'z' ]
     }].forEach((test, index) => {
-        it('can parse path ' + (index + 1), () => {
+        it(`can parse path ${index + 1}`, () => {
             const result = parse(test.path);
-            const segmentValues = result.segments.map((s) => {
-                return s.toSVG();
-            });
+            const segmentValues = result.segments.map(s => s.toSVG());
 
             expect(segmentValues).toEqual(test.segments);
         });
@@ -43,7 +40,7 @@ describe('parsing/parse-path', () => {
             { start: at(0, 45), end: at(0, 46) }
         ]
     }].forEach((pair, index) => {
-        it('produces correct positions ' + (index + 1), () => {
+        it(`produces correct positions ${index + 1}`, () => {
             const result = parse(pair.path);
             const positions = result.segments.map(s => ({ start: s.start, end: s.end }));
 
@@ -67,7 +64,7 @@ describe('parsing/parse-path', () => {
         const path = data.path;
         const expected = data.expected;
 
-        it('produces path that can be converted to absolute ' + (index + 1), () => {
+        it(`produces path that can be converted to absolute ${index + 1}`, () => {
             const result = parse(path);
             const absolute = result.segments[expected.index].toAbsolute();
 
@@ -86,6 +83,6 @@ describe('parsing/parse-path', () => {
     });
 
     function at(line, column) {
-        return { line: line, column: column };
+        return { line, column };
     }
 });

@@ -1,28 +1,18 @@
 {
     "insertHintOnTab": true,
-    "spaceUnits": 2,
     "language": {
         "javascript": {
-            "linting.prefer": "JSHint",
+            "linting.prefer": "ESLint",
             "linting.usePreferredOnly": true
         }
     },
     "path": {
         "**.js": {
-            "spaceUnits": 4,
-            "brackets-git.gitPath": "C:\\Program Files\\Git\\cmd\\git.exe",
             "fileFilters": [
                 {
                     "name": "node_modules",
                     "patterns": [
                         "node_modules"
-                    ]
-                },
-                {
-                    "name": "node_modules & wwwroot",
-                    "patterns": [
-                        "node_modules",
-                        "wwwroot"
                     ]
                 }
             ]

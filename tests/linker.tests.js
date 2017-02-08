@@ -1,6 +1,5 @@
-/* globals describe:false, it:false, expect:false */
-import parse from '/js/parsing/parse-svg.js';
-import linker from '/js/preview/linker.js';
+import parse from '../js/parsing/parse-svg.js';
+import linker from '../js/preview/linker.js';
 
 describe('preview/linker', () => {
     it('produces correct annotations', () => {

@@ -8,8 +8,8 @@ import autosave from './autosave.js';
 import settings from './settings.js';
 import 'jquery-ui';
 
-let editor = editorFactory($('#code'));
-let preview = previewFactory($('.preview .content'));
+const editor = editorFactory($('#code'));
+const preview = previewFactory($('.preview .content'));
 openOnDrop($('body'), editor);
 autosave(editor);
 trace(editor, preview);
@@ -17,9 +17,7 @@ trace(editor, preview);
 if (!editor.code)
     editor.code = $('#default').text();
 
-editor.on('astchange', function(ast) {
-    preview.render(editor.code, ast);
-});
+editor.on('astchange', ast => preview.render(editor.code, ast));
 
 buildCommands({
     code:    $('section.code .commands'),
@@ -27,8 +25,8 @@ buildCommands({
 }, editor, preview);
 
 (function setupResize() {
-    let $code = $('section.code');
-    let width = settings('code.section.width');
+    const $code = $('section.code');
+    const width = settings('code.section.width');
     if (width.value)
         $code.css('width', width.value);
 
@@ -36,7 +34,7 @@ buildCommands({
         handles: 'e',
         stop: function(_, uie) {
             let percent = 100 * (uie.size.width / $(document).width());
-            percent = (Math.round(percent * 100) / 100) + '%';
+            percent = `${Math.round(percent * 100) / 100}%`;
             uie.element.css('width', percent);
             width.value = percent;
         }

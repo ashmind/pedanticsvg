@@ -1,25 +1,23 @@
-/* jshint newcap:false, quotmark:false */
-
 export default function(object, names) {
-    let allHandlers = {};
+    const allHandlers = {};
 
-    let subscribe = [];
+    const subscribe = [];
     allHandlers.subscribe = subscribe;
     for (const name of names) {
         allHandlers[name] = [];
     }
 
     object.on = function(name, handler) {
-        let handlers = allHandlers[name];
+        const handlers = allHandlers[name];
         if (!handlers)
             throw NoEvent(name);
 
         handlers.push(handler);
-        callAll(subscribe, { name: name, handler: handler });
+        callAll(subscribe, { name, handler });
     };
 
     object.off = function(name, handler) {
-        let handlers = allHandlers[name];
+        const handlers = allHandlers[name];
         if (!handlers)
             throw NoEvent(name);
 
@@ -44,10 +42,10 @@ export default function(object, names) {
 
 function callAll(handlers, event) {
     for (const handler of handlers) {
-        handler.call(undefined, event);
+        handler(event);
     }
 }
 
 function NoEvent(name) {
-    return new Error("Event '" + name + "' is not registered.");
+    return new Error(`Event '${name}' is not registered.`);
 }
