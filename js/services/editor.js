@@ -1,23 +1,22 @@
-define([
-    'jquery',
-    'app/utils/setup-events',
-    'app/services/codemirror-setup',
-    'app/parsing/parse-svg',
-    'app/services/refactoring/ui-builder'
-], function($, setupEvents, setupCodeMirror, parse, refactorUI) { 'use strict'; return function($editor) {
-    var code;
-    var ast;
-    var errors;
-    var getNodesInRanges;
-    var firstParse = true;
+import setupEvents from '../utils/setup-events.js';
+import setupCodeMirror from './codemirror-setup.js';
+import parse from '../parsing/parse-svg.js';
+import refactorUI from './refactoring/ui-builder.js';
 
-    var service = setupEvents({}, [
+export default $editor => {
+    let code;
+    let ast;
+    let errors;
+    let getNodesInRanges;
+    let firstParse = true;
+
+    const service = setupEvents({}, [
         'codechange',
         'astchange',
         'errorchange'
     ]);
 
-    service.on('subscribe', function(e) {
+    service.on('subscribe', e => {
         // since service does not currently provide editable ast
         // as a property, this is the only way to get it to any new
         // subscribers
@@ -25,7 +24,7 @@ define([
             e.handler.call(undefined, ast);
     });
 
-    var cm = setupCodeMirror($editor[0]);
+    const cm = setupCodeMirror($editor[0]);
     cm.setOption('trackNodesInSelection', {
         getNodes: getNodesInSelection
     });
@@ -42,8 +41,8 @@ define([
     setupRefactorings();
 
     Object.defineProperty(service, 'code', {
-        get: function() { return code; },
-        set: function(value) {
+        get: () => code,
+        set: value => {
             if (value === code)
                 return;
 
@@ -74,7 +73,7 @@ define([
                 return;
         }
 
-        var parsed = parse(code);
+        const parsed = parse(code);
         getNodesInRanges = parsed.getNodesInRanges;
         reportParseErrors(parsed.errors, updateLinting);
 
@@ -85,59 +84,53 @@ define([
         service.trigger('astchange', ast);
     }
 
-    function reportParseErrors(errors, updateLinting) {
+    function reportParseErrors(errors, updateLinting) { // eslint-disable-line no-shadow
         if (!updateLinting)
             return;
 
-        var cmErrors = errors.map(function(e) {
-            return {
-                message: e.message,
-                from: toCMPosition(e),
-                to: toCMPosition(e)
-            };
-        });
+        const cmErrors = errors.map(e => ({
+            message: e.message,
+            from: toCMPosition(e),
+            to: toCMPosition(e)
+        }));
 
         updateLinting(cm, cmErrors);
     }
 
-    function getNodesInSelection(cm, selections) {
-        /* jshint shadow:true */
-
+    function getNodesInSelection(cm, selections) { // eslint-disable-line no-shadow
         if (!ast)
             return [];
 
-        var ranges = [];
-        for (var i = 0; i < selections.length; i++) {
+        const ranges = [];
+        for (const item of selections) {
             ranges.push({
-                start: fromCMPosition(selections[i].from()),
-                end: fromCMPosition(selections[i].to())
+                start: fromCMPosition(item.from()),
+                end: fromCMPosition(item.to())
             });
         }
-        var astNodes = getNodesInRanges(ranges);
-        var mappedNodes = [];
-        for (var i = 0; i < astNodes.length; i++) {
-            var astNode = astNodes[i];
+        const astNodes = getNodesInRanges(ranges);
+        const mappedNodes = [];
+        for (const astNode of astNodes) {
             mappedNodes.push({
                 id: astNode.id,
                 start: toCMPosition(astNode.start),
                 end: toCMPosition(astNode.end),
-                astNode: astNode
+                astNode
             });
         }
         return mappedNodes;
     }
 
     function setupRefactorings() {
-        var activePoints = [];
-        cm.on('nodesInSelectionChanged', function(cm, e) {
-            /* jshint shadow:true */
-            var newGroups = {};
-            var nodes = e.nodes;
+        const activePoints = [];
+        cm.on('nodesInSelectionChanged', (cm, e) => { // eslint-disable-line no-shadow
+            const newGroups = {};
+            const nodes = e.nodes;
 
-            var newGroup;
-            var newGroupEndIndex;
-            for (var i = 0; i < nodes.length; i++) {
-                var astNode = nodes[i].astNode;
+            let newGroup;
+            let newGroupEndIndex;
+            for (const node of nodes) { 
+                const astNode = node.astNode;
                 if (newGroup && astNode.index === newGroupEndIndex + 1) {
                     newGroup.push(astNode);
                 }
@@ -152,10 +145,10 @@ define([
             if (newGroup)
                 newGroups[newGroup[0].id] = newGroup;
 
-            for (var i = 0; i < activePoints.length; i++) {
-                var point = activePoints[i];
-                var keep = false;
-                var group = newGroups[point.startId];
+            for (let i = 0; i < activePoints.length; i++) {
+                const point = activePoints[i];
+                let keep = false;
+                const group = newGroups[point.startId];
                 if (group) {
                     keep = refactorUI.updateWidget(point.$widget, group);
                     delete newGroups[point.startId];
@@ -168,9 +161,9 @@ define([
                 }
             }
 
-            for (var id in newGroups) {
-                var group = newGroups[id];
-                var $widget = refactorUI.buildWidget(group, applyRefactoringChanges);
+            for (const id in newGroups) {
+                const group = newGroups[id];
+                const $widget = refactorUI.buildWidget(group, applyRefactoringChanges);
                 if (!$widget)
                     continue;
 
@@ -179,26 +172,22 @@ define([
                     mark: cm.setBookmark(toCMPosition(group[0].start), {
                         widget: $widget[0]
                     }),
-                    $widget: $widget
+                    $widget
                 });
             }
         });
     }
 
     function applyRefactoringChanges(changes) {
-        cm.operation(function() {
-            /* jshint shadow:true */
-
-            for (var i = 0; i < changes.length; i++) {
-                var change = changes[i];
+        cm.operation(() => {
+            for (const change of changes) {
                 change.startMarker = cm.setBookmark(toCMPosition(change.start));
                 change.endMarker = cm.setBookmark(toCMPosition(change.end));
             }
 
-            for (var i = 0; i < changes.length; i++) {
-                var change = changes[i];
-                var from = change.startMarker.find();
-                var to = change.endMarker.find();
+            for (const change of changes) {
+                const from = change.startMarker.find();
+                const to = change.endMarker.find();
                 cm.replaceRange(change.text, from, to);
 
                 change.startMarker.clear();
@@ -215,4 +204,4 @@ define([
     function toCMPosition(position) {
         return { line: position.line, ch: position.column };
     }
-};});
+};

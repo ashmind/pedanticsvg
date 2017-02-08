@@ -1,8 +1,7 @@
-/* globals describe:false, it:false, expect:false */
+import CodeMirrorFake from './utils/codemirror-fake.js';
+import '../js/codemirror/track-nodes.js';
 
-describe('app/codemirror/track-nodes', ['codemirror'], function(_, CodeMirrorFake) {
-    'use strict';
-
+describe('codemirror/track-nodes', () => {
     [{
         initial:  [1,3],
         updated:  [1,2,5],
@@ -11,30 +10,29 @@ describe('app/codemirror/track-nodes', ['codemirror'], function(_, CodeMirrorFak
         initial:  [4],
         updated:  [1,2,3,4],
         expected: [1,2,3,4]
-    }].forEach(function(test, index) {
-        it('preserves node order on update ' + index, function() {
-            var nodesRef = { nodes: test.initial.map(node) };
-            var cm = fakeCodeMirror(nodesRef);
+    }].forEach((test, index) => {
+        it(`preserves node order on update ${index}`, () => {
+            const nodesRef = { nodes: test.initial.map(node) };
+            const cm = fakeCodeMirror(nodesRef);
 
             cm.refreshNodesInSelection();
             nodesRef.nodes = test.updated.map(node);
-            var change = cm.refreshNodesInSelection();
+            const change = cm.refreshNodesInSelection();
 
-            expect(change.nodes.map(function(n) { return n.id; }))
+            expect(change.nodes.map(n => n.id))
                 .toEqual(test.expected);
         });
     });
 
     function node(id) {
-        return { id: id };
+        return { id };
     }
 
     function fakeCodeMirror(nodesRef) {
-        /* jshint newcap:false */
-        var cm = CodeMirrorFake();
-        cm.listSelections = function() { return []; };
+        const cm = CodeMirrorFake();
+        cm.listSelections = () => [];
         cm.setOption('trackNodesInSelection', {
-            getNodes: function() { return nodesRef.nodes; }
+            getNodes: () => nodesRef.nodes
         });
         return cm;
     }

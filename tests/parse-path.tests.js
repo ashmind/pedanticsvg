@@ -1,8 +1,6 @@
-/* globals describe:false, it:false, expect:false */
+import parse from '../js/parsing/parse-path.js';
 
-describe('app/parsing/parse-path', function(parse) {
-    'use strict';
-
+describe('parsing/parse-path', () => {
     [{
         path:     'M 100 100 L 300 100 L 200 300 z',
         segments: [ 'M 100 100', 'L 300 100', 'L 200 300', 'z' ]
@@ -18,12 +16,10 @@ describe('app/parsing/parse-path', function(parse) {
     },{
         path:     'M300,200 h-150 a150,150 0 1,0 150,-150 z',
         segments: [ 'M300,200', 'h-150', 'a150,150 0 1,0 150,-150', 'z' ]
-    }].forEach(function(test, index) {
-        it('can parse path ' + (index + 1), function() {
-            var result = parse(test.path);
-            var segmentValues = result.segments.map(function(s) {
-                return s.toSVG();
-            });
+    }].forEach((test, index) => {
+        it(`can parse path ${index + 1}`, () => {
+            const result = parse(test.path);
+            const segmentValues = result.segments.map(s => s.toSVG());
 
             expect(segmentValues).toEqual(test.segments);
         });
@@ -43,12 +39,10 @@ describe('app/parsing/parse-path', function(parse) {
             { start: at(0, 29), end: at(0, 45) },
             { start: at(0, 45), end: at(0, 46) }
         ]
-    }].forEach(function(pair, index) {
-        it('produces correct positions ' + (index + 1), function() {
-            var result = parse(pair.path);
-            var positions = result.segments.map(function(s) {
-                return { start: s.start, end: s.end };
-            });
+    }].forEach((pair, index) => {
+        it(`produces correct positions ${index + 1}`, () => {
+            const result = parse(pair.path);
+            const positions = result.segments.map(s => ({ start: s.start, end: s.end }));
 
             expect(positions).toEqual(pair.positions);
         });
@@ -66,20 +60,20 @@ describe('app/parsing/parse-path', function(parse) {
             index: 2,
             value: 'A150,150 0 1,0 300,50'
         }
-    }].forEach(function(data, index) {
-        var path = data.path;
-        var expected = data.expected;
+    }].forEach((data, index) => {
+        const path = data.path;
+        const expected = data.expected;
 
-        it('produces path that can be converted to absolute ' + (index + 1), function() {
-            var result = parse(path);
-            var absolute = result.segments[expected.index].toAbsolute();
+        it(`produces path that can be converted to absolute ${index + 1}`, () => {
+            const result = parse(path);
+            const absolute = result.segments[expected.index].toAbsolute();
 
             expect(absolute.toSVG()).toEqual(expected.value);
         });
     });
 
-    it('reports parsing errors', function() {
-        var result = parse('M100 100 e! H10');
+    it('reports parsing errors', () => {
+        const result = parse('M100 100 e! H10');
 
         expect(result.errors).toEqual([{
             message: 'Unexpected: \'e!\'.',
@@ -89,6 +83,6 @@ describe('app/parsing/parse-path', function(parse) {
     });
 
     function at(line, column) {
-        return { line: line, column: column };
+        return { line, column };
     }
 });

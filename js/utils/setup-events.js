@@ -1,57 +1,51 @@
-define(function() {
-    /* jshint newcap:false, quotmark:false */
+export default function(object, names) {
+    const allHandlers = {};
 
-    'use strict';
+    const subscribe = [];
+    allHandlers.subscribe = subscribe;
+    for (const name of names) {
+        allHandlers[name] = [];
+    }
 
-    return function(object, names) {
-        var allHandlers = {};
+    object.on = function(name, handler) {
+        const handlers = allHandlers[name];
+        if (!handlers)
+            throw NoEvent(name);
 
-        var subscribe = [];
-        allHandlers.subscribe = subscribe;
-        for (var i = 0; i < names.length; i++) {
-            allHandlers[names[i]] = [];
-        }
-
-        object.on = function(name, handler) {
-            var handlers = allHandlers[name];
-            if (!handlers)
-                throw NoEvent(name);
-
-            handlers.push(handler);
-            callAll(subscribe, { name: name, handler: handler });
-        };
-
-        object.off = function(name, handler) {
-            var handlers = allHandlers[name];
-            if (!handlers)
-                throw NoEvent(name);
-
-            for (var i = 0; i < handlers.length; i++) {
-                if (handlers[i] === handler) {
-                    handlers.splice(i, 1);
-                    i -= 1;
-                }
-            }
-        };
-
-        object.trigger = function(name, event) {
-            var handlers = allHandlers[name];
-            if (!handlers)
-                throw NoEvent(name);
-
-            callAll(handlers, event);
-        };
-
-        return object;
+        handlers.push(handler);
+        callAll(subscribe, { name, handler });
     };
 
-    function callAll(handlers, event) {
-        for (var i = 0; i < handlers.length; i++) {
-            handlers[i].call(undefined, event);
-        }
-    }
+    object.off = function(name, handler) {
+        const handlers = allHandlers[name];
+        if (!handlers)
+            throw NoEvent(name);
 
-    function NoEvent(name) {
-        return new Error("Event '" + name + "' is not registered.");
+        for (let i = 0; i < handlers.length; i++) {
+            if (handlers[i] === handler) {
+                handlers.splice(i, 1);
+                i -= 1;
+            }
+        }
+    };
+
+    object.trigger = function(name, event) {
+        const handlers = allHandlers[name];
+        if (!handlers)
+            throw NoEvent(name);
+
+        callAll(handlers, event);
+    };
+
+    return object;
+}
+
+function callAll(handlers, event) {
+    for (const handler of handlers) {
+        handler(event);
     }
-});
+}
+
+function NoEvent(name) {
+    return new Error(`Event '${name}' is not registered.`);
+}

@@ -3,12 +3,33 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Jasmine Spec Runner v2.0.1</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jasmine/2.4.1/jasmine.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/2.4.1/jasmine.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/2.4.1/jasmine-html.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/2.4.1/boot.js"></script>
 
-    <link rel="shortcut icon" type="image/png" href="external/jasmine/jasmine_favicon.png">
-    <link rel="stylesheet" type="text/css" href="external/jasmine/jasmine.css">
-
-    <!-- include source files here... -->
-    <script data-main="tests.main" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.11/require.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.19.41/system.js"></script>
+    <script>
+      SystemJS.config({
+        map: {
+          'systemjs-babel-build': '../external/systemjs-babel-browser.js',
+          'FileSaver': '../external/FileSaver.js',
+          'sax-customized': '../external/sax-customized.js',
+          'jquery': 'https://code.jquery.com/jquery-2.0.3.min.js',
+          'codemirror': './utils/codemirror-fake.js'
+        },
+        packages: {
+          'plugin-babel': {
+            main: '../../external/plugin-babel.js',
+            map: {
+              '../core-js/array/from': '../../js/utils/array-from-stub.js'
+            }
+          }
+        },
+        transpiler: 'plugin-babel'
+      });
+      SystemJS.import('./tests.main.js');
+    </script>
   </head>
   <body>
   </body>

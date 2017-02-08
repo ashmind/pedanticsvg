@@ -1,23 +1,21 @@
-/* globals describe:false, it:false, expect:false */
+import parse from '../js/parsing/parse-svg.js';
 
-describe('app/parsing/parse-svg', function(parse) {
-    'use strict';
-
-    it('can parse a simple SVG', function() {
-        var original = '<svg xmlns="http://www.w3.org/2000/svg" width="10px" height="10px" viewBox="0 0 10 10"><metadata>dog</metadata><g><path d="M2 2 l3 3z"/></g></svg>';
-        var ast = parse(original).root;
+describe('parsing/parse-svg', () => {
+    it('can parse a simple SVG', () => {
+        const original = '<svg xmlns="http://www.w3.org/2000/svg" width="10px" height="10px" viewBox="0 0 10 10"><metadata>dog</metadata><g><path d="M2 2 l3 3z"/></g></svg>';
+        const ast = parse(original).root;
 
         expect(toTestSVG(ast)).toEqual(original);
     });
 
-    it('can parse namespaces', function() {
-        var original = '<svg:svg xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><svg:a xlink:href="#nowhere"><svg:text>/svg/index.html</svg:text></svg:a></svg:svg>';
-        var ast = parse(original).root;
+    it('can parse namespaces', () => {
+        const original = '<svg:svg xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><svg:a xlink:href="#nowhere"><svg:text>/svg/index.html</svg:text></svg:a></svg:svg>';
+        const ast = parse(original).root;
 
         expect(toTestSVG(ast)).toEqual(original);
     });
 
-    it('finds nodes by range correctly (simple 1)', function() {
+    it('finds nodes by range correctly (simple 1)', () => {
         testFindsNodesByRange(
             '<svg><g></g></svg>',
             [{ start: at(0, 0), end: at(0, 0) }],
@@ -25,7 +23,7 @@ describe('app/parsing/parse-svg', function(parse) {
         );
     });
 
-    it('finds nodes by range correctly (simple 2)', function() {
+    it('finds nodes by range correctly (simple 2)', () => {
         testFindsNodesByRange(
             '<svg><g></g></svg>',
             [{ start: at(0, 5), end: at(0, 5) }],
@@ -33,7 +31,7 @@ describe('app/parsing/parse-svg', function(parse) {
         );
     });
 
-    it('finds nodes by range correctly (simple 3)', function() {
+    it('finds nodes by range correctly (simple 3)', () => {
         testFindsNodesByRange(
             '<svg><g></g><g><path /></g></svg>',
             [
@@ -44,7 +42,7 @@ describe('app/parsing/parse-svg', function(parse) {
         );
     });
 
-    it('finds nodes by range correctly (path segments)', function() {
+    it('finds nodes by range correctly (path segments)', () => {
         testFindsNodesByRange(
             '<path d="M570 664 c-19 -49 27 -87 69 -57 23 16 28 52 9 71 -7 7 -25 12 -40 12 -21 0 -31 -6 -38 -26z"/>',
             [{ start: at(0, 13), end: at(0, 13) }],
@@ -52,7 +50,7 @@ describe('app/parsing/parse-svg', function(parse) {
         );
     });
 
-    it('finds nodes by range correctly (multiline+namespace)', function() {
+    it('finds nodes by range correctly (multiline+namespace)', () => {
         testFindsNodesByRange(
             ['<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" version="1.1">',
              '  <path d="M 10 90 A 70 70 0 0 1 90 10"',
@@ -66,32 +64,30 @@ describe('app/parsing/parse-svg', function(parse) {
     });
 
     function toTestSVG(astNode) {
-        /* jshint shadow:true */
-
         if (typeof(astNode) === 'string')
             return astNode;
 
         if (astNode.type === 'root') {
-            var result = '';
-            for (var i = 0; i < astNode.children.length; i++) {
-                result += toTestSVG(astNode.children[i]);
+            let result = '';
+            for (const child of astNode.children) {
+                result += toTestSVG(child);
             }
             return result;
         }
 
         if (astNode.type === 'tag') {
-            var result = '<' + astNode.name;
-            var attributes = astNode.attributes;
-            for (var i = 0; i < attributes.length; i++) {
-                result += ' ' + attributes[i].name + '="' + attributes[i].value + '"';
+            let result = `<${astNode.name}`;
+            const attributes = astNode.attributes;
+            for (const i of attributes) {
+                result += ` ${i.name}="${i.value}"`;
             }
 
             if (astNode.children.length > 0) {
                 result += '>';
-                for (var i = 0; i < astNode.children.length; i++) {
-                    result += toTestSVG(astNode.children[i]);
+                for (const i of astNode.children) {
+                    result += toTestSVG(i);
                 }
-                result += '</' + astNode.name + '>';
+                result += `</${astNode.name}>`;
             }
             else {
                 result += '/>';
@@ -99,19 +95,17 @@ describe('app/parsing/parse-svg', function(parse) {
             return result;
         }
 
-        throw new Error('Unknown AST node: ' + astNode.type);
+        throw new Error(`Unknown AST node: ${astNode.type}`);
     }
 
     function testFindsNodesByRange(code, ranges, expected) {
-        var ast = parse(code);
-        var nodes = ast.getNodesInRanges(ranges);
+        const ast = parse(code);
+        const nodes = ast.getNodesInRanges(ranges);
 
-        expect(nodes.map(function(n) {
-            return n.name || n.toSVG();
-        })).toEqual(expected);
+        expect(nodes.map(n => n.name || n.toSVG())).toEqual(expected);
     }
 
     function at(line, column) {
-        return { line: line, column: column };
+        return { line, column };
     }
 });

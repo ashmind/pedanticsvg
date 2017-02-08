@@ -153,12 +153,13 @@ SAXParser.prototype =
   , flush: function () { flushBuffers(this) }
   }
 
-try {
-  var Stream = require("stream").Stream
-} catch (ex) {
+// modification by Andrey Shchekin (commented-out)
+//try {
+//  var Stream = require("stream").Stream
+//} catch (ex) {
   var Stream = function () {}
-}
-
+//}
+// end modification
 
 var streamWraps = sax.EVENTS.filter(function (ev) {
   return ev !== "error" && ev !== "end"
@@ -218,8 +219,11 @@ SAXStream.prototype.write = function (data) {
       typeof Buffer.isBuffer === 'function' &&
       Buffer.isBuffer(data)) {
     if (!this._decoder) {
-      var SD = require('string_decoder').StringDecoder
-      this._decoder = new SD('utf8')
+      // modification by Andrey Shchekin
+      throw "Decoder not avalable.";
+      // var SD = require('string_decoder').StringDecoder
+      // this._decoder = new SD('utf8')
+      // end modification
     }
     data = this._decoder.write(data);
   }

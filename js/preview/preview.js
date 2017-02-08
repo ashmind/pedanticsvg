@@ -1,37 +1,37 @@
-define(['jquery', 'app/preview/linker', 'jquery-ui'], function($, linker) { 'use strict'; return function($preview) {
-    var SVG_MEDIA_TYPE = 'image/svg+xml';
+import $ from 'jquery';
+import linker from './linker.js';
+import 'jquery-ui';
+    
+export default $preview => {
+    const SVG_MEDIA_TYPE = 'image/svg+xml';
 
-    var $template = $preview.find('template');
-    var $templateTarget = $template.parent();
+    const $template = $preview.find('template');
+    const $templateTarget = $template.parent();
     $(document.importNode($template[0].content, true))
         .appendTo($templateTarget);
 
-    var $wrapper = $templateTarget.find('.wrapper');
-    var $sizeText = $templateTarget.find('.size :first-child');
-    var $sizeMode = $templateTarget.find('.size .mode');
-    var $iframe = $templateTarget.find('iframe');
-    var $iframeFix = $('<div>').addClass('iframe-fix').appendTo($wrapper);
+    const $wrapper = $templateTarget.find('.wrapper');
+    const $sizeText = $templateTarget.find('.size :first-child');
+    const $sizeMode = $templateTarget.find('.size .mode');
+    let $iframe = $templateTarget.find('iframe');
+    const $iframeFix = $('<div>').addClass('iframe-fix').appendTo($wrapper);
 
-    var lastUnreleasedUrl;
+    let lastUnreleasedUrl;
 
-    var loadControl;
-    var loadPromise;
+    let loadControl;
+    let loadPromise;
 
-    var manualSizeSet = false;
+    let manualSizeSet = false;
 
-    var setupPromise = featureDetect().then(
-        function() {
-            setup();
-        },
-        function() {
-            notSupported();
-        }
+    const setupPromise = featureDetect().then(
+        () => setup(),
+        () => notSupported()
     );
 
     function featureDetect() {
-        return new Promise(function(resolve, reject) {
+        return new Promise((resolve, reject) => {
             $iframe[0].onload = function() {
-                var contentType = $iframe[0].contentDocument.contentType || $iframe[0].contentDocument.mimeType;
+                const contentType = $iframe[0].contentDocument.contentType || $iframe[0].contentDocument.mimeType;
                 if (contentType !== SVG_MEDIA_TYPE) {
                     if (URL.revokeObjectURL)
                         URL.revokeObjectURL(lastUnreleasedUrl);
@@ -68,11 +68,11 @@ define(['jquery', 'app/preview/linker', 'jquery-ui'], function($, linker) { 'use
                 autosize();
             }
 
-            var $root = getRootElementImmediate();
+            const $root = getRootElementImmediate();
             if ($root.find('parsererror')) { // something failed?
-                var stylesheetURL = new URL('css/preview-errors.css', document.baseURI);
-                var $link = $('<link rel="stylesheet" href="' + stylesheetURL + '">');
-                $link[0].onload = function() { done(); };
+                const stylesheetURL = new URL('css/preview-errors.css', document.baseURI);
+                const $link = $(`<link rel="stylesheet" href="${stylesheetURL}">`);
+                $link[0].onload = () => done();
                 $root.find('head,body').andSelf().eq(0).prepend($link);
                 return;
             }
@@ -80,22 +80,17 @@ define(['jquery', 'app/preview/linker', 'jquery-ui'], function($, linker) { 'use
             done();
         };
 
-        $(document).mousedown(function() {
-            $iframeFix.show();
-        }).mouseup(function() {
-            $iframeFix.hide();
-        });
+        $(document)
+            .mousedown(() => $iframeFix.show())
+            .mouseup(() => $iframeFix.hide());
 
-        $(window).resize(function() {
-            autosize();
-        });
-
+        $(window).resize(() => autosize());
         $wrapper.resizable({ handles: 'all' })
                 .on('resize', manualResize);
     }
 
     function render(svg, ast) {
-        setupPromise.then(function() {
+        setupPromise.then(() => {
             setLoadPromise();
 
             svg = linker.annotate(svg, ast);
@@ -104,8 +99,8 @@ define(['jquery', 'app/preview/linker', 'jquery-ui'], function($, linker) { 'use
     }
 
     function renderRaw(svg) {
-        var blob = new Blob([svg], {type: SVG_MEDIA_TYPE});
-        var url = URL.createObjectURL(blob);
+        const blob = new Blob([svg], {type: SVG_MEDIA_TYPE});
+        const url = URL.createObjectURL(blob);
         $iframe.addClass('loading');
         $iframe[0].src = url;
 
@@ -118,9 +113,7 @@ define(['jquery', 'app/preview/linker', 'jquery-ui'], function($, linker) { 'use
         if (!loadPromise)
             setLoadPromise();
 
-        return loadPromise.then(function() {
-            return getRootElementImmediate();
-        });
+        return loadPromise.then(() => getRootElementImmediate());
     }
 
     function getRootElementImmediate() {
@@ -128,13 +121,13 @@ define(['jquery', 'app/preview/linker', 'jquery-ui'], function($, linker) { 'use
     }
 
     function setLoadPromise() {
-        loadPromise = new Promise(function(resolve, reject) {
-            loadControl = { resolve: resolve, reject: reject };
+        loadPromise = new Promise((resolve, reject) => {
+            loadControl = { resolve, reject };
         });
     }
 
     $sizeMode.click(function() {
-        manualSizeSet = this.checked;
+        manualSizeSet = this.checked; // eslint-disable-line no-invalid-this
         $wrapper.toggleClass('manual-size', manualSizeSet);
         if (!manualSizeSet)
             autosize();
@@ -144,13 +137,13 @@ define(['jquery', 'app/preview/linker', 'jquery-ui'], function($, linker) { 'use
         if (manualSizeSet)
             return;
 
-        var previewSize = getSize($preview);
-        var auto;
+        const previewSize = getSize($preview);
+        let auto;
         if ($iframe) {
             $wrapper.width(previewSize.width).height(previewSize.height);
             $iframe.width(previewSize.width).height(previewSize.height);
 
-            var $svg = getRootElementImmediate();
+            const $svg = getRootElementImmediate();
 
             auto = getSize($svg);
             if ($wrapper.width() > auto.width)
@@ -174,8 +167,8 @@ define(['jquery', 'app/preview/linker', 'jquery-ui'], function($, linker) { 'use
     }
 
     function manualResize() {
-        var wrapperWidth = $wrapper.width();
-        var wrapperHeight = $wrapper.height();
+        const wrapperWidth = $wrapper.width();
+        const wrapperHeight = $wrapper.height();
         $iframe.width(wrapperWidth)
                .height(wrapperHeight);
 
@@ -189,11 +182,11 @@ define(['jquery', 'app/preview/linker', 'jquery-ui'], function($, linker) { 'use
     }
 
     function showSize(width, height) {
-        $sizeText.text(width + ' × ' + height);
+        $sizeText.text(`${width} × ${height}`);
     }
 
     return {
-        render: render,
-        getRootElement: getRootElement
+        render,
+        getRootElement
     };
-};});
+};

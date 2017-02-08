@@ -1,45 +1,38 @@
-define(['app/commands/all'], function(commands) {
-    'use strict';
+import $ from 'jquery';
+import commands from './all.js';
 
-    return function (locations, editor, preview) {
-        var invoke = function(command) {
-            return command.action(editor, preview);
-        };
+function appendCommand($location, command, invoke) {
+    let $element;
+    if (command.type !== 'toggle') {
+        $element = $('<button>');
+        $element.click(() => invoke(command));
+    }
+    else {
+        $element = $('<input type="checkbox">');
+        applyToggleState($element, command, command.state);
 
-        for (var i = 0; i < commands.length; i++) {
-            var command = commands[i];
-            var $location = locations[command.section];
-            appendCommand($location, command, invoke);
-        }
-    };
-
-    function appendCommand($location, command, invoke) {
-        var $element;
-        if (command.type !== 'toggle') {
-            $element = $('<button>');
-            $element.click(function() {
-                invoke(command);
-            });
-        }
-        else {
-            $element = $('<input type="checkbox">');
-            applyToggleState($element, command, command.state);
-
-            $element.change(function(e) {
-                e.preventDefault();
-                var newState = invoke(command);
-                applyToggleState($element, command, newState);
-            });
-        }
-
-        $element
-            .addClass('command command-' + command.name)
-            .attr('title', command.title)
-            .appendTo($location);
+        $element.change(e => {
+            e.preventDefault();
+            const newState = invoke(command);
+            applyToggleState($element, command, newState);
+        });
     }
 
-    function applyToggleState($element, command, newState) {
-        command.state = newState;
-        $element[0].checked = newState;
+    $element
+        .addClass(`command command-${command.name}`)
+        .attr('title', command.title)
+        .appendTo($location);
+}
+
+function applyToggleState($element, command, newState) {
+    command.state = newState;
+    $element[0].checked = newState;
+}
+
+export default (locations, editor, preview) => {
+    const invoke = command => command.action(editor, preview);
+    for (const command of commands) {
+        const $location = locations[command.section];
+        appendCommand($location, command, invoke);
     }
-});
+};

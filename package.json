@@ -1,0 +1,9 @@
+{
+  "name": "pedanticsvg",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^3.15.0"
+  }
+}

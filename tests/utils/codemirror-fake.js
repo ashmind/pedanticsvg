@@ -1,4 +1,5 @@
-define(['jquery'], function($) {
+/* globals define:false */
+define(['jquery'], $ => {
     'use strict';
 
     /*var stub = function() {};
@@ -11,16 +12,16 @@ define(['jquery'], function($) {
         value: ''
     };*/
 
-    var optionCallbacks = {};
-    var extensions = {};
+    const optionCallbacks = {};
+    const extensions = {};
 
-    var CodeMirrorFake = function() {
-        var handlers = {};
-        var options = {};
+    const CodeMirrorFake = () => {
+        const handlers = {};
+        const options = {};
 
-        var cm = {};
-        cm.on = function(name, handler) {
-            var handlerList = handlers[name];
+        const cm = {};
+        cm.on = (name, handler) => {
+            let handlerList = handlers[name];
             if (!handlerList) {
                 handlerList = [];
                 handlers[name] = handlerList;
@@ -29,33 +30,22 @@ define(['jquery'], function($) {
             handlerList.push(handler);
         };
 
-        cm.setOption = function(name, value) {
-            optionCallbacks[name](this, value);
+        cm.setOption = (name, value) => {
+            optionCallbacks[name](cm, value);
             options[name] = value;
         };
 
-        cm.getOption = function(name) {
-            return options[name];
-        };
-
-        cm.markText = function() {
-            return { clear: function() {} };
-        };
+        cm.getOption = name => options[name];
+        cm.markText = () => ({ clear: () => {} });
 
         $.extend(cm, extensions);
         return cm;
     };
 
     $.extend(CodeMirrorFake, {
-        defineOption: function(name, _, callback) {
-            optionCallbacks[name] = callback;
-        },
-
-        defineExtension: function(name, extension) {
-            extensions[name] = extension;
-        },
-
-        signal: function () {}
+        defineOption:    (name, _, callback) => { optionCallbacks[name] = callback; },
+        defineExtension: (name, extension) => { extensions[name] = extension; },
+        signal: () => {}
     });
 
     return CodeMirrorFake;
