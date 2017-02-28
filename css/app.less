@@ -1,5 +1,5 @@
-@import url(http://fonts.googleapis.com/css?family=Open+Sans);
-@import url(http://fonts.googleapis.com/css?family=Roboto+Condensed);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+@import url(https://fonts.googleapis.com/css?family=Roboto+Condensed);
 @import url('imports/jquery-ui.custom.less');
 @import url('imports/common.less');
 
@@ -66,9 +66,9 @@ section {
 }
 
 section header {
-  position: relative;
   .display-flex();
-  padding: 5px;
+  padding-top: 4px;
+  padding-bottom: 5px;
   padding-left: 7px;
   color: #888;
   background-color: #eee;
@@ -104,25 +104,23 @@ section .content {
 }
 
 .commands {
-  position: absolute;
-  margin-left: 20px;
+  margin-left: 10px;
   padding-left: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  height: 1.4em;
-
-  border-left: 3px solid #e0e0e0;
+  border-left: 2px solid #e0e0e0;
 }
 
 .command {
   border: none;
-  height: 1.4em;
-  width: 1.4em;
+  height: 1.2em;
+  width: 1.2em;
+  display: flex;
   background: transparent;
   background-size: contain;
   opacity: 0.5;
   transition: opacity 0.2s linear;
   outline: none;
+  -webkit-appearance: none;
+  cursor: pointer;
 
   -webkit-appearance: none;
   cursor: pointer;
@@ -132,7 +130,7 @@ section .content {
   }
 }
 
-.command-download { background-image: url('../icons/download.svg'); }
+.command-download { background-image: url('../icons/download.svg'); vertical-align: top; }
 .command-tracing:checked { background-image: url('../icons/tracing-on.svg'); }
 .command-tracing         { background-image: url('../icons/tracing-off.svg'); }
 
