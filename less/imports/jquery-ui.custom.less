@@ -1,0 +1,106 @@
+.ui-resizable-for-n(@border-offset-size, @area-size: @border-offset-size) {
+  .ui-resizable-n {
+    top: -@border-offset-size;
+    left: -@border-offset-size;
+    right: -@border-offset-size;
+    height: @area-size;
+  }
+}
+
+.ui-resizable-for-s(@border-offset-size, @area-size: @border-offset-size) {
+  .ui-resizable-s {
+    bottom: -@border-offset-size;
+    left: -@border-offset-size;
+    right: -@border-offset-size;
+    height: @area-size;
+  }
+}
+
+.ui-resizable-for-w(@border-offset-size, @area-size: @border-offset-size) {
+  .ui-resizable-w {
+    top: -@border-offset-size;
+    bottom: -@border-offset-size;
+    left: -@border-offset-size;
+    width: @area-size;
+  }
+}
+
+.ui-resizable-for-e(@border-offset-size, @area-size: @border-offset-size) {
+  .ui-resizable-e {
+    top: -@border-offset-size;
+    bottom: -@border-offset-size;
+    right: -@border-offset-size;
+    width: @area-size;
+  }
+}
+
+.ui-resizable-for-all(@border-offset-size, @area-size: @border-offset-size) {
+    .ui-resizable-for-n(@border-offset-size, @area-size);
+    .ui-resizable-for-s(@border-offset-size, @area-size);
+    .ui-resizable-for-w(@border-offset-size, @area-size);
+    .ui-resizable-for-e(@border-offset-size, @area-size);
+
+    .ui-resizable-nw,
+    .ui-resizable-ne {
+      top: -@border-offset-size;
+    }
+
+    .ui-resizable-se,
+    .ui-resizable-sw {
+      bottom: -@border-offset-size;
+    }
+
+    .ui-resizable-nw,
+    .ui-resizable-sw {
+      left: -@border-offset-size;
+    }
+
+    .ui-resizable-ne,
+    .ui-resizable-se {
+      right: -@border-offset-size;
+    }
+
+    .ui-resizable-nw,
+    .ui-resizable-ne,
+    .ui-resizable-sw,
+    .ui-resizable-se {
+      height: 1.5*@area-size;
+    }
+
+    .ui-resizable-nw,
+    .ui-resizable-ne,
+    .ui-resizable-sw,
+    .ui-resizable-se {
+      width: 1.5*@area-size;
+    }
+}
+
+.ui-resizable-handle {
+  position: absolute;
+}
+
+.ui-resizable-e,
+.ui-resizable-w {
+  cursor: ew-resize;
+}
+
+.ui-resizable-s,
+.ui-resizable-n {
+  cursor: ns-resize;
+}
+
+.ui-resizable-nw {
+  cursor: nw-resize;
+}
+
+.ui-resizable-ne {
+  cursor: ne-resize;
+}
+
+.ui-resizable-sw {
+  cursor: sw-resize;
+}
+
+.ui-resizable-se {
+  cursor: se-resize;
+}
