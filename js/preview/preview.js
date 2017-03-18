@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import linker from './linker.js';
 import 'jquery-ui';
-    
+
 export default $preview => {
     const SVG_MEDIA_TYPE = 'image/svg+xml';
 
@@ -70,7 +70,7 @@ export default $preview => {
 
             const $root = getRootElementImmediate();
             if ($root.find('parsererror')) { // something failed?
-                const stylesheetURL = new URL('css/preview-errors.css', document.baseURI);
+                const stylesheetURL = new URL('preview/errors.css', document.baseURI);
                 const $link = $(`<link rel="stylesheet" href="${stylesheetURL}">`);
                 $link[0].onload = () => done();
                 $root.find('head,body').andSelf().eq(0).prepend($link);
