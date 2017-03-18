@@ -63,6 +63,14 @@ describe('parsing/parse-svg', () => {
         );
     });
 
+    it('returns empty list when finding by range if the code is broken', () => {
+        testFindsNodesByRange(
+            '<svg><rect </svg>',
+            [{ start: at(0, 6),  end: at(0, 7) }],
+            []
+        );
+    });
+
     function toTestSVG(astNode) {
         if (typeof(astNode) === 'string')
             return astNode;

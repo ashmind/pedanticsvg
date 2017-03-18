@@ -7,7 +7,7 @@ function parse(code) {
         position: true,
         xmlns: true
     });
-    
+
     const root = ast.root();
     const flat = [];
     const stack = [root];
@@ -86,7 +86,11 @@ function parse(code) {
 
     return {
         root, errors,
-        getNodesInRanges: ranges => getNodesInRanges(flat, ranges)
+        getNodesInRanges: ranges => {
+            if (errors.length > 0)
+                return [];
+            return getNodesInRanges(flat, ranges);
+        }
     };
 }
 
