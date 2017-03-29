@@ -59,6 +59,11 @@ describe('parsing/parse-path', () => {
         expected: {
             index: 2,
             value: 'A150,150 0 1,0 300,50'
+    }, {
+        path:     'M26.013,10.047l1.654-2.866c-2.198-1.272-4.743-2.012-7.466-2.012h0v3.312h0',
+        expected: {
+            index: 2,
+            value: 'C25.469 5.909 22.924 5.169 20.201 5.169'
         }
     }].forEach((data, index) => {
         const path = data.path;
@@ -69,6 +74,30 @@ describe('parsing/parse-path', () => {
             const absolute = result.segments[expected.index].toAbsolute();
 
             expect(absolute.toSVG()).toEqual(expected.value);
+        });
+    });
+
+    [{
+        path:     'M20.201,5.169c-8.254,0-14.946,6.692-14.946,14.946c0,8.255,6.692,14.946,14.946,14.946 s14.946-6.691,14.946-14.946C35.146,11.861,28.455,5.169,20.201,5.169z M20.201,31.749c-6.425,0-11.634-5.208-11.634-11.634 c0-6.425,5.209-11.634,11.634-11.634c6.425,0,11.633,5.209,11.633,11.634C31.834,26.541,26.626,31.749,20.201,31.749z',
+        expected: {
+            index: 4,
+            value: 'c-0.001,-8.254,-6.692,-14.946,-14.946,-14.946'
+        }
+    }, {
+        path:     'M26.013,10.047l1.654-2.866c-2.198-1.272-4.743-2.012-7.466-2.012h0v3.312h0 C22.32,8.481,24.301,9.057,26.013,10.047z',
+        expected: {
+            index: 6,
+            value: 'c2.119,0,4.1,0.576,5.812,1.566'
+        }
+    }].forEach((data, index) => {
+        const path = data.path;
+        const expected = data.expected;
+
+        it(`produces path that can be converted to relative ${index + 1}`, () => {
+            const result = parse(path);
+            const relative = result.segments[expected.index].toRelative();
+
+            expect(relative.toSVG()).toEqual(expected.value);
         });
     });
 
