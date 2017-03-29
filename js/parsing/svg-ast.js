@@ -128,7 +128,8 @@ SvgPathSegment.prototype = {
 
             const startCoord = (key === 'x' || key === 'x1' || key === 'x2')
                            ? start.x : start.y;
-            newCoords[key] = coords[key] + (change * startCoord);
+            
+            newCoords[key] = Math.round((coords[key] + (change * startCoord)) * 1000)/1000;
         }
         return newCoords;
     },
