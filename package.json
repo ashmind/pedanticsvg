@@ -2,8 +2,12 @@
   "name": "pedanticsvg",
   "version": "0.0.0",
   "private": true,
+  "scripts": {
+    "start": "serve ."
+  },
   "dependencies": {},
   "devDependencies": {
-    "eslint": "^3.15.0"
+    "eslint": "^3.15.0",
+    "serve": "^6.5.6"
   }
 }

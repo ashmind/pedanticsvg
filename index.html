@@ -134,25 +134,18 @@
     </footer>
 
     <script src="external/url.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.20.10/system.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.19.41/system.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/less.js/2.7.2/less.min.js" data-env="development"></script>
     <script>less.watch();</script>
     <script>
       SystemJS.config({
         baseURL: './js',
-        meta: {
-          "*.js": {
-            "babelOptions": {
-              "es2015": false
-            }
-          }
-        },
         map: {
           'plugin-babel': './external/plugin-babel.js',
           'systemjs-babel-build': './external/systemjs-babel-browser.js',
           'FileSaver': './external/FileSaver.js',
           'sax-customized': './external/sax-customized.js',
-          'jquery': 'https://code.jquery.com/jquery-2.0.3.min.js',
+          'jquery': 'https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js',
           'jquery-ui': 'https://code.jquery.com/ui/1.11.1/jquery-ui.min.js',
           'codemirror': 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/4.2.0'
         },
@@ -165,7 +158,8 @@
           codemirror: {
             main: 'codemirror.js',
             map: {
-              './lib/codemirror':  './codemirror.js'
+              './lib/codemirror':  './codemirror.js',
+              './addon/fold/xml-fold.js': './addon/fold/xml-fold.js'
             }
           }
         },
